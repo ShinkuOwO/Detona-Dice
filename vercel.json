@@ -1,12 +1,11 @@
 {
-  "version": 2,
-  "installCommand": "npm install",
   "buildCommand": "npm run build --workspace=web",
   "outputDirectory": "packages/web/dist",
-  "routes": [
+  "installCommand": "npm install",
+  "rewrites": [
     {
-      "src": "/(.*)",
-      "dest": "/packages/web/dist/$1"
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ],
   "env": {
