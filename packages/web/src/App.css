@@ -1,0 +1,309 @@
+/* ==================================================================== */
+/* 1. FONT AND GLOBAL PALETTE (VARIABLES)                               */
+/* ==================================================================== */
+
+@font-face {
+  font-family: 'RetroGaming';
+  src: url('./assets/fonts/retro_gaming.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-synthesis: none;
+}
+
+:root {
+  --color-background: #1a1a2d;      /* Tapete de la mesa */
+  --color-panel-dark: #12121b;      /* Paneles */
+  --color-panel-border: #4a4a6b;    /* Borde de paneles */
+
+  --color-accent-red: #ff0055;      /* Peligro, HP, Cráneos */
+  --color-accent-blue: #00e0ff;     /* Info, Energía, Botones */
+  --color-accent-green: #00ff7b;    /* Éxito, Dinero */
+  --color-accent-yellow: #ffff00;   /* Oro, Élite */
+
+  --text-light: #e0e0e0;            /* Texto normal */
+  --text-dark: #12121b;             /* Texto sobre botones brillantes */
+  --text-dim: #77779a;              /* Mensajes, placeholders */
+}
+
+/* ==================================================================== */
+/* 2. ESTILOS BASE Y RENDERING (Global)                                 */
+/* ==================================================================== */
+
+* {
+  box-sizing: border-box;
+  /* Scrollbars retro (Firefox) */
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-accent-blue) var(--color-panel-dark);
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--text-light);
+  font-family: 'RetroGaming', monospace;
+  margin: 0;
+
+  /* Hacks para pixel art */
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+  font-smooth: never;
+  -webkit-font-smoothing: none;
+}
+
+/* ==================================================================== */
+/* 3. CLASES DE LAYOUT Y UTILIDAD                                       */
+/* ==================================================================== */
+
+/* Sombra que da "peso" al UI */
+.chunky-shadow {
+  box-shadow: 4px 4px 0px #000;
+}
+.chunky-shadow:active {
+  box-shadow: 1px 1px 0px #000;
+  transform: translate(3px, 3px);
+}
+
+/* Panel genérico (laterales y central) */
+.retro-panel {
+  background-color: var(--color-panel-dark);
+  border: 2px solid var(--color-panel-border);
+  padding: 15px;
+  overflow-y: auto;
+}
+
+/* ==================================================================== */
+/* 4. CONTROLES: BOTONES, INPUTS                                        */
+/* ==================================================================== */
+
+/* Botón principal retro */
+.retro-button {
+  font-family: 'RetroGaming', monospace;
+  font-size: 16px;
+  padding: 12px 18px;
+  background-color: var(--color-accent-blue);
+  color: var(--text-dark);
+  border: 2px solid var(--color-panel-border);
+  cursor: pointer;
+  text-transform: uppercase;
+}
+
+.retro-button.danger {
+  background-color: var(--color-accent-red);
+  color: var(--text-light);
+}
+
+.retro-button.success {
+  background-color: var(--color-accent-green);
+  color: var(--text-dark);
+}
+
+/* Botones pequeños (habilidades, reroll) */
+.retro-button.small {
+  font-size: 10px;
+  padding: 2px 4px;
+  background-color: #444;
+  color: #fff;
+  border: 1px solid #888;
+  box-shadow: 2px 2px 0px #000;
+}
+.retro-button.small:active {
+  box-shadow: none;
+  transform: translate(2px, 2px);
+}
+
+/* Botón específico para Reroll */
+.reroll-button {
+  background-color: var(--color-accent-green);
+  color: var(--text-dark);
+  border-color: var(--color-accent-green);
+  box-shadow: 4px 4px 0px var(--color-accent-yellow);
+}
+
+/* Inputs retro */
+.retro-input {
+  font-family: 'RetroGaming', monospace;
+  font-size: 20px;
+  background-color: var(--color-panel-dark);
+  color: var(--color-accent-green);
+  border: 2px solid var(--color-panel-border);
+  padding: 10px;
+  text-align: center;
+}
+.retro-input:focus {
+  outline: 2px solid var(--color-accent-blue);
+}
+
+/* ==================================================================== */
+/* 5. COMPONENTES ESPECÍFICOS                                           */
+/* ==================================================================== */
+
+/* --- Dados (DadoComponent.tsx) --- */
+.dado {
+  width: 70px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  font-family: 'RetroGaming', monospace;
+  cursor: pointer;
+  margin: 5px;
+  user-select: none;
+}
+
+.dado.base {
+  border: 3px solid var(--color-accent-blue);
+  background-color: #111;
+  color: #fff;
+}
+
+.dado.corrupto {
+  border: 3px solid var(--color-accent-red);
+  background-color: #111;
+  color: var(--color-accent-red);
+}
+
+.dado.selected {
+  background-color: #555;
+  border-color: var(--color-accent-yellow);
+}
+
+/* --- Combate (CombateScreen.tsx) --- */
+.combate-screen h1 {
+  font-size: 48px;
+  color: var(--color-accent-red);
+  margin: 10px 0;
+}
+
+.combate-screen h2 {
+  font-size: 24px;
+  color: var(--text-light);
+}
+
+.combate-screen .mensaje {
+  color: var(--text-dim);
+  min-height: 24px;
+  font-style: italic;
+}
+
+.combate-screen .dado-area {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 20px;
+  min-height: 150px;
+  gap: 30px;
+}
+
+.combate-screen .action-area {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.combate-screen .action-area button {
+  font-size: 20px;
+  padding: 15px;
+  min-width: 200px;
+}
+
+/* Botón de habilidad (icono tipo “+” / ↻) */
+.ability-btn {
+  background-color: var(--color-accent-blue);
+  color: var(--text-dark);
+  font-size: 14px;
+  padding: 3px 6px;
+  height: 20px;
+  width: 30px;
+  box-shadow: 2px 2px 0px var(--color-accent-blue);
+  border: 1px solid var(--color-panel-border);
+}
+
+.ability-btn:active {
+  box-shadow: none;
+  transform: translate(2px, 2px);
+}
+
+/* --- Chat (PanelDerecho.tsx) --- */
+.chat-form {
+  display: flex;
+}
+
+.chat-form input {
+  flex: 1 1 0%;
+  min-width: 0; /* crítico para evitar scroll horizontal en flex */
+  margin-right: 10px;
+  font-size: 16px;
+  text-align: left;
+}
+
+.chat-window {
+  word-break: break-word; /* Rompe palabras largas */
+  min-width: 0;           /* Para que el contenedor flex pueda reducirse */
+}
+
+/* ==================================================================== */
+/* 6. HACKS DE NAVEGADOR (SCROLLBAR RETRO)                              */
+/* ==================================================================== */
+
+/* Chrome, Edge, Safari */
+::-webkit-scrollbar {
+  width: 12px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-panel-dark);
+  border-left: 1px solid var(--color-panel-border);
+}
+::-webkit-scrollbar-thumb {
+  background-color: var(--color-accent-blue);
+  border: 2px solid var(--color-panel-dark);
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-accent-red);
+}
+/* ===================== */
+/* BARRAS DE ESTADO RETRO */
+/* ===================== */
+
+.status-bar {
+  width: 100%;
+  height: 10px;
+  background-color: var(--color-panel-dark);
+  border: 2px solid var(--color-panel-border);
+  box-shadow: 2px 2px 0px #000;
+  margin-top: 2px;
+  overflow: hidden;
+}
+
+.status-bar-fill {
+  height: 100%;
+  transition: width 0.3s ease-out; /* ANIMACIÓN de la barra */
+}
+
+/* Colores específicos */
+.hp-fill {
+  background-color: var(--color-accent-red);
+}
+
+.energy-fill {
+  background-color: var(--color-accent-blue);
+}
+
+.xp-fill {
+  background-color: var(--color-accent-green);
+}
+
+/* HP bajo: parpadeo de peligro */
+@keyframes hp-pulse {
+  0% {
+    filter: brightness(1);
+  }
+  100% {
+    filter: brightness(1.7);
+  }
+}
+
+.hp-low {
+  animation: hp-pulse 0.5s infinite alternate;
+}

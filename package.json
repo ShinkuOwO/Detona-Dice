@@ -1,0 +1,11 @@
+{
+  "name": "detona-dice-monorepo",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:web": "npm run dev -w web",
+    "dev:server": "npm run dev -w server"
+  }
+}
