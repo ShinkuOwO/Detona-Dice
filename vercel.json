@@ -3,6 +3,12 @@
   "installCommand": "npm install",
   "buildCommand": "npm run build --workspace=web",
   "outputDirectory": "packages/web/dist",
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/packages/web/dist/$1"
+    }
+  ],
   "env": {
     "VITE_SOCKET_URL": "https://detona-dice.onrender.com"
   }
