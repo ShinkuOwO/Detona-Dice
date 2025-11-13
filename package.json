@@ -7,7 +7,7 @@
   "scripts": {
     "dev:web": "npm run dev -w web",
     "dev:server": "npm run dev -w server",
-    "build": "npm run build --workspace=web",
+    "build": "npm run build --workspace=web && cp -r packages/web/dist ./dist",
     "postinstall": "chmod +x node_modules/.bin/* || true"
   }
 }
