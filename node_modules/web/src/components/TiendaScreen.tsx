@@ -2,10 +2,12 @@ import React from 'react';
 import { useGame } from '../contexts/GameContext';
 import { socket } from '../socket';
 import styles from './TiendaScreen.module.css';
+import { useNotification } from '../contexts/NotificationContext';
 
 const TiendaScreen: React.FC = () => {
   const { state } = useGame();
   const { partidaState } = state;
+  useNotification();
 
   // Si no hay partida, o no estamos en tienda, salida defensiva
   if (!partidaState) {

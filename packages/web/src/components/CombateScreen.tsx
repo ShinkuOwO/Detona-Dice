@@ -3,12 +3,14 @@ import { useGame } from '../contexts/GameContext';
 import { socket } from '../socket';
 import DadoComponent from './DadoComponent';
 import styles from './CombateScreen.module.css';
+import { useNotification } from '../contexts/NotificationContext';
 
 const CombateScreen: React.FC = () => {
   const { state } = useGame();
   const { partidaState } = state;
   const [selectedDice, setSelectedDice] = useState<string[]>([]);
   const [showBag, setShowBag] = useState(false);
+  const { addNotification } = useNotification();
 
   if (!partidaState || !partidaState.encuentroActual) {
     return <div>Cargando encuentro...</div>;
@@ -36,7 +38,8 @@ const CombateScreen: React.FC = () => {
 
   const handleConfirmarSeleccion = () => {
     if (selectedDice.length !== 2) {
-      return alert(`Debes seleccionar exactamente 2 dados para confirmar.`);
+      addNotification('error', 'Debes seleccionar exactamente 2 dados para confirmar.');
+      return;
     }
     socket.emit('cliente:seleccionar_dados', {
       dadoId1: selectedDice[0],

@@ -14,7 +14,7 @@ const server = http.createServer(app);
 
 // === CONFIG BÁSICA DE DESPLIEGUE ===
 const PORT = process.env.PORT || 3001;
-const CORS_ORIGIN = process.env.CORS_ORIGIN || '*'; 
+const CORS_ORIGIN = process.env.CORS_ORIGIN || 'http://localhost:5173';
 // en local usas '*', en Render pondremos la URL de Vercel
 
 // Socket.io con CORS controlado por env

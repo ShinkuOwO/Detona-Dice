@@ -1,20 +1,28 @@
 import React, { useState } from 'react';
 import { useGame } from '../contexts/GameContext';
 import { socket } from '../socket';
+import { useNotification } from '../contexts/NotificationContext';
 
 const LoginScreen: React.FC = () => {
   const { dispatch } = useGame();
   const [nick, setNick] = useState('');
   const [codigoSala, setCodigoSala] = useState('');
+ const { addNotification } = useNotification();
 
   const handleCrearSala = () => {
-    if (nick.trim() === '') return alert('Por favor, introduce un nick');
+    if (nick.trim() === '') {
+      addNotification('error', 'Por favor, introduce un nick');
+      return;
+    }
     dispatch({ type: 'SET_NICK', payload: nick });
     socket.emit('cliente:crear_sala', { nick });
   };
 
   const handleUnirseSala = () => {
-    if (nick.trim() === '' || codigoSala.trim() === '') return alert('Introduce un nick Y un código de sala');
+    if (nick.trim() === '' || codigoSala.trim() === '') {
+      addNotification('error', 'Introduce un nick Y un código de sala');
+      return;
+    }
     dispatch({ type: 'SET_NICK', payload: nick });
     socket.emit('cliente:unirse_sala', { nick, codigoSala: codigoSala.toUpperCase() });
   };

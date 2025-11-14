@@ -1,10 +1,12 @@
 import React from 'react';
 import { useGame } from '../contexts/GameContext';
 import { socket } from '../socket';
+import { useNotification } from '../contexts/NotificationContext';
 
 const PactoScreen: React.FC = () => {
   const { state } = useGame();
   const { partidaState } = state;
+  const { addNotification } = useNotification();
 
   // --- ARRAY DE COLORES PARA LOS PACTOS ---
   // Estos colores deben coincidir con tus variables en App.css
@@ -27,7 +29,8 @@ const PactoScreen: React.FC = () => {
   
   const handleReroll = () => {
     if (oro < 10) {
-      return alert('¡Oro insuficiente para reroll!');
+      addNotification('error', '¡Oro insuficiente para reroll!');
+      return;
     }
     socket.emit('cliente:reroll_mejoras');
   };

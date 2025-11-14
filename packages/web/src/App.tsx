@@ -13,6 +13,8 @@ import LobbyScreen from './components/LobbyScreen';
 import GameRouter from './components/GameRouter';
 import LoginScreen from './components/LoginScreen';
 import ResultsScreen from './components/ResultsScreen';
+import NotificationBar from './components/NotificationBar';
+import { NotificationProvider } from './contexts/NotificationContext';
 
 const AppContent: React.FC = () => {
   const { state, dispatch } = useGame();
@@ -42,7 +44,7 @@ const AppContent: React.FC = () => {
     });
 
     socket.on('servidor:error', (data: { mensaje: string }) => {
-      alert(`Error del Servidor: ${data.mensaje}`);
+      console.error(`Error del Servidor: ${data.mensaje}`);
     });
 
     socket.on('servidor:fin_carrera', (data: { resultados: ResultadosFin[] }) => {
@@ -101,7 +103,14 @@ const AppContent: React.FC = () => {
 };
 
 const App: React.FC = () => {
-  return <AppContent />;
+  return (
+    <>
+      <NotificationProvider>
+        <AppContent />
+        <NotificationBar />
+      </NotificationProvider>
+    </>
+  );
 };
 
 export default App;
