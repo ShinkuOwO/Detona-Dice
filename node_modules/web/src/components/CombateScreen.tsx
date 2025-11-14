@@ -7,7 +7,7 @@ import { useNotification } from '../contexts/NotificationContext';
 
 // Helper functions to calculate game state info
 const getMaxDadosSeleccionables = (partida: any) => {
-  const dadosExtra = partida.getModificador('dados_extra') || 0;
+  const dadosExtra = partida.getModificador ? partida.getModificador('dados_extra') : (partida.modificadores?.dados_extra || 0);
   return 2 + dadosExtra; // Por defecto se pueden seleccionar 2 dados, más los dados extra de las reliquias
 };
 
@@ -59,6 +59,7 @@ const CombateScreen: React.FC = () => {
     setTimeout(() => {
       setAnimatingDice(prev => {
         const newAnimating = { ...prev };
+        const allDiceIds = [...dadosBase, ...dadosCorrupcion].map(d => d.id);
         allDiceIds.forEach(id => {
           delete newAnimating[id];
         });
@@ -251,13 +252,13 @@ const CombateScreen: React.FC = () => {
         {/* Acción principal */}
         <div className={styles.accionColumn}>
           <button
-            onClick={partidaState.dadosLanzados ? handleConfirmarSeleccion : handleLanzarDados}
-            disabled={botonPrincipalLabel !== 'LANZAR DADOS' && !seleccionCompleta}
-            className="retro-button retro-button-danger chunky-shadow responsive-button accionPrincipal"
-            style={{ fontSize: '18px', padding: '12px 20px', minWidth: '150px', cursor: 'pointer' }}
-          >
-            {botonPrincipalLabel}
-          </button>
+    onClick={partidaState.dadosLanzados ? handleConfirmarSeleccion : handleLanzarDados}
+    disabled={botonPrincipalLabel !== 'LANZAR DADOS' && !seleccionCompleta}
+    className="retro-button retro-button-danger chunky-shadow responsive-button accionPrincipal"
+    style={{ fontSize: '18px', padding: '12px 20px', minWidth: '150px', cursor: 'pointer' }}
+  >
+    {botonPrincipalLabel}
+  </button>
         </div>
 
         {/* Bolsa */}
