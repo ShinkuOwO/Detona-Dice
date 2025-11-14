@@ -72,6 +72,7 @@ const CombateScreen: React.FC = () => {
             dado={dado}
             disabled={!allowSelection}
             isSelected={selectedDice.includes(dado.id)}
+            isLanzando={partidaState.dadosLanzados && !dado.valor} // Mostrar animación si los dados están lanzándose pero aún no tienen valor
             onClick={() => handleSeleccionarDado(dado.id)}
           />
         ))}

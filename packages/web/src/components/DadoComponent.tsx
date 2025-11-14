@@ -7,15 +7,17 @@ interface DadoProps {
   isSelected: boolean;
   onClick: () => void;
   disabled: boolean;
+  isLanzando?: boolean; // Nueva propiedad para indicar si el dado está en animación
 }
 
-const DadoComponent: React.FC<DadoProps> = ({ dado, isSelected, onClick, disabled }) => {
+const DadoComponent: React.FC<DadoProps> = ({ dado, isSelected, onClick, disabled, isLanzando = false }) => {
   // Clases según tipo y selección
   const dadoClasses = [
     styles.dado,
     dado.esCorrupto ? styles.dadoCorrupto : styles.dadoBase,
     isSelected ? styles.dadoSeleccionado : '',
-    disabled ? styles.dadoDesactivado : ''
+    disabled ? styles.dadoDesactivado : '',
+    isLanzando ? styles.dadoLanzando : ''
   ].join(' ');
 
   const mostrarValor = () => {
