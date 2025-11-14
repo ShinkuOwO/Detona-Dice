@@ -35,9 +35,8 @@ const CombateScreen: React.FC = () => {
   };
 
   const handleConfirmarSeleccion = () => {
-    const maxDados = partidaState.getMaxDadosSeleccionables();
-    if (selectedDice.length < 2 || selectedDice.length > maxDados) {
-      return alert(`Debes seleccionar entre 2 y ${maxDados} dados.`);
+    if (selectedDice.length !== 2) {
+      return alert(`Debes seleccionar exactamente 2 dados para confirmar.`);
     }
     socket.emit('cliente:seleccionar_dados', {
       dadoId1: selectedDice[0],
