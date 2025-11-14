@@ -1,0 +1,208 @@
+.panelDerecho {
+  background-color: var(--verde-bosque);
+  border: 3px solid var(--azul-acero);
+  padding: 15px;
+  min-width: 250px;
+  overflow-y: auto;
+  position: relative;
+  overflow: hidden;
+}
+
+.panelDerecho::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.15),
+    rgba(0, 0, 0, 0.15) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  pointer-events: none;
+  z-index: -1;
+}
+
+.tituloPanel {
+  color: var(--verde-brillante);
+  text-align: center;
+  margin-top: 0;
+  text-shadow: 2px 2px 0 var(--magenta);
+  animation: glitch-title 2s infinite;
+}
+
+@keyframes glitch-title {
+  0% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-2px);
+  }
+  40% {
+    transform: translateX(2px);
+  }
+  60% {
+    transform: translateX(-2px);
+  }
+  80% {
+    transform: translateX(2px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.carreraTitulo {
+  color: var(--azul-cielo);
+  text-align: center;
+  margin: 15px 0 10px 0;
+  text-shadow: 1px 1px 0 var(--turquesa);
+}
+
+.jugadorCarrera {
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: var(--azul-noche);
+  border: 2px solid var(--color-panel-border);
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.jugadorCarrera:hover {
+  background-color: var(--azul-acero);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.nombreJugador {
+  color: var(--celeste-palido);
+  font-weight: bold;
+  margin-bottom: 5px;
+  font-size: 1.1em;
+}
+
+.estadoJugador {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.estadoInfo {
+  color: var(--lavanda);
+  font-size: 0.9em;
+}
+
+.estadoVivo {
+  color: var(--verde-brillante);
+}
+
+.estadoEliminado {
+  color: var(--magenta);
+  text-decoration: line-through;
+}
+
+.barraProgreso {
+  width: 100%;
+  height: 8px;
+  background-color: var(--marron-oscuro);
+  border: 1px solid var(--color-panel-border);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 6px;
+}
+
+.barraProgresoLlena {
+  height: 100%;
+  background-color: var(--verde-brillante);
+  transition: width 0.3s ease;
+}
+
+.barraProgresoLlenaEliminado {
+  background-color: var(--magenta);
+}
+
+.mensajeSistema {
+  color: var(--malva);
+  text-align: center;
+  margin: 20px 0;
+  font-style: italic;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.6;
+  }
+}
+
+.chatTitulo {
+  color: var(--rosa-lavanda);
+  text-align: center;
+  margin: 15px 0 10px 0;
+  text-shadow: 1px 1px 0 var(--azul-acero);
+}
+
+.mensajeChat {
+  padding: 6px;
+  margin-bottom: 6px;
+  background-color: var(--verde-menta);
+  border-left: 3px solid var(--turquesa);
+  border-radius: 4px;
+  font-size: 0.85em;
+}
+
+.mensajeChatRemitente {
+  color: var(--verde-oliva-oscuro);
+  font-weight: bold;
+  margin-bottom: 2px;
+}
+
+.mensajeChatContenido {
+  color: var(--verde-oliva);
+}
+
+.formularioChat {
+  display: flex;
+  margin-top: 10px;
+}
+
+.inputChat {
+  flex: 1;
+  padding: 8px;
+  background-color: var(--color-panel-dark);
+  color: var(--celeste-palido);
+  border: 2px solid var(--color-panel-border);
+  border-radius: 4px 0 0 4px;
+}
+
+.inputChat:focus {
+  outline: 2px solid var(--color-accent-blue);
+}
+
+.botonEnviar {
+  padding: 8px 12px;
+  background-color: var(--azul-acero);
+  color: var(--celeste-palido);
+  border: 2px solid var(--color-panel-border);
+  border-radius: 0 4px 4px 0;
+  cursor: pointer;
+  transition: all 0.1s;
+}
+
+.botonEnviar:hover {
+  background-color: var(--turquesa);
+  transform: translateY(-1px);
+}
+
+.botonEnviar:active {
+  transform: translateY(1px);
+}

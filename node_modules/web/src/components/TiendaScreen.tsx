@@ -23,7 +23,7 @@ const TiendaScreen: React.FC = () => {
           No hay tienda disponible ahora mismo.
         </p>
         <button
-          className="retro-button chunky-shadow"
+          className={styles.botonSalir}
           onClick={() => socket.emit('cliente:salir_tienda')}
         >
           VOLVER AL MAPA
@@ -60,12 +60,7 @@ const TiendaScreen: React.FC = () => {
           {items.map((item) => (
             <div
               key={item.id}
-              className="retro-panel"
-              style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}
+              className={styles.itemTienda}
             >
               <div className={styles.descripcionItem}>
                 <div className={styles.nombreItem}>
@@ -79,13 +74,14 @@ const TiendaScreen: React.FC = () => {
                 </div>
               </div>
 
-              <div style={{ textAlign: 'right' }}>
+              <div>
                 <div className={styles.precioItem}>
                   {item.precio} G
                 </div>
                 <button
-                  className="retro-button small chunky-shadow"
+                  className={styles.botonComprar}
                   onClick={() => handleComprar(item.id)}
+                  disabled={oro < item.precio}
                 >
                   Comprar
                 </button>
@@ -96,7 +92,7 @@ const TiendaScreen: React.FC = () => {
       )}
 
       <button
-        className="retro-button chunky-shadow"
+        className={styles.botonSalir}
         onClick={handleSalir}
       >
         VOLVER AL MAPA

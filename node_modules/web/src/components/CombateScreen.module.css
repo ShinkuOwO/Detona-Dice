@@ -1,24 +1,86 @@
 .combateScreen {
   padding: 20px;
   text-align: center;
+  background-color: var(--color-background);
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+.combateScreen::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.15),
+    rgba(0, 0, 0, 0.15) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  pointer-events: none;
+  z-index: -1;
 }
 
 .encuentroNombre {
   font-size: 2em;
   margin-bottom: 10px;
+  color: var(--azul-cielo);
+  text-shadow: 2px 2px 0 var(--color-accent-blue);
+  animation: glitch-title 3s infinite;
+}
+
+@keyframes glitch-title {
+  0% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-2px);
+  }
+  40% {
+    transform: translateX(2px);
+  }
+  60% {
+    transform: translateX(-2px);
+  }
+  80% {
+    transform: translateX(2px);
+  }
+  100% {
+    transform: translateX(0);
+  }
 }
 
 .objetivo {
   font-size: 3em;
-  color: var(--color-accent-red);
+  color: var(--magenta);
   margin: 10px 0;
+  text-shadow: 3px 3px 0 var(--color-accent-red);
+  animation: glitch-objetive 2s infinite;
+}
+
+@keyframes glitch-objetive {
+  0% {
+    text-shadow: 3px 3px 0 var(--magenta);
+  }
+  50% {
+    text-shadow: -3px -3px 0 var(--verde-brillante);
+  }
+  100% {
+    text-shadow: 3px 3px 0 var(--magenta);
+  }
 }
 
 .mensaje {
-  color: var(--text-dim);
+  color: var(--lavanda);
   min-height: 24px;
   font-style: italic;
   margin-bottom: 20px;
+  font-size: 1.2em;
+  text-shadow: 1px 1px 0 var(--text-dim);
 }
 
 .infoBar {
@@ -27,7 +89,11 @@
   gap: 30px;
   margin-bottom: 10px;
   font-size: 14px;
-  color: var(--text-dim);
+  color: var(--celeste-palido);
+  background-color: var(--azul-acero);
+  padding: 8px;
+  border: 2px solid var(--turquesa);
+  border-radius: 4px;
 }
 
 .dadoArea {
@@ -38,6 +104,9 @@
   min-height: 150px;
   gap: 30px;
   margin: 20px 0;
+  background-color: var(--verde-bosque);
+  border: 2px solid var(--color-panel-border);
+  border-radius: 8px;
 }
 
 .actionArea {
@@ -45,6 +114,7 @@
   justify-content: center;
   gap: 20px;
   margin: 20px 0;
+  flex-wrap: wrap;
 }
 
 .botonLanzar {
@@ -52,14 +122,65 @@
   padding: 15px;
   min-width: 200px;
   cursor: pointer;
+  background-color: var(--verde-brillante);
+  color: var(--verde-oliva);
+  border: 3px solid var(--turquesa);
+  text-transform: uppercase;
+  font-family: 'RetroGaming', monospace;
+  box-shadow: 4px 4px 0px #000;
+  transition: all 0.1s;
+}
+
+.botonLanzar:hover {
+  background-color: var(--verde);
+  transform: translateY(-2px);
+}
+
+.botonLanzar:active {
+  transform: translateY(2px);
+  box-shadow: 2px 2px 0px #000;
 }
 
 .botonConfirmar {
   cursor: pointer;
+  background-color: var(--color-accent-green);
+  color: var(--text-dark);
+  border: 2px solid var(--color-panel-border);
+  padding: 10px 20px;
+  font-family: 'RetroGaming', monospace;
+  box-shadow: 4px 4px 0px #000;
+  transition: all 0.1s;
+}
+
+.botonConfirmar:hover {
+  background-color: var(--verde);
+  transform: translateY(-2px);
+}
+
+.botonConfirmar:active {
+  transform: translateY(2px);
+  box-shadow: 2px 2px 0px #000;
 }
 
 .botonBolsa {
   cursor: pointer;
+  background-color: var(--azul-acero);
+  color: var(--celeste-palido);
+  border: 2px solid var(--color-panel-border);
+  padding: 10px 20px;
+  font-family: 'RetroGaming', monospace;
+  box-shadow: 4px 4px 0px #000;
+  transition: all 0.1s;
+}
+
+.botonBolsa:hover {
+  background-color: var(--turquesa);
+  transform: translateY(-2px);
+}
+
+.botonBolsa:active {
+  transform: translateY(2px);
+  box-shadow: 2px 2px 0px #000;
 }
 
 .bolsaPanel {
@@ -70,6 +191,8 @@
   max-width: 400px;
   margin-inline: auto;
   text-align: left;
+  border-radius: 8px;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
 .bolsaVacia {
@@ -82,10 +205,32 @@
   align-items: center;
  margin-bottom: 5px;
   font-size: 12px;
+  padding: 5px;
+  border: 1px solid var(--azul-acero);
+  border-radius: 4px;
+  background-color: var(--verde-bosque);
 }
 
 .botonUsar {
   cursor: pointer;
+  background-color: var(--color-accent-blue);
+  color: var(--text-dark);
+  border: 1px solid var(--color-panel-border);
+  padding: 4px 8px;
+  font-size: 10px;
+  font-family: 'RetroGaming', monospace;
+  box-shadow: 2px 2px 0px #000;
+  transition: all 0.1s;
+}
+
+.botonUsar:hover {
+  background-color: var(--celeste-palido);
+  transform: translateY(-1px);
+}
+
+.botonUsar:active {
+  transform: translateY(1px);
+  box-shadow: 1px 1px 0px #000;
 }
 
 .habilidadesArea {
@@ -93,6 +238,8 @@
   padding: 15px;
   border: 2px solid var(--color-panel-border);
   background-color: var(--color-panel-dark);
+  border-radius: 8px;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
 .habilidadesBotones {
@@ -100,12 +247,37 @@
   justify-content: center;
   gap: 10px;
   margin: 10px 0;
+  flex-wrap: wrap;
 }
 
 .abilityBtn {
   padding: 8px 12px;
   font-size: 14px;
   min-width: 100px;
+  background-color: var(--color-accent-blue);
+  color: var(--text-dark);
+  border: 2px solid var(--color-panel-border);
+  font-family: 'RetroGaming', monospace;
+  box-shadow: 4px 4px 0px #000;
+  transition: all 0.1s;
+  text-transform: uppercase;
+}
+
+.abilityBtn:hover {
+  background-color: var(--celeste-palido);
+  transform: translateY(-2px);
+}
+
+.abilityBtn:active {
+  transform: translateY(2px);
+  box-shadow: 2px 2px 0px #000;
+}
+
+.abilityBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: 4px 4px 0px #000;
 }
 
 .energiaInfo {
@@ -113,4 +285,5 @@
   color: var(--text-dim);
   font-size: 14px;
  margin: 10px 0 0 0;
+  text-shadow: 1px 1px 0 var(--azul-noche);
 }

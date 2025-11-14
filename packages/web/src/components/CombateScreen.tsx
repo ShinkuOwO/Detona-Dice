@@ -84,8 +84,7 @@ const CombateScreen: React.FC = () => {
         <button
           onClick={handleLanzarDados}
           disabled={partidaState.dadosLanzados}
-          className="retro-button danger chunky-shadow"
-          style={{ fontSize: '20px', padding: '15px', minWidth: '200px', cursor: 'pointer' }}
+          className={styles.botonLanzar}
         >
           {partidaState.dadosLanzados ? 'DADOS LANZADOS' : 'LANZAR DADOS'}
         </button>
@@ -93,7 +92,7 @@ const CombateScreen: React.FC = () => {
         {selectedDice.length === 2 && (
           <button
             onClick={handleConfirmarSeleccion}
-            className="retro-button success chunky-shadow"
+            className={styles.botonConfirmar}
           >
             CONFIRMAR SELECCIÓN
           </button>
@@ -103,7 +102,7 @@ const CombateScreen: React.FC = () => {
         <button
           type="button"
           onClick={() => setShowBag((prev) => !prev)}
-          className="retro-button chunky-shadow"
+          className={styles.botonBolsa}
         >
           BOLSA ({consumibles?.length || 0})
         </button>
@@ -115,7 +114,7 @@ const CombateScreen: React.FC = () => {
           <h3>HABILIDADES</h3>
           <div className={styles.habilidadesBotones}>
             <button
-              className={`${styles.abilityBtn} retro-button chunky-shadow`}
+              className={styles.abilityBtn}
               onClick={() => socket.emit('cliente:usar_habilidad', { habilidadId: 'aumentar_dado', dadoId: selectedDice[0] })}
               disabled={selectedDice.length !== 1 || partidaState.energia < 1}
               title="Aumentar Dado (+1 al valor, cuesta 1 energía)"
@@ -123,7 +122,7 @@ const CombateScreen: React.FC = () => {
               [+] Aumentar
             </button>
             <button
-              className={`${styles.abilityBtn} retro-button chunky-shadow`}
+              className={styles.abilityBtn}
               onClick={() => socket.emit('cliente:usar_habilidad', { habilidadId: 'voltear_dado', dadoId: selectedDice[0] })}
               disabled={selectedDice.length !== 1 || partidaState.energia < 2}
               title="Voltear Dado (7 - valor, cuesta 2 energía)"
@@ -131,7 +130,7 @@ const CombateScreen: React.FC = () => {
               [⇄] Voltear
             </button>
             <button
-              className={`${styles.abilityBtn} retro-button chunky-shadow`}
+              className={styles.abilityBtn}
               onClick={() => socket.emit('cliente:usar_habilidad', { habilidadId: 'relanzar_dado', dadoId: selectedDice[0] })}
               disabled={selectedDice.length !== 1 || partidaState.energia < 1}
               title="Relanzar Dado (cuesta 1 energía)"
@@ -158,7 +157,7 @@ const CombateScreen: React.FC = () => {
                 <span>{itemId}</span>
                 <button
                   type="button"
-                  className="retro-button small"
+                  className={styles.botonUsar}
                   onClick={() => handleUsarConsumible(itemId)}
                 >
                   USAR

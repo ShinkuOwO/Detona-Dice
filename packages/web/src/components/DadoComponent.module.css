@@ -10,23 +10,38 @@
   margin: 5px;
   user-select: none;
   transition: transform 0.2s ease, border-color 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.dado::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, transparent 50%, rgba(255, 255, 255, 0.1) 50%);
+  pointer-events: none;
 }
 
 .dadoBase {
   border: 3px solid var(--color-accent-blue);
- background-color: #111;
-  color: #fff;
+ background-color: var(--verde-menta);
+  color: var(--verde-oliva-oscuro);
 }
 
 .dadoCorrupto {
   border: 3px solid var(--color-accent-red);
-  background-color: #111;
-  color: var(--color-accent-red);
+  background-color: var(--magenta);
+ color: var(--azul-medianoche);
 }
 
 .dadoSeleccionado {
-  background-color: #555;
+  background-color: var(--lavanda);
   border-color: var(--color-accent-yellow);
+  box-shadow: 0 0 10px var(--color-accent-yellow);
+  animation: glitch-select 0.1s infinite alternate;
 }
 
 .dadoDesactivado {
@@ -44,5 +59,26 @@
   }
   100% {
     transform: rotate(360deg) scale(1.2);
+  }
+}
+
+@keyframes glitch-select {
+  0% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-2px);
+  }
+  40% {
+    transform: translateX(2px);
+  }
+  60% {
+    transform: translateX(-2px);
+  }
+  80% {
+    transform: translateX(2px);
+  }
+  100% {
+    transform: translateX(0);
   }
 }

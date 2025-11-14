@@ -2,18 +2,57 @@
 
 /* Variables de tema */
 :root {
-  --color-background: #1a1a2d;      /* Tapete de la mesa */
-  --color-panel-dark: #12121b;      /* Paneles */
-  --color-panel-border: #4a4a6b;    /* Borde de paneles */
+  /* Paleta de colores tipo glitch */
+  /* Fila 1 (Tonos Claros) */
+  --celeste-palido: #8ED5D2;
+  --rosa-lavanda: #C68DC2;
+  --lavanda: #8A8FC2;
+  --azul-cielo: #82B4DA;
+  --verde-menta: #97D0A0;
+  --verde-limon-palido: #CED892;
+  --malva: #B591BA;
+  --verde-brillante: #59BE56;
+  --magenta: #BF4B94;
+  --violeta: #6F68A8;
 
-  --color-accent-red: #ff0055;      /* Peligro, HP, Cráneos */
-  --color-accent-blue: #00e0ff;     /* Info, Energía, Botones */
-  --color-accent-green: #00ff7b;    /* Éxito, Dinero */
-  --color-accent-yellow: #ffff00;   /* Oro, Élite */
+  /* Fila 2 (Tonos Medios) */
+  --turquesa: #2DB0AD;
+  --azul-acero: #4979B4;
+  --purpura: #7E5FA5;
+  --verde: #57B154;
+  --verde-petroleo: #0E6264;
+  --borgona-oscuro: #602A3A;
+  --purpura-oscuro: #4B336E;
+  --azul-marino: #2A486E;
+  --verde-petroleo-oscuro: #0E5658;
+  --verde-oliva: #5C5B2D;
 
-  --text-light: #e0e0e0;            /* Texto normal */
-  --text-dark: #12121b;             /* Texto sobre botones brillantes */
-  --text-dim: #77779a;              /* Mensajes, placeholders */
+  /* Fila 3 (Tonos Oscuros) */
+  --azul-noche: #1C2B42;
+  --verde-bosque: #103A3C;
+  --verde-muy-oscuro: #253A28;
+  --verde-oliva-oscuro: #3C4229;
+  --marron-oscuro: #4E3A2D;
+  --marron-rojizo: #432B2A;
+  --purpura-berenjena: #4C2C48;
+  --azul-oscuro: #29324A;
+  --azul-medianoche: #18283C;
+
+  /* Colores de fondo y panel */
+  --color-background: var(--azul-noche);
+  --color-panel-dark: var(--verde-bosque);
+  --color-panel-border: var(--azul-acero);
+
+  /* Colores de acento */
+  --color-accent-red: var(--magenta);
+  --color-accent-blue: var(--celeste-palido);
+  --color-accent-green: var(--verde-brillante);
+  --color-accent-yellow: var(--verde-limon-palido);
+
+  /* Colores de texto */
+  --text-light: var(--celeste-palido);
+  --text-dark: var(--verde-oliva);
+  --text-dim: var(--lavanda);
 }
 
 /* Fuente personalizada */

@@ -1,0 +1,177 @@
+.panelIzquierdo {
+  background-color: var(--verde-bosque);
+  border: 3px solid var(--azul-acero);
+  padding: 15px;
+  min-width: 250px;
+  overflow-y: auto;
+  position: relative;
+  overflow: hidden;
+}
+
+.panelIzquierdo::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.15),
+    rgba(0, 0, 0, 0.15) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  pointer-events: none;
+  z-index: -1;
+}
+
+.tituloPanel {
+  color: var(--verde-brillante);
+  text-align: center;
+  margin-top: 0;
+  text-shadow: 2px 2px 0 var(--magenta);
+  animation: glitch-title 2s infinite;
+}
+
+@keyframes glitch-title {
+  0% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-2px);
+  }
+  40% {
+    transform: translateX(2px);
+  }
+  60% {
+    transform: translateX(-2px);
+  }
+  80% {
+    transform: translateX(2px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.infoJugador {
+  margin-bottom: 15px;
+  padding: 10px;
+  background-color: var(--azul-noche);
+  border: 2px solid var(--turquesa);
+  border-radius: 6px;
+}
+
+.nombreJugador {
+  color: var(--celeste-palido);
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.estadoJugador {
+  color: var(--lavanda);
+  font-size: 0.9em;
+}
+
+.stats {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.statRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.statLabel {
+  color: var(--azul-cielo);
+}
+
+.statValue {
+  color: var(--verde-limon-palido);
+  font-weight: bold;
+}
+
+.barraEstado {
+  width: 100%;
+  height: 10px;
+  background-color: var(--marron-oscuro);
+  border: 1px solid var(--color-panel-border);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 4px;
+}
+
+.barraLlena {
+  height: 100%;
+  background-color: var(--verde-brillante);
+  transition: width 0.3s ease;
+}
+
+.barraLlenaEnergia {
+  background-color: var(--color-accent-blue);
+}
+
+.barraLlenaXp {
+  background-color: var(--magenta);
+}
+
+.reliquiasTitulo {
+  color: var(--malva);
+  text-align: center;
+  margin: 15px 0 10px 0;
+  text-shadow: 1px 1px 0 var(--azul-acero);
+}
+
+.reliquiaItem {
+  background-color: var(--verde-menta);
+  color: var(--verde-oliva-oscuro);
+  padding: 8px;
+  margin-bottom: 8px;
+  border: 1px solid var(--turquesa);
+  border-radius: 4px;
+  text-align: center;
+  font-size: 0.9em;
+}
+
+.inventarioTitulo {
+  color: var(--rosa-lavanda);
+  text-align: center;
+  margin: 15px 0 10px 0;
+  text-shadow: 1px 1px 0 var(--azul-acero);
+}
+
+.consumibleItem {
+  background-color: var(--azul-acero);
+  color: var(--celeste-palido);
+  padding: 8px;
+  margin-bottom: 8px;
+  border: 1px solid var(--turquesa);
+  border-radius: 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.usarBtn {
+  background-color: var(--verde-brillante);
+  color: var(--verde-oliva);
+  border: 1px solid var(--turquesa);
+  padding: 4px 8px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 0.8em;
+  transition: all 0.1s;
+}
+
+.usarBtn:hover {
+  background-color: var(--verde);
+  transform: translateY(-1px);
+}
+
+.usarBtn:active {
+  transform: translateY(1px);
+}
