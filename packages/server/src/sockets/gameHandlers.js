@@ -32,10 +32,7 @@ function registerGameHandlers(io, socket) {
     }
 
     const partida = partidas.get(socket.id);
-    if (!partida) {
-      return socket.emit('servidor:error', { mensaje: 'Partida no encontrada' });
-    }
-
+    if (!partida) return socket.emit('servidor:error', { mensaje: 'Partida no encontrada' });
     if (partida.estadoJuego !== 'mapa') {
       return socket.emit('servidor:error', { mensaje: 'No es momento de elegir un nodo' });
     }
@@ -52,14 +49,20 @@ function registerGameHandlers(io, socket) {
       partida.estadoJuego = 'evento_pacto';
       partida.mensaje = 'Un eco siniestro te ofrece poder...';
     } else if (nodoElegido.tipo === 'tienda') {
-      // ENTRAR A TIENDA (no volver automáticamente al mapa)
       partida.estadoJuego = 'tienda';
       partida.mensaje = 'Has encontrado una tienda misteriosa.';
       partida.tiendaActual = generarTienda(partida.piso);
-      partida.encuentroActual = null;
+      // OJO: ya NO curamos gratis ni regresamos al mapa aquí.
     } else {
-      // combate o elite
-      partida.encuentroActual = generarEncuentro(partida.piso, nodoElegido.tipo);
+      // combate / elite / jefe
+      const numCorr = Array.isArray(partida.dadosCorrupcion)
+        ? partida.dadosCorrupcion.length
+        : 0;
+      partida.encuentroActual = generarEncuentro(
+        partida.piso,
+        nodoElegido.tipo,
+        numCorr,
+      );
       partida.objetivoEncuentro = partida.encuentroActual.objetivo;
       partida.estadoJuego = 'combate';
       partida.mensaje = `¡Te enfrentas a ${partida.encuentroActual.nombre}!`;
@@ -199,6 +202,17 @@ function registerGameHandlers(io, socket) {
       partida.piso += 1;
       partida.oro += encuentro.recompensaOro;
       partida.xp += encuentro.recompensaXp;
+      // Corrupción pasiva: cada 4 pisos ganas 1 dado corrupto
+      if (partida.piso % 4 === 0) {
+        const nuevoDado = crearDadoCorrupcion(
+          `dc-${(partida.dadosCorrupcion?.length || 0) + 1}`,
+        );
+        if (!Array.isArray(partida.dadosCorrupcion)) {
+          partida.dadosCorrupcion = [];
+        }
+        partida.dadosCorrupcion.push(nuevoDado);
+        partida.mensaje += ' La corrupción crece... has ganado 1 dado corrupto.';
+      }
 
       if (partida.xp >= partida.xpParaNivel) {
         // SUBES DE NIVEL
@@ -222,6 +236,14 @@ function registerGameHandlers(io, socket) {
       partida.estadoJuego = 'mapa';
       partida.mapaActual = generarMapa(partida.piso);
       partida.encuentroActual = null;
+      if (tieneCranio) {
+        let dano = encuentro.danoCranio;
+        const reduccion = partida.modificadores?.reduccionDanoCraneo || 0;
+        dano = Math.max(0, dano - reduccion);
+        partida.hp = Math.max(0, partida.hp - dano);
+        partida.mensaje = `¡Penalidad por cráneo! -${dano} HP.`;
+      }
+
     }
 
     // Reset bloqueo para el siguiente turno
@@ -347,14 +369,10 @@ function registerGameHandlers(io, socket) {
   // Salir de la tienda y volver al mapa
   socket.on('cliente:salir_tienda', () => {
     const jugador = jugadores.get(socket.id);
-    if (!jugador) {
-      return socket.emit('servidor:error', { mensaje: 'No estás autenticado' });
-    }
+    if (!jugador) return socket.emit('servidor:error', { mensaje: 'No estás autenticado' });
 
     const partida = partidas.get(socket.id);
-    if (!partida) {
-      return socket.emit('servidor:error', { mensaje: 'Partida no encontrada' });
-    }
+    if (!partida) return socket.emit('servidor:error', { mensaje: 'Partida no encontrada' });
 
     if (partida.estadoJuego !== 'tienda') {
       return socket.emit('servidor:error', { mensaje: 'No estás en una tienda' });

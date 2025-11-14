@@ -1,73 +1,121 @@
 // src/game/items.js
 
+// Definición base de ítems
 const POOL_ITEMS = [
   {
     id: 'pocion_pequena',
     nombre: 'Poción Pequeña',
     tipo: 'consumible',
-    precio: 20,
-    descripcion: 'Cura 8 HP cuando se usa.',
+    costoBase: 20,
+    descripcion: 'Cura 8 HP.',
     usar(partida) {
       partida.hp = Math.min(partida.hp + 8, partida.hpMax);
     },
   },
   {
-    id: 'amuleto_energia',
-    nombre: 'Amuleto de Energía',
-    tipo: 'reliquia',
-    precio: 50,
-    descripcion: '+1 Energía máxima permanente.',
-    aplicarPasivo(partida) {
-      partida.energiaMax += 1;
+    id: 'pocion_grande',
+    nombre: 'Poción Grande',
+    tipo: 'consumible',
+    costoBase: 35,
+    descripcion: 'Cura 16 HP.',
+    usar(partida) {
+      partida.hp = Math.min(partida.hp + 16, partida.hpMax);
     },
   },
   {
-    id: 'bolsa_oro',
-    nombre: 'Bolsa Misteriosa',
-    tipo: 'instantaneo',
-    precio: 30,
-    descripcion: 'Ganas 40 de Oro al comprar.',
-    aplicarInstantaneo(partida) {
-      partida.oro += 40;
+    id: 'filtro_corrupcion',
+    nombre: 'Filtro de Corrupción',
+    tipo: 'consumible',
+    costoBase: 40,
+    descripcion: 'Elimina 1 dado corrupto (si existe).',
+    usar(partida) {
+      if (partida.dadosCorrupcion.length > 0) {
+        partida.dadosCorrupcion.pop();
+      }
+    },
+  },
+  {
+    id: 'amulet_anticraneo',
+    nombre: 'Amuleto Anti-Cráneo',
+    tipo: 'reliquia',
+    costoBase: 50,
+    descripcion: 'Reduce en 2 el daño por CRÁNEO.',
+    aplicarReliquia(partida) {
+      if (!partida.modificadores) partida.modificadores = {};
+      partida.modificadores.reduccionDanoCraneo =
+        (partida.modificadores.reduccionDanoCraneo || 0) + 2;
+    },
+  },
+  {
+    id: 'bolsa_dados',
+    nombre: 'Bolsa de Dados',
+    tipo: 'reliquia',
+    costoBase: 60,
+    descripcion: '+1 dado base permanente.',
+    aplicarReliquia(partida) {
+      const nuevoId = `d-extra-${partida.dadosBase.length + 1}`;
+      partida.dadosBase.push({
+        id: nuevoId,
+        valor: null,
+        esCorrupto: false,
+      });
     },
   },
 ];
 
+// Genera una tienda para el piso actual
 function generarTienda(piso) {
+  // La tienda ofrece 3 items aleatorios, con costo escalado
   const poolMezclado = [...POOL_ITEMS].sort(() => 0.5 - Math.random());
-  const items = poolMezclado.slice(0, 3); // 3 ítems en tienda
-  return {
-    tipo: 'normal',
-    piso,
-    items,
-  };
+  const seleccion = poolMezclado.slice(0, 3);
+
+  return seleccion.map((item) => ({
+    id: item.id,
+    nombre: item.nombre,
+    tipo: item.tipo,
+    descripcion: item.descripcion,
+    costo: item.costoBase + piso * 3, // escalar por piso
+  }));
 }
 
-function encontrarItemEnTienda(partida, itemId) {
-  if (!partida.tiendaActual) return null;
-  return partida.tiendaActual.items.find((item) => item.id === itemId) || null;
-}
-
+// Compra de ítem desde la tienda
 function comprarItem(partida, itemId) {
-  const item = encontrarItemEnTienda(partida, itemId);
-  if (!item) return { ok: false, error: 'Item no encontrado en tienda' };
-  if (partida.oro < item.precio) return { ok: false, error: 'Oro insuficiente' };
-
-  partida.oro -= item.precio;
-
-  if (item.tipo === 'instantaneo' && item.aplicarInstantaneo) {
-    item.aplicarInstantaneo(partida);
-  } else if (item.tipo === 'reliquia') {
-    partida.reliquias.push(item.id);
-    if (item.aplicarPasivo) item.aplicarPasivo(partida);
-  } else if (item.tipo === 'consumible') {
-    partida.consumibles.push(item.id);
+  if (!partida.tiendaActual) {
+    return { ok: false, error: 'No hay tienda activa' };
   }
 
-  // opcional: quitar el ítem de la tienda
-  partida.tiendaActual.items = partida.tiendaActual.items.filter((i) => i.id !== itemId);
+  const oferta = partida.tiendaActual.find((i) => i.id === itemId);
+  if (!oferta) {
+    return { ok: false, error: 'Item no disponible en esta tienda' };
+  }
 
-  return { ok: true, item };
+  if (partida.oro < oferta.costo) {
+    return { ok: false, error: 'Oro insuficiente' };
+  }
+
+  partida.oro -= oferta.costo;
+
+  const itemDef = POOL_ITEMS.find((i) => i.id === itemId);
+  if (!itemDef) {
+    return { ok: false, error: 'Item inválido' };
+  }
+
+  if (itemDef.tipo === 'consumible') {
+    if (!Array.isArray(partida.consumibles)) {
+      partida.consumibles = [];
+    }
+    partida.consumibles.push(itemDef.id);
+  } else if (itemDef.tipo === 'reliquia') {
+    if (!Array.isArray(partida.reliquias)) {
+      partida.reliquias = [];
+    }
+    partida.reliquias.push(itemDef.id);
+    if (typeof itemDef.aplicarReliquia === 'function') {
+      itemDef.aplicarReliquia(partida);
+    }
+  }
+
+  return { ok: true, item: oferta };
 }
 
 module.exports = {

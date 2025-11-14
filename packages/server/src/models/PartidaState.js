@@ -40,7 +40,8 @@ class PartidaState {
 
     // --- NUEVO: tienda / items ---
     this.tiendaActual = null;    // { piso, tipo, items: [...] }
-    this.consumibles = [];       // ids de ítems consumibles
+    this.consumibles = [];  // ids de ítems consumibles
+    this.modificadores = {};     
     // this.reliquias ya existe y se reutiliza
   }
 }

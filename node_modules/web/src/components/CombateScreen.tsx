@@ -7,18 +7,19 @@ const CombateScreen: React.FC = () => {
   const { state } = useGame();
   const { partidaState } = state;
   const [selectedDice, setSelectedDice] = useState<string[]>([]);
+  const [showBag, setShowBag] = useState(false);
 
   if (!partidaState || !partidaState.encuentroActual) {
     return <div>Cargando encuentro...</div>;
   }
 
-  const { encuentroActual, dadosBase, dadosCorrupcion, mensaje } = partidaState;
+  const { encuentroActual, dadosBase, dadosCorrupcion, mensaje, consumibles } =
+    partidaState;
 
-  const allowSelection =
-    partidaState.dadosLanzados && partidaState.estadoJuego === 'combate';
+  const allowSelection = partidaState.dadosLanzados && partidaState.estadoJuego === 'combate';
 
   const handleLanzarDados = () => {
-    if (partidaState.dadosLanzados || partidaState.estadoJuego !== 'combate') return;
+    if (partidaState.dadosLanzados) return;
     setSelectedDice([]);
     socket.emit('cliente:lanzar_dados');
   };
@@ -43,13 +44,8 @@ const CombateScreen: React.FC = () => {
     setSelectedDice([]);
   };
 
-  const handleUsarHabilidad = (habilidadId: 'aumentar_dado' | 'voltear_dado' | 'relanzar_dado') => {
-    if (!allowSelection) return;
-    if (selectedDice.length !== 1) {
-      return alert('Selecciona exactamente 1 dado para usar la habilidad.');
-    }
-    const dadoId = selectedDice[0];
-    socket.emit('cliente:usar_habilidad', { habilidadId, dadoId });
+  const handleUsarConsumible = (itemId: string) => {
+    socket.emit('cliente:usar_consumible', { itemId });
   };
 
   const todosLosDados = [...dadosBase, ...dadosCorrupcion];
@@ -59,6 +55,22 @@ const CombateScreen: React.FC = () => {
       <h2>{encuentroActual.nombre}</h2>
       <h1>OBJETIVO: {encuentroActual.objetivo}+</h1>
       <p className="mensaje">{mensaje}</p>
+
+      {/* Barra superior de info rápida */}
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          gap: '30px',
+          marginBottom: '10px',
+          fontSize: '14px',
+          color: 'var(--text-dim)',
+        }}
+      >
+        <span>ENERGÍA: {partidaState.energia} / {partidaState.energiaMax}</span>
+        <span>DADOS CORRUPTOS: {dadosCorrupcion.length}</span>
+        <span>CONSUMIBLES: {consumibles?.length || 0}</span>
+      </div>
 
       {/* Área de Dados */}
       <div className="dado-area">
@@ -73,46 +85,11 @@ const CombateScreen: React.FC = () => {
         ))}
       </div>
 
-      {/* Botones de Habilidad */}
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          gap: '10px',
-          marginTop: '10px',
-        }}
-      >
-        <button
-          className="retro-button small ability-btn"
-          onClick={() => handleUsarHabilidad('aumentar_dado')}
-          disabled={!allowSelection}
-          title="Aumentar Dado (1 Energía)"
-        >
-          +
-        </button>
-        <button
-          className="retro-button small ability-btn"
-          onClick={() => handleUsarHabilidad('voltear_dado')}
-          disabled={!allowSelection}
-          title="Voltear Dado (2 Energía)"
-        >
-          ↕
-        </button>
-        <button
-          className="retro-button small ability-btn"
-          onClick={() => handleUsarHabilidad('relanzar_dado')}
-          disabled={!allowSelection}
-          title="Relanzar Dado (1 Energía)"
-        >
-          ⟳
-        </button>
-      </div>
-
-      {/* Botones de Acción */}
+      {/* Acciones principales */}
       <div className="action-area">
         <button
           onClick={handleLanzarDados}
-          disabled={partidaState.dadosLanzados || partidaState.estadoJuego !== 'combate'}
+          disabled={partidaState.dadosLanzados}
           className="retro-button danger chunky-shadow"
           style={{ fontSize: '20px', padding: '15px', minWidth: '200px', cursor: 'pointer' }}
         >
@@ -127,7 +104,57 @@ const CombateScreen: React.FC = () => {
             CONFIRMAR SELECCIÓN
           </button>
         )}
+
+        {/* Botón de bolsa */}
+        <button
+          type="button"
+          onClick={() => setShowBag((prev) => !prev)}
+          className="retro-button chunky-shadow"
+        >
+          BOLSA ({consumibles?.length || 0})
+        </button>
       </div>
+
+      {/* Panel de Bolsa (simple dropdown) */}
+      {showBag && (
+        <div
+          style={{
+            marginTop: '15px',
+            padding: '10px',
+            border: '2px solid var(--color-panel-border)',
+            backgroundColor: 'var(--color-panel-dark)',
+            maxWidth: '400px',
+            marginInline: 'auto',
+            textAlign: 'left',
+          }}
+        >
+          {(!consumibles || consumibles.length === 0) && (
+            <p style={{ color: 'var(--text-dim)' }}>No tienes consumibles.</p>
+          )}
+          {consumibles &&
+            consumibles.map((itemId, idx) => (
+              <div
+                key={`${itemId}-${idx}`}
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  marginBottom: '5px',
+                  fontSize: '12px',
+                }}
+              >
+                <span>{itemId}</span>
+                <button
+                  type="button"
+                  className="retro-button small"
+                  onClick={() => handleUsarConsumible(itemId)}
+                >
+                  USAR
+                </button>
+              </div>
+            ))}
+        </div>
+      )}
     </div>
   );
 };

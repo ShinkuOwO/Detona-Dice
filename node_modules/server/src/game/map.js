@@ -1,53 +1,67 @@
-// game/map.js
+// src/game/map.js
 
+// Escalado de XP
 function calcularXPParaNivel(nivel) {
-  return 100 + (nivel * 25);
+  return 100 + nivel * 35; // sube un poco más fuerte
 }
 
 function calcularXPporEncuentro(tipo, pisoActual) {
   switch (tipo) {
-    case 'normal': return 10 + (pisoActual * 2);
-    case 'elite':  return 30 + (pisoActual * 3);
-    case 'jefe':   return 100;
-    default:       return 10 + (pisoActual * 2);
+    case 'normal':
+      return 10 + pisoActual * 3;
+    case 'elite':
+      return 40 + pisoActual * 4;
+    case 'jefe':
+      return 120 + pisoActual * 5;
+    default:
+      return 10 + pisoActual * 3;
   }
 }
 
-function calcularObjetivoPiso(pisoActual) {
-  return 5 + Math.floor(pisoActual / 2);
+// Escalado del objetivo
+function calcularObjetivoPiso(pisoActual, tipo = 'normal') {
+  let base = 6 + pisoActual; // antes era 5 + piso/2
+
+  if (tipo === 'elite') base += 3;
+  if (tipo === 'jefe') base += 5;
+
+  return base;
 }
 
-function generarEncuentro(piso, tipoNodo = 'normal') {
+function generarEncuentro(piso, tipoNodo = 'normal', numDadosCorrupcion = 0) {
   let tipo = tipoNodo;
 
-  // Forzar jefe/élite en ciertos pisos
-  if (piso % 10 === 0 && tipo !== 'jefe') {
-    tipo = 'jefe';
-  } else if (piso % 5 === 0 && tipo !== 'elite' && tipo !== 'jefe') {
-    tipo = 'elite';
-  }
+  // Forzar jefe en pisos clave
+  if (piso % 10 === 0 && tipo !== 'jefe') tipo = 'jefe';
+  else if (piso % 5 === 0 && tipo !== 'elite' && tipo !== 'jefe') tipo = 'elite';
 
-  const objetivo = calcularObjetivoPiso(piso);
+  const objetivo = calcularObjetivoPiso(piso, tipo);
+
   let danoFallo;
   let danoCranio;
   let recompensaOro;
 
   switch (tipo) {
     case 'elite':
-      danoFallo = 3;
-      danoCranio = 3;
-      recompensaOro = 25 + Math.floor(piso / 2);
+      danoFallo = 3 + Math.floor(piso / 4);
+      danoCranio = 4 + Math.floor(piso / 3);
+      recompensaOro = 35 + Math.floor(piso * 1.5);
       break;
+
     case 'jefe':
-      danoFallo = 5;
-      danoCranio = 5;
-      recompensaOro = 100;
+      danoFallo = 5 + Math.floor(piso / 3);
+      danoCranio = 8 + Math.floor(piso / 2); // muy peligroso
+      recompensaOro = 100 + piso * 3;
       break;
-    default: // normal
-      danoFallo = 1;
-      danoCranio = 2;
-      recompensaOro = 10 + Math.floor(piso / 2);
+
+    default:
+      danoFallo = 1 + Math.floor(piso / 5);
+      danoCranio = 2 + Math.floor(piso / 4);
+      recompensaOro = 12 + Math.floor(piso * 1.2);
   }
+
+  // Corrupción extra: cada dado corrupto aumenta daño de cráneo
+  const danoExtraPorCorrupcion = numDadosCorrupcion > 0 ? numDadosCorrupcion : 0;
 
   return {
     nombre: `${tipo.charAt(0).toUpperCase() + tipo.slice(1)} Piso ${piso}`,
@@ -56,84 +70,111 @@ function generarEncuentro(piso, tipoNodo = 'normal') {
     recompensaOro,
     recompensaXp: calcularXPporEncuentro(tipo, piso),
     danoFallo,
-    danoCranio,
+    danoCranio: danoCranio + danoExtraPorCorrupcion,
   };
 }
 
-/**
- * Genera el mapa de nodos para un piso.
- * 
- * @param {number} piso
- * @param {Object} [opciones]
- * @param {string[]} [opciones.excluirTipos] Lista de tipos a NO incluir (ej: ['tienda']).
- */
-function generarMapa(piso, opciones = {}) {
-  const { excluirTipos = [] } = opciones;
+// Probabilidades base de nodos aleatorios (sin pisos especiales)
+const PESOS_NODOS = {
+  combate: 0.5,
+  elite: 0.15,
+  evento_pacto: 0.2,
+  tienda: 0.15,
+};
 
-  // Pool base
-  const basePool = [
-    { id: `c-${piso}`, tipo: 'combate',       texto: 'Combate Normal' },
-    { id: `e-${piso}`, tipo: 'elite',         texto: 'Combate Élite' },
-    { id: `p-${piso}`, tipo: 'evento_pacto',  texto: 'Evento Misterioso' },
-    { id: `t-${piso}`, tipo: 'tienda',        texto: 'Tienda' },
-  ];
+function elegirTipoNodoAleatorio() {
+  const r = Math.random();
+  let acumulado = 0;
 
-  // Filtrar tipos excluidos (por ejemplo, tienda o evento_pacto)
-  const poolNodos = basePool.filter(
-    (nodo) => !excluirTipos.includes(nodo.tipo)
-  );
-
-  // Siempre intentamos tener al menos un combate
-  const nodoCombate =
-    poolNodos.find((n) => n.tipo === 'combate') ||
-    basePool.find((n) => n.tipo === 'combate');
-
-  let opcionesNodos = [nodoCombate];
-
-  // Nodos "especiales" (no combate) disponibles tras filtro
-  const especiales = poolNodos.filter((n) => n.tipo !== 'combate');
-
-  // Piso de tienda (cada 4) -> Combate + Tienda (si no está excluida)
-  if (piso % 4 === 0) {
-    const tienda = especiales.find((n) => n.tipo === 'tienda');
-    if (tienda) {
-      opcionesNodos = [nodoCombate, tienda];
-    } else {
-      // Si tienda está excluida o no existe, al menos combate + otro especial si hay
-      if (especiales[0]) opcionesNodos = [nodoCombate, especiales[0]];
-      else opcionesNodos = [nodoCombate];
-    }
+  for (const [tipo, peso] of Object.entries(PESOS_NODOS)) {
+    acumulado += peso;
+    if (r <= acumulado) return tipo;
   }
-  // Piso de élite/evento (cada 5) -> Élite + Evento (si están disponibles)
-  else if (piso % 5 === 0) {
-    const elite =
-      poolNodos.find((n) => n.tipo === 'elite') || nodoCombate;
-    const evento = especiales.find((n) => n.tipo === 'evento_pacto');
+  return 'combate';
+}
 
-    opcionesNodos = [elite];
-    if (evento) {
-      opcionesNodos.push(evento);
-    } else if (especiales.length > 0) {
-      // si el evento está excluido, al menos elite + otro especial
-      opcionesNodos.push(especiales[0]);
-    }
-  }
-  // Piso normal -> Combate + 1 especial aleatorio si existe
-  else {
-    if (especiales.length > 0) {
-      const mezclados = [...especiales].sort(() => 0.5 - Math.random());
-      opcionesNodos.push(mezclados[0]);
-    }
+function generarMapa(piso) {
+  const nodos = [];
+
+  // Piso de jefe → no hay mapa, el frontend puede usar solo el combate forzado
+  if (piso % 10 === 0) {
+    return {
+      piso,
+      nodos: [
+        {
+          id: `j-${piso}`,
+          tipo: 'jefe',
+          texto: 'JEFE DEL PISO',
+        },
+      ],
+      nodoActual: null,
+    };
   }
 
-  // Limpiar posibles undefined y mezclar el orden final
-  const nodosFinal = opcionesNodos
-    .filter(Boolean)
-    .sort(() => 0.5 - Math.random());
+  // Piso de tienda garantizada cada 4 (pero no en jefe)
+  const pisoDeTienda = piso % 4 === 0;
+  const pisoDeElite = piso % 5 === 0;
+
+  if (pisoDeElite) {
+    // Élite o Evento
+    nodos.push(
+      {
+        id: `e-${piso}`,
+        tipo: 'elite',
+        texto: 'Combate Élite',
+      },
+      {
+        id: `p-${piso}`,
+        tipo: 'evento_pacto',
+        texto: 'Evento Misterioso',
+      },
+    );
+  } else if (pisoDeTienda) {
+    // Combate o Tienda
+    nodos.push(
+      {
+        id: `c-${piso}`,
+        tipo: 'combate',
+        texto: 'Combate Normal',
+      },
+      {
+        id: `t-${piso}`,
+        tipo: 'tienda',
+        texto: 'Tienda',
+      },
+    );
+  } else {
+    // Caso general: 2–3 caminos con al menos 1 combate
+    nodos.push({
+      id: `c-${piso}`,
+      tipo: 'combate',
+      texto: 'Combate Normal',
+    });
+
+    const numExtras = Math.random() < 0.6 ? 2 : 1;
+    for (let i = 0; i < numExtras; i++) {
+      const tipo = elegirTipoNodoAleatorio();
+      nodos.push({
+        id: `${tipo[0]}-${piso}-${i}`,
+        tipo,
+        texto:
+          tipo === 'elite'
+            ? 'Combate Élite'
+            : tipo === 'evento_pacto'
+              ? 'Evento Misterioso'
+              : tipo === 'tienda'
+                ? 'Tienda'
+                : 'Combate Normal',
+      });
+    }
+  }
+
+  // Mezclar orden
+  nodos.sort(() => 0.5 - Math.random());
 
   return {
     piso,
-    nodos: nodosFinal,
+    nodos,
     nodoActual: null,
   };
 }
