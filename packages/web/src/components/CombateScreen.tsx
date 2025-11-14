@@ -60,7 +60,6 @@ const CombateScreen: React.FC = () => {
 
       {/* Barra superior de info rápida */}
       <div className={styles.infoBar}>
-        <span>ENERGÍA: {partidaState.energia} / {partidaState.energiaMax}</span>
         <span>DADOS CORRUPTOS: {dadosCorrupcion.length}</span>
         <span>CONSUMIBLES: {consumibles?.length || 0}</span>
       </div>
@@ -139,7 +138,6 @@ const CombateScreen: React.FC = () => {
               [↻] Relanzar
             </button>
           </div>
-          <p className={styles.energiaInfo}>Energía actual: {partidaState.energia}/{partidaState.energiaMax}</p>
         </div>
       )}
 

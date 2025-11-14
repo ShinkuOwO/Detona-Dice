@@ -16,11 +16,7 @@ const PanelIzquierdo: React.FC = () => {
     );
   }
 
-  const { piso, hp, hpMax, oro, energia, energiaMax, nivel, xp, xpParaNivel, reliquias, consumibles } = partidaState;
-
-  const hpPercent = Math.max(0, Math.min(100, (hp / hpMax) * 100));
-  const energiaPercent = Math.max(0, Math.min(100, (energia / energiaMax) * 100));
-  const xpPercent = Math.max(0, Math.min(100, (xp / xpParaNivel) * 100));
+  const { piso, nivel, reliquias, consumibles } = partidaState;
 
   const handleUsarConsumible = (itemId: string) => {
     socket.emit('cliente:usar_consumible', { itemId });
@@ -64,36 +60,6 @@ const PanelIzquierdo: React.FC = () => {
         </div>
       </div>
 
-      <div className={styles.stats}>
-        <div className={styles.statRow}>
-          <span className={styles.statLabel}>HP:</span>
-          <span className={styles.statValue}>{hp}/{hpMax}</span>
-        </div>
-        <div className={styles.barraEstado}>
-          <div className={`${styles.barraLlena} ${styles.barraLlenaHp}`} style={{ width: `${hpPercent}%` }} />
-        </div>
-
-        <div className={styles.statRow}>
-          <span className={styles.statLabel}>Energía:</span>
-          <span className={styles.statValue}>{energia}/{energiaMax}</span>
-        </div>
-        <div className={styles.barraEstado}>
-          <div className={`${styles.barraLlena} ${styles.barraLlenaEnergia}`} style={{ width: `${energiaPercent}%` }} />
-        </div>
-
-        <div className={styles.statRow}>
-          <span className={styles.statLabel}>XP:</span>
-          <span className={styles.statValue}>{xp}/{xpParaNivel}</span>
-        </div>
-        <div className={styles.barraEstado}>
-          <div className={`${styles.barraLlena} ${styles.barraLlenaXp}`} style={{ width: `${xpPercent}%` }} />
-        </div>
-
-        <div className={styles.statRow}>
-          <span className={styles.statLabel}>Oro:</span>
-          <span className={styles.statValue}>{oro} G</span>
-        </div>
-      </div>
 
       {/* HABILIDADES */}
       <h3 className={styles.tituloPanel}>HABILIDADES</h3>

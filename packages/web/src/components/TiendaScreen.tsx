@@ -48,11 +48,6 @@ const TiendaScreen: React.FC = () => {
 
       <p className={styles.mensajeTienda}>{mensaje}</p>
 
-      <p className={styles.dineroActual}>
-        <strong>Tu oro:</strong>{' '}
-        <span className={styles.dineroCantidad}>{oro} G</span>
-      </p>
-
       {items.length === 0 ? (
         <p className={styles.sinItems}>El mercader no tiene nada que vender...</p>
       ) : (

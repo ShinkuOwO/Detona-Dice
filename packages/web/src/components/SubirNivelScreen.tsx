@@ -72,7 +72,7 @@ const SubirNivelScreen: React.FC = () => {
         className="retro-button small reroll-button chunky-shadow"
         style={{ marginTop: '30px' }}
       >
-        Reroll (Cuesta 10 Oro) - Tienes: {oro}
+        Reroll (Cuesta 10 Oro)
       </button>
     </div>
   );
