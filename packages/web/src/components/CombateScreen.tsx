@@ -8,8 +8,9 @@ import { useNotification } from '../contexts/NotificationContext';
 const CombateScreen: React.FC = () => {
   const { state } = useGame();
   const { partidaState } = state;
-   const [selectedDice, setSelectedDice] = useState<string[]>([]);
+  const [selectedDice, setSelectedDice] = useState<string[]>([]);
   const [showBag, setShowBag] = useState(false);
+  const [animatingDice, setAnimatingDice] = useState<Record<string, 'rolling' | 'flipping' | 'increasing'>>({});
   const { addNotification } = useNotification();
 
   if (!partidaState || !partidaState.encuentroActual) {
@@ -24,7 +25,30 @@ const CombateScreen: React.FC = () => {
   const handleLanzarDados = () => {
     if (partidaState.dadosLanzados) return;
     setSelectedDice([]);
-    socket.emit('cliente:lanzar_dados');
+    
+    // Trigger rolling animation for all dice
+    const allDiceIds = [...dadosBase, ...dadosCorrupcion].map(d => d.id);
+    const animationState: Record<string, 'rolling'> = {};
+    allDiceIds.forEach(id => {
+      animationState[id] = 'rolling';
+    });
+    setAnimatingDice(animationState);
+    
+    // Emit the socket event after a short delay to allow animation to start
+    setTimeout(() => {
+      socket.emit('cliente:lanzar_dados');
+    }, 300); // 300ms to allow animation to play
+    
+    // Remove the animation classes after animation completes
+    setTimeout(() => {
+      setAnimatingDice(prev => {
+        const newAnimating = { ...prev };
+        allDiceIds.forEach(id => {
+          delete newAnimating[id];
+        });
+        return newAnimating;
+      });
+    }, 600); // 600ms to match the animation duration
   };
 
   const handleSeleccionarDado = (dadoId: string) => {
@@ -68,16 +92,22 @@ const CombateScreen: React.FC = () => {
 
       {/* Área de Dados */}
       <div className={styles.dadoArea}>
-        {todosLosDados.map((dado) => (
+        {todosLosDados.map((dado) => {
+          // Determine animation state for this die
+          const animationState = animatingDice[dado.id] || 
+            (partidaState.dadosLanzados && !dado.valor ? 'rolling' : 'none');
+          
+          return (
           <DadoComponent
             key={dado.id}
             dado={dado}
             disabled={!allowSelection}
             isSelected={selectedDice.includes(dado.id)}
-            isLanzando={partidaState.dadosLanzados && !dado.valor} // Mostrar animación si los dados están lanzándose pero aún no tienen valor
+            animationState={animationState}
             onClick={() => handleSeleccionarDado(dado.id)}
           />
-        ))}
+          );
+        })}
       </div>
 
       {/* Acciones principales */}
@@ -117,7 +147,28 @@ const CombateScreen: React.FC = () => {
           <div className={styles.habilidadesBotones}>
             <button
               className={`${styles.abilityBtn} retro-button chunky-shadow`}
-              onClick={() => socket.emit('cliente:usar_habilidad', { habilidadId: 'aumentar_dado', dadoId: selectedDice[0] })}
+              onClick={() => {
+                if (selectedDice.length !== 1) return;
+                // Trigger the increasing animation for the selected die
+                setAnimatingDice(prev => ({
+                  ...prev,
+                  [selectedDice[0]]: 'increasing'
+                }));
+                
+                // After a short delay, emit the socket event
+                setTimeout(() => {
+                  socket.emit('cliente:usar_habilidad', { habilidadId: 'aumentar_dado', dadoId: selectedDice[0] });
+                }, 300); // 300ms to allow animation to play
+                
+                // Remove the animation class after animation completes
+                setTimeout(() => {
+                  setAnimatingDice(prev => {
+                    const newAnimating = { ...prev };
+                    delete newAnimating[selectedDice[0]];
+                    return newAnimating;
+                  });
+                }, 600); // 600ms to match the animation duration
+              }}
               disabled={selectedDice.length !== 1 || partidaState.energia < 1}
               title="Aumentar Dado (+1 al valor, cuesta 1 energía)"
             >
@@ -125,7 +176,28 @@ const CombateScreen: React.FC = () => {
             </button>
             <button
               className={`${styles.abilityBtn} retro-button chunky-shadow`}
-              onClick={() => socket.emit('cliente:usar_habilidad', { habilidadId: 'voltear_dado', dadoId: selectedDice[0] })}
+              onClick={() => {
+                if (selectedDice.length !== 1) return;
+                // Trigger the flipping animation for the selected die
+                setAnimatingDice(prev => ({
+                  ...prev,
+                  [selectedDice[0]]: 'flipping'
+                }));
+                
+                // After a short delay, emit the socket event
+                setTimeout(() => {
+                  socket.emit('cliente:usar_habilidad', { habilidadId: 'voltear_dado', dadoId: selectedDice[0] });
+                }, 300); // 300ms to allow animation to play
+                
+                // Remove the animation class after animation completes
+                setTimeout(() => {
+                  setAnimatingDice(prev => {
+                    const newAnimating = { ...prev };
+                    delete newAnimating[selectedDice[0]];
+                    return newAnimating;
+                  });
+                }, 600); // 600ms to match the animation duration
+              }}
               disabled={selectedDice.length !== 1 || partidaState.energia < 2}
               title="Voltear Dado (7 - valor, cuesta 2 energía)"
             >
@@ -133,7 +205,28 @@ const CombateScreen: React.FC = () => {
             </button>
             <button
               className={`${styles.abilityBtn} retro-button chunky-shadow`}
-              onClick={() => socket.emit('cliente:usar_habilidad', { habilidadId: 'relanzar_dado', dadoId: selectedDice[0] })}
+              onClick={() => {
+                if (selectedDice.length !== 1) return;
+                // Trigger the rolling animation for the selected die
+                setAnimatingDice(prev => ({
+                  ...prev,
+                  [selectedDice[0]]: 'rolling'
+                }));
+                
+                // After a short delay, emit the socket event
+                setTimeout(() => {
+                  socket.emit('cliente:usar_habilidad', { habilidadId: 'relanzar_dado', dadoId: selectedDice[0] });
+                }, 300); // 300ms to allow animation to play
+                
+                // Remove the animation class after animation completes
+                setTimeout(() => {
+                  setAnimatingDice(prev => {
+                    const newAnimating = { ...prev };
+                    delete newAnimating[selectedDice[0]];
+                    return newAnimating;
+                  });
+                }, 600); // 600ms to match the animation duration
+              }}
               disabled={selectedDice.length !== 1 || partidaState.energia < 1}
               title="Relanzar Dado (cuesta 1 energía)"
             >
