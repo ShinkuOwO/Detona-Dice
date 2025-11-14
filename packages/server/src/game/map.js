@@ -93,91 +93,68 @@ function elegirTipoNodoAleatorio() {
   return 'combate';
 }
 
-function generarMapa(piso) {
+function generarMapa(piso, numCorr = 0) {
   const nodos = [];
 
-  // Piso de jefe → no hay mapa, el frontend puede usar solo el combate forzado
+  // COMBATE SIEMPRE
+  nodos.push({
+    id: `c-${piso}`,
+    tipo: 'combate',
+    texto: 'Combate',
+  });
+
+  // PROBABILIDADES MODERNAS
+  const roll = Math.random();
+
+  // Jefe cada 10 pisos
   if (piso % 10 === 0) {
-    return {
-      piso,
-      nodos: [
-        {
-          id: `j-${piso}`,
-          tipo: 'jefe',
-          texto: 'JEFE DEL PISO',
-        },
-      ],
-      nodoActual: null,
-    };
-  }
-
-  // Piso de tienda garantizada cada 4 (pero no en jefe)
-  const pisoDeTienda = piso % 4 === 0;
-  const pisoDeElite = piso % 5 === 0;
-
-  if (pisoDeElite) {
-    // Élite o Evento
-    nodos.push(
-      {
-        id: `e-${piso}`,
-        tipo: 'elite',
-        texto: 'Combate Élite',
-      },
-      {
+    nodos.push({
+      id: `j-${piso}`,
+      tipo: 'elite',
+      texto: 'Jefe / Élite',
+    });
+  } else {
+    // 20% evento
+    if (roll < 0.2) {
+      nodos.push({
         id: `p-${piso}`,
         tipo: 'evento_pacto',
         texto: 'Evento Misterioso',
-      },
-    );
-  } else if (pisoDeTienda) {
-    // Combate o Tienda
-    nodos.push(
-      {
-        id: `c-${piso}`,
-        tipo: 'combate',
-        texto: 'Combate Normal',
-      },
-      {
+      });
+    }
+    // 10% tienda
+    else if (roll < 0.3) {
+      nodos.push({
         id: `t-${piso}`,
         tipo: 'tienda',
         texto: 'Tienda',
-      },
-    );
-  } else {
-    // Caso general: 2–3 caminos con al menos 1 combate
-    nodos.push({
-      id: `c-${piso}`,
-      tipo: 'combate',
-      texto: 'Combate Normal',
-    });
-
-    const numExtras = Math.random() < 0.6 ? 2 : 1;
-    for (let i = 0; i < numExtras; i++) {
-      const tipo = elegirTipoNodoAleatorio();
+      });
+    }
+    // 20% elite si tienes corrupción alta
+    else if (roll < 0.5 && numCorr >= 2) {
       nodos.push({
-        id: `${tipo[0]}-${piso}-${i}`,
-        tipo,
-        texto:
-          tipo === 'elite'
-            ? 'Combate Élite'
-            : tipo === 'evento_pacto'
-              ? 'Evento Misterioso'
-              : tipo === 'tienda'
-                ? 'Tienda'
-                : 'Combate Normal',
+        id: `e-${piso}`,
+        tipo: 'elite',
+        texto: 'Élite',
+      });
+    } 
+    // default: combate extra
+    else {
+      nodos.push({
+        id: `c2-${piso}`,
+        tipo: 'combate',
+        texto: 'Combate',
       });
     }
   }
 
-  // Mezclar orden
-  nodos.sort(() => 0.5 - Math.random());
-
   return {
     piso,
-    nodos,
+    nodos: nodos.sort(() => 0.5 - Math.random()),
     nodoActual: null,
   };
 }
+
 
 module.exports = {
   generarEncuentro,

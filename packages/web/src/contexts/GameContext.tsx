@@ -109,7 +109,7 @@ export interface PartidaState {
 
   // Inventario / progresión
   tiendaActual: TiendaState | null;
-  consumibles: ConsumibleId[];
+  consumibles?: string[];
   reliquias: ReliquiaId[];
   pactosHechos: PactoId[];
 }
