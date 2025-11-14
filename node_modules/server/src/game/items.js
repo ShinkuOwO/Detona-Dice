@@ -2,6 +2,7 @@
 
 // Definición base de ítems
 const POOL_ITEMS = [
+  // Consumibles
   {
     id: 'pocion_pequena',
     nombre: 'Poción Pequeña',
@@ -34,6 +35,39 @@ const POOL_ITEMS = [
       }
     },
   },
+  {
+    id: 'dado_calavera',
+    nombre: 'Dado Calavera',
+    tipo: 'consumible',
+    costoBase: 50,
+    descripcion: 'Convierte un dado normal en un dado corrupto con valor 8.',
+    usar(partida) {
+      // Buscar un dado normal para convertirlo
+      const dadoNormalIndex = partida.dadosBase.findIndex(d => !d.esCorrupto);
+      if (dadoNormalIndex !== -1) {
+        const dadoNormal = partida.dadosBase[dadoNormalIndex];
+        const nuevoDado = {
+          id: `dc-${partida.dadosCorrupcion.length + 1}`,
+          valor: 8,
+          esCorrupto: true
+        };
+        partida.dadosBase.splice(dadoNormalIndex, 1);
+        partida.dadosCorrupcion.push(nuevoDado);
+      }
+    },
+  },
+  {
+    id: 'dado_bendito',
+    nombre: 'Dado Bendito',
+    tipo: 'consumible',
+    costoBase: 60,
+    descripcion: 'Rellena la energía al máximo.',
+    usar(partida) {
+      partida.energia = partida.energiaMax;
+    },
+  },
+
+  // Reliquias
   {
     id: 'amulet_anticraneo',
     nombre: 'Amuleto Anti-Cráneo',
@@ -89,7 +123,58 @@ const POOL_ITEMS = [
       partida.aplicarReliquia('reliquia_oro');
     },
   },
+  {
+    id: 'reliquia_dados_extra',
+    nombre: 'Guanteletes de Dados',
+    tipo: 'reliquia',
+    costoBase: 10,
+    descripcion: 'Permite seleccionar hasta 3 dados en combate.',
+    aplicarReliquia(partida) {
+      partida.aplicarModificador('dados_extra', 1);
+    },
+  },
+  {
+    id: 'reliquia_energia_plus',
+    nombre: 'Batería Mística',
+    tipo: 'reliquia',
+    costoBase: 90,
+    descripcion: '+2 Energía Máxima',
+    aplicarReliquia(partida) {
+      partida.energiaMax += 2;
+    },
+  },
+  {
+    id: 'reliquia_cambio_dados',
+    nombre: 'Caja de Dados',
+    tipo: 'reliquia',
+    costoBase: 150,
+    descripcion: 'Permite cambiar dados corruptos por normales.',
+    aplicarReliquia(partida) {
+      partida.aplicarModificador('cambio_dados', 1);
+    },
+  },
+  {
+    id: 'reliquia_ventaja',
+    nombre: 'Ojo de Horus',
+    tipo: 'reliquia',
+    costoBase: 200,
+    descripcion: 'Reduce el objetivo del enemigo en 2.',
+    aplicarReliquia(partida) {
+      partida.aplicarModificador('ventaja_objetivo', -2);
+    },
+  },
+  {
+    id: 'reliquia_rescate',
+    nombre: 'Amuleto de Rescate',
+    tipo: 'reliquia',
+    costoBase: 180,
+    descripcion: 'Revive con 1 HP si mueres.',
+    aplicarReliquia(partida) {
+      partida.aplicarModificador('revivir', 1);
+    },
+  },
 ];
+
 
 // Genera una tienda para el piso actual
 function generarTienda(piso) {

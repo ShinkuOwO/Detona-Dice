@@ -87,3 +87,30 @@
 .botonUsar {
   cursor: pointer;
 }
+
+.habilidadesArea {
+  margin-top: 20px;
+  padding: 15px;
+  border: 2px solid var(--color-panel-border);
+  background-color: var(--color-panel-dark);
+}
+
+.habilidadesBotones {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.abilityBtn {
+  padding: 8px 12px;
+  font-size: 14px;
+  min-width: 100px;
+}
+
+.energiaInfo {
+  text-align: center;
+  color: var(--text-dim);
+  font-size: 14px;
+ margin: 10px 0 0 0;
+}

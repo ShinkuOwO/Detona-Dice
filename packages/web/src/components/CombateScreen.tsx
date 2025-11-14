@@ -29,14 +29,15 @@ const CombateScreen: React.FC = () => {
     if (!allowSelection) return;
     if (selectedDice.includes(dadoId)) {
       setSelectedDice((prev) => prev.filter((id) => id !== dadoId));
-    } else if (selectedDice.length < 2) {
+    } else if (selectedDice.length < partidaState.getMaxDadosSeleccionables()) {
       setSelectedDice((prev) => [...prev, dadoId]);
     }
   };
 
   const handleConfirmarSeleccion = () => {
-    if (selectedDice.length !== 2) {
-      return alert('Debes seleccionar exactamente 2 dados.');
+    const maxDados = partidaState.getMaxDadosSeleccionables();
+    if (selectedDice.length < 2 || selectedDice.length > maxDados) {
+      return alert(`Debes seleccionar entre 2 y ${maxDados} dados.`);
     }
     socket.emit('cliente:seleccionar_dados', {
       dadoId1: selectedDice[0],
@@ -107,6 +108,40 @@ const CombateScreen: React.FC = () => {
           BOLSA ({consumibles?.length || 0})
         </button>
       </div>
+
+      {/* Habilidades */}
+      {partidaState.dadosLanzados && (
+        <div className={styles.habilidadesArea}>
+          <h3>HABILIDADES</h3>
+          <div className={styles.habilidadesBotones}>
+            <button
+              className={`${styles.abilityBtn} retro-button chunky-shadow`}
+              onClick={() => socket.emit('cliente:usar_habilidad', { habilidadId: 'aumentar_dado', dadoId: selectedDice[0] })}
+              disabled={selectedDice.length !== 1 || partidaState.energia < 1}
+              title="Aumentar Dado (+1 al valor, cuesta 1 energía)"
+            >
+              [+] Aumentar
+            </button>
+            <button
+              className={`${styles.abilityBtn} retro-button chunky-shadow`}
+              onClick={() => socket.emit('cliente:usar_habilidad', { habilidadId: 'voltear_dado', dadoId: selectedDice[0] })}
+              disabled={selectedDice.length !== 1 || partidaState.energia < 2}
+              title="Voltear Dado (7 - valor, cuesta 2 energía)"
+            >
+              [⇄] Voltear
+            </button>
+            <button
+              className={`${styles.abilityBtn} retro-button chunky-shadow`}
+              onClick={() => socket.emit('cliente:usar_habilidad', { habilidadId: 'relanzar_dado', dadoId: selectedDice[0] })}
+              disabled={selectedDice.length !== 1 || partidaState.energia < 1}
+              title="Relanzar Dado (cuesta 1 energía)"
+            >
+              [↻] Relanzar
+            </button>
+          </div>
+          <p className={styles.energiaInfo}>Energía actual: {partidaState.energia}/{partidaState.energiaMax}</p>
+        </div>
+      )}
 
       {/* Panel de Bolsa (simple dropdown) */}
       {showBag && (

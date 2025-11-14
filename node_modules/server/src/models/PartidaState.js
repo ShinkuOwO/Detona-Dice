@@ -92,6 +92,44 @@ class PartidaState {
         break;
     }
   }
+
+  // Método para obtener el número máximo de dados que se pueden seleccionar
+  getMaxDadosSeleccionables() {
+    const dadosExtra = this.getModificador('dados_extra') || 0;
+    return 2 + dadosExtra; // Por defecto se pueden seleccionar 2 dados, más los dados extra de las reliquias
+  }
+
+  // Método para ajustar el objetivo del enemigo
+  getModificadorObjetivo() {
+    return this.getModificador('ventaja_objetivo') || 0;
+  }
+
+  // Método para verificar si el jugador revive al morir
+  puedeRevivir() {
+    const revivir = this.getModificador('revivir') || 0;
+    if (revivir > 0) {
+      this.aplicarModificador('revivir', -1); // Disminuir el contador de revivir
+      return true;
+    }
+    return false;
+  }
+
+  // Método para cambiar dados corruptos por normales
+  cambiarDadoCorrupto() {
+    const puedeCambiar = this.getModificador('cambio_dados') || 0;
+    if (puedeCambiar > 0 && this.dadosCorrupcion.length > 0) {
+      const dadoCorrupto = this.dadosCorrupcion.pop(); // Remover un dado corrupto
+      const nuevoDado = {
+        id: `d-${this.dadosBase.length + 1}`,
+        valor: null,
+        esCorrupto: false
+      };
+      this.dadosBase.push(nuevoDado); // Agregar un dado normal
+      this.aplicarModificador('cambio_dados', -1); // Disminuir el contador de cambios
+      return true;
+    }
+    return false;
+  }
 }
 
 module.exports = PartidaState;

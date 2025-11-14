@@ -240,11 +240,29 @@ function registerGameHandlers(io, socket) {
       }
     } else {
       // DERROTA
-      partida.hp = Math.max(0, partida.hp - encuentro.danoFallo);
-      partida.mensaje = `Derrota. Objetivo ${objetivo} no alcanzado. -${encuentro.danoFallo} HP.`;
-      partida.estadoJuego = 'mapa';
-      partida.mapaActual = generarMapa(partida.piso);
-      partida.encuentroActual = null;
+      // Verificar si el jugador puede revivir
+      if (partida.puedeRevivir()) {
+        partida.hp = 1; // Revivir con 1 HP
+        partida.mensaje = `ยกMilagrosamente sobrevives con 1 HP!`;
+        // Actualizar carrera pรบblica
+        jugadorCarrera.piso = partida.piso;
+        jugadorCarrera.hp = partida.hp;
+        io.to(sala.codigoSala).emit('servidor:actualizacion_carrera', {
+          carreraState: {
+            jugadorId: socket.id,
+            nick: jugador.nick,
+            piso: partida.piso,
+            hp: partida.hp,
+            estado: 'vivo',
+          },
+        });
+      } else {
+        partida.hp = Math.max(0, partida.hp - encuentro.danoFallo);
+        partida.mensaje = `Derrota. Objetivo ${objetivo} no alcanzado. -${encuentro.danoFallo} HP.`;
+        partida.estadoJuego = 'mapa';
+        partida.mapaActual = generarMapa(partida.piso);
+        partida.encuentroActual = null;
+      }
     }
 
     // Reset bloqueo para el siguiente turno

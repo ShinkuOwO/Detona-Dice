@@ -112,6 +112,17 @@ export interface PartidaState {
   consumibles?: string[];
   reliquias: ReliquiaId[];
   pactosHechos: PactoId[];
+
+  // Métodos
+  aplicarEfecto: (efecto: any) => void;
+  limpiarEfectos: () => void;
+  aplicarModificador: (nombre: string, valor: number) => void;
+  getModificador: (nombre: string) => number;
+  aplicarReliquia: (reliquiaId: string) => void;
+  getMaxDadosSeleccionables: () => number;
+  getModificadorObjetivo: () => number;
+  puedeRevivir: () => boolean;
+  cambiarDadoCorrupto: () => boolean;
 }
 
 export interface ResultadosFin {
