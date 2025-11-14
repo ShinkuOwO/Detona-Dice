@@ -1,58 +1,61 @@
-/* Estilos generales para la aplicación */
+/* Estilos generales para la aplicación - Inspirado en Balatro */
 
 /* Variables de tema */
 :root {
-  /* Paleta de colores tipo glitch */
-  /* Fila 1 (Tonos Claros) */
-  --celeste-palido: #8ED5D2;
-  --rosa-lavanda: #C68DC2;
-  --lavanda: #8A8FC2;
-  --azul-cielo: #82B4DA;
-  --verde-menta: #97D0A0;
-  --verde-limon-palido: #CED892;
-  --malva: #B591BA;
-  --verde-brillante: #59BE56;
-  --magenta: #BF4B94;
-  --violeta: #6F68A8;
-
-  /* Fila 2 (Tonos Medios) */
-  --turquesa: #2DB0AD;
-  --azul-acero: #4979B4;
-  --purpura: #7E5FA5;
-  --verde: #57B154;
-  --verde-petroleo: #0E6264;
-  --borgona-oscuro: #602A3A;
-  --purpura-oscuro: #4B336E;
-  --azul-marino: #2A486E;
-  --verde-petroleo-oscuro: #0E5658;
-  --verde-oliva: #5C5B2D;
-
-  /* Fila 3 (Tonos Oscuros) */
-  --azul-noche: #1C2B42;
-  --verde-bosque: #103A3C;
-  --verde-muy-oscuro: #253A28;
-  --verde-oliva-oscuro: #3C4229;
-  --marron-oscuro: #4E3A2D;
-  --marron-rojizo: #432B2A;
-  --purpura-berenjena: #4C2C48;
-  --azul-oscuro: #29324A;
-  --azul-medianoche: #18283C;
-
-  /* Colores de fondo y panel */
-  --color-background: var(--azul-noche);
-  --color-panel-dark: var(--verde-bosque);
-  --color-panel-border: var(--azul-acero);
-
-  /* Colores de acento */
-  --color-accent-red: var(--magenta);
-  --color-accent-blue: var(--celeste-palido);
-  --color-accent-green: var(--verde-brillante);
-  --color-accent-yellow: var(--verde-limon-palido);
-
-  /* Colores de texto */
-  --text-light: var(--celeste-palido);
-  --text-dark: var(--verde-oliva);
-  --text-dim: var(--lavanda);
+  /* Paleta de colores tipo Balatro con toque retro */
+  /* Fondo principal */
+  --color-background: #1a1a1d;
+  
+  /* Colores de cartas/juego */
+  --card-red: #e0245e;
+  --card-black: #1a1a1d;
+  --card-back: #3a3a5c;
+  --card-gold: #ffd700;
+  --card-blue: #5d8aa8;
+  --card-green: #3cb371;
+  
+  /* Colores de interfaz */
+  --ui-panel: #2c2c3a;
+  --ui-panel-border: #4a4a6a;
+  --ui-highlight: #ffcc00;
+  --ui-text: #ffffff;
+  --ui-text-dim: #aaaaaa;
+  --ui-accent: #ff6b35;
+  --ui-success: #4ade80;
+  --ui-warning: #facc15;
+  --ui-error: #f87171;
+  
+  /* Colores para dados */
+  --dado-normal-bg: #4f46e5;
+  --dado-corrupto-bg: #7c3aed;
+  --dado-bendito-bg: #059669;
+  --dado-selected: #fbbf24;
+  --dado-border: #1e293b;
+  
+  /* Efectos visuales */
+  --glow-primary: 0 0 10px rgba(79, 70, 229, 0.7);
+  --glow-corrupto: 0 0 10px rgba(124, 58, 237, 0.7);
+  --glow-bendito: 0 0 10px rgba(5, 150, 105, 0.7);
+  
+  /* Colores para interfaz de juego */
+  --health-bar-bg: #333333;
+  --health-bar-fill: #ef4444;
+  --energy-bar-bg: #333333;
+  --energy-bar-fill: #3b82f6;
+  --xp-bar-fill: #8b5cf6;
+  
+  /* Tipografía */
+  --font-retro: 'Press Start 2P', 'Courier New', monospace;
+  --font-normal: 'VT323', 'Courier New', monospace;
+  
+  /* Variables adicionales necesarias para evitar errores */
+  --color-panel-border: var(--ui-panel-border);
+  --color-accent-red: var(--ui-error);
+  --color-accent-blue: var(--ui-accent);
+  --text-light: var(--ui-text);
+  --text-dark: #000;
+  --azul-noche: #1c2b42;
+  --xp-bar-fill: var(--ui-success);
 }
 
 /* Fuente personalizada */
@@ -69,13 +72,13 @@
   box-sizing: border-box;
   /* Scrollbars retro (Firefox) */
   scrollbar-width: thin;
-  scrollbar-color: var(--color-accent-blue) var(--color-panel-dark);
+  scrollbar-color: var(--ui-accent) var(--ui-panel);
 }
 
 body {
   background-color: var(--color-background);
- color: var(--text-light);
-  font-family: 'RetroGaming', monospace;
+  color: var(--ui-text);
+  font-family: var(--font-retro), 'RetroGaming', monospace;
   margin: 0;
   min-height: 100vh;
   width: 100vw;
@@ -176,8 +179,8 @@ body {
 }
 
 .retro-panel {
-  background-color: var(--color-panel-dark);
-  border: 2px solid var(--color-panel-border);
+  background-color: var(--ui-panel);
+  border: 2px solid var(--ui-panel-border);
   padding: 15px;
   overflow-y: auto;
 }
@@ -186,69 +189,69 @@ body {
   font-family: 'RetroGaming', monospace;
   font-size: 16px;
   padding: 12px 18px;
- background-color: var(--color-accent-blue);
-  color: var(--text-dark);
-  border: 2px solid var(--color-panel-border);
+  background-color: var(--ui-accent);
+  color: var(--ui-text);
+  border: 2px solid var(--ui-panel-border);
   cursor: pointer;
   text-transform: uppercase;
 }
 
 .retro-button-danger {
-  background-color: var(--color-accent-red);
-  color: var(--text-light);
+  background-color: var(--ui-error);
+  color: var(--ui-text);
 }
 
 .retro-button-success {
-  background-color: var(--color-accent-green);
-  color: var(--text-dark);
+  background-color: var(--ui-success);
+  color: var(--ui-text);
 }
 
 .retro-button-purple {
-  background-color: var(--purpura);
-  color: var(--text-light);
+  background-color: var(--ui-accent);
+  color: var(--ui-text);
 }
 
 .retro-button-small {
   font-size: 10px;
   padding: 2px 4px;
   background-color: #444;
- color: #fff;
+  color: #fff;
   border: 1px solid #888;
   box-shadow: 2px 2px 0px #000;
 }
 
 .retro-button-small-active {
   box-shadow: none;
- transform: translate(2px, 2px);
+  transform: translate(2px, 2px);
 }
 
 .reroll-button {
-  background-color: var(--color-accent-green);
-  color: var(--text-dark);
-  border-color: var(--color-accent-green);
-  box-shadow: 4px 4px 0px var(--color-accent-yellow);
+  background-color: var(--ui-success);
+  color: var(--ui-text);
+  border-color: var(--ui-success);
+  box-shadow: 4px 4px 0px var(--ui-highlight);
 }
 
 .retro-input {
   font-family: 'RetroGaming', monospace;
   font-size: 20px;
- background-color: var(--color-panel-dark);
-  color: var(--color-accent-green);
-  border: 2px solid var(--color-panel-border);
+  background-color: var(--ui-panel);
+  color: var(--ui-success);
+  border: 2px solid var(--ui-panel-border);
   padding: 10px;
   text-align: center;
 }
 
 .retro-input-focus {
-  outline: 2px solid var(--color-accent-blue);
+  outline: 2px solid var(--ui-accent);
 }
 
 /* Barra de estado */
 .statusBar {
   width: 100%;
   height: 10px;
-  background-color: var(--color-panel-dark);
-  border: 2px solid var(--color-panel-border);
+  background-color: var(--ui-panel);
+  border: 2px solid var(--ui-panel-border);
   box-shadow: 2px 2px 0px #000;
   margin-top: 2px;
   overflow: hidden;
@@ -260,15 +263,15 @@ body {
 }
 
 .hpFill {
-  background-color: var(--color-accent-red);
+  background-color: var(--ui-error);
 }
 
 .energyFill {
-  background-color: var(--color-accent-blue);
+  background-color: var(--ui-accent);
 }
 
 .xpFill {
-  background-color: var(--color-accent-green);
+  background-color: var(--xp-bar-fill);
 }
 
 .hpLow {
@@ -299,8 +302,8 @@ body {
 }
 
 .modal-content {
-  background-color: var(--color-panel-dark);
-  border: 3px solid var(--color-accent-blue);
+  background-color: var(--ui-panel);
+  border: 3px solid var(--ui-accent);
  padding: 20px;
   border-radius: 8px;
   width: 400px;
@@ -334,9 +337,9 @@ body {
 
 .modal-header h3 {
   margin: 0;
-  color: var(--color-accent-blue);
+  color: var(--ui-accent);
  font-size: 1.2em;
-  text-shadow: 1px 1px 0 var(--azul-noche);
+  text-shadow: 1px 1px 0 var(--ui-panel-border);
 }
 
 .close-button {

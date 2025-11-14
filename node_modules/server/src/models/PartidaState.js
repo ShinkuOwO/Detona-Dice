@@ -78,11 +78,11 @@ class PartidaState {
 
   // Inicializar estado runtime para un pacto específico
   inicializarEstadoPacto(pactoId) {
-    this.estadoPactos[pactoId] = {
-      combatesCompletados: 0,
-      revivirUsado: false,
-      relanzarUsadoEsteCombate: false,
-    };
+      this.estadoPactos[pactoId] = {
+        combatesCompletados: 0,
+        revivirUsado: false,
+        relanzarUsadoEsteCombate: false,
+      };
   }
 
   // Recalcular modificadores de pactos basados en los pactos activos
@@ -113,7 +113,7 @@ class PartidaState {
           nuevosMods.reduceCostoRelanzar += 99; // truco para que quede en 0
           break;
         case 'pacto_destino_invertido':
-          nuevosMods.reduceCostoVoltear -= 1; // Voltear cuesta 1 en lugar de 2
+          nuevosMods.reduceCostoVoltear += 1; // Voltear cuesta 1 en lugar de 2 (reduce en 1)
           break;
         case 'pacto_faro_oscuro':
           nuevosMods.objetivoDelta -= 2;
@@ -184,7 +184,7 @@ class PartidaState {
       this.dadosCorrupcion.push(nuevoDado);
     }
 
-    // Permitir que cada pacto individual aplique efectos al inicio del piso
+      // Permitir que cada pacto individual aplique efectos al inicio del piso
     for (const pactoId of this.pactosActivos) {
       const { LOGICA_PACTOS } = require('../game/pactosLogic');
       const logicaPacto = LOGICA_PACTOS[pactoId];
@@ -403,7 +403,7 @@ class PartidaState {
   }
 
   // Método para serializar el estado para enviar al cliente
- serializarParaCliente() {
+  serializarParaCliente() {
     return {
       piso: this.piso,
       hp: this.hp,
@@ -434,6 +434,9 @@ class PartidaState {
       modificadores: this.modificadores
     };
   }
+
+  // Eliminando métodos duplicados ya que existen arriba
+  // No se necesita redefinir getModificador y aplicarModificador
 }
 
 module.exports = PartidaState;
