@@ -9,6 +9,11 @@ import type{
 } from './contexts/GameContext';
 import { socket } from './socket';
 
+// Importar Bootstrap y estilos retro
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'animate.css';
+import './styles/bootstrap-retro.css';
+
 import LobbyScreen from './components/LobbyScreen';
 import GameRouter from './components/GameRouter';
 import LoginScreen from './components/LoginScreen';

@@ -1,0 +1,171 @@
+ANÁLISIS DETALLADO: ¿QUÉ DEJAR, REEMPLAZAR, MODIFICAR Y AGREGAR EN EL PROYECTO "DETONA DICE"?
+
+ANÁLISIS REALIZADO POR: Arquitecto Fullstack, Game Designer y Especialista en UI/UX
+
+---
+
+## I. COMPONENTES Y FUNCIONALIDADES A MANTENER (LO QUE FUNCIONA BIEN)
+
+### A. Arquitectura Backend
+- [MANTENER] Estructura de monorepo con separación clara entre cliente/servidor
+- [MANTENER] Uso de Socket.IO para comunicación en tiempo real
+- [MANTENER] Patrón cliente-servidor autoritativo (seguridad y consistencia)
+- [MANTENER] Estructura modular de handlers de sockets
+- [MANTENER] Clase PartidaState con lógica de juego completa
+- [MANTENER] Sistema de pactos con lógica compleja y extensible
+
+### B. Lógica de Juego
+- [MANTENER] Sistema de dados con habilidades (aumentar, voltear, relanzar)
+- [MANTENER] Sistema de progresión por pisos
+- [MANTENER] Sistema de corrupción progresiva
+- [MANTENER] Sistema de carreras multijugador
+- [MANTENER] Estructura de encuentros y objetivos
+- [MANTENER] Sistema de XP y niveles
+
+### C. Componentes Frontend Clave
+- [MANTENER] GameContext con reducer para estado global
+- [MANTENER] Estructura de pantallas (Lobby, Combate, Mapa, etc.)
+- [MANTENER] Sistema de sockets y listeners
+- [MANTENER] Componente base de dados (adaptar para Bootstrap)
+
+---
+
+## II. COMPONENTES Y FUNCIONALIDADES A REEMPLAZAR
+
+### A. Estilos CSS Personalizados
+- [REEMPLAZAR] Archivos CSS modules (*.module.css) por clases de Bootstrap con personalización retro
+- [REEMPLAZAR] Archivo App.css por sistema de estilos basado en Bootstrap
+- [REEMPLAZAR] Estilos personalizados en componentes por clases de Bootstrap con personalización
+
+### B. Componentes de UI Básicos
+- [REEMPLAZAR] Componentes de UI personalizados por componentes de Bootstrap con estilos retro
+- [REEMPLAZAR] Sistema de notificaciones personalizado por toasts de Bootstrap
+- [REEMPLAZAR] Modales personalizados por modales de Bootstrap
+- [REEMPLAZAR] Tooltips personalizados por tooltips de Bootstrap
+
+---
+
+## III. COMPONENTES Y FUNCIONALIDADES A MODIFICAR
+
+### A. Componentes de Pantalla
+- [MODIFICAR] CombateScreen.tsx - Integrar Bootstrap, añadir tooltips y feedback visual
+- [MODIFICAR] MapaScreen.tsx - Mejorar visualización con cards de Bootstrap
+- [MODIFICAR] PactoScreen.tsx - Usar cards de Bootstrap con información detallada
+- [MODIFICAR] TiendaScreen.tsx - Implementar con cards de Bootstrap y tooltips
+- [MODIFICAR] SubirNivelScreen.tsx - Mejorar presentación con cards y feedback
+
+### B. Sistema de Información
+- [MODIFICAR] Añadir tooltips a dados para mostrar información oculta
+- [MODIFICAR] Mostrar modificadores activos en tiempo real
+- [MODIFICAR] Añadir preview de resultados antes de confirmar acciones
+- [MODIFICAR] Mejorar sistema de mensajes con alertas de Bootstrap
+
+### C. Interacción de Usuario
+- [MODIFICAR] Feedback visual para selección de dados
+- [MODIFICAR] Animaciones con clases de Bootstrap
+- [MODIFICAR] Validación y feedback de errores con alertas de Bootstrap
+- [MODIFICAR] Sistema de ayuda contextual
+
+---
+
+## IV. COMPONENTES Y FUNCIONALIDADES A AGREGAR
+
+### A. Sistema de Estilos Retro con Bootstrap
+- [AGREGAR] Archivo de personalización de Bootstrap (variables CSS)
+- [AGREGAR] Clases CSS personalizadas para estilo retro (.btn-retro, .card-retro, etc.)
+- [AGREGAR] Tipografía retro compatible con Bootstrap
+- [AGREGAR] Paleta de colores retro basada en Bootstrap
+
+### B. Componentes de UI Mejorados
+- [AGREGAR] Sistema de tooltips detallados para dados, pactos y estadísticas
+- [AGREGAR] Modales de información detallada para decisiones importantes
+- [AGREGAR] Toasts de notificación con estilo retro
+- [AGREGAR] Progress bars con estilo retro para HP, XP, etc.
+- [AGREGAR] Badges informativos para estados y modificadores
+
+### C. Sistema de Feedback Visual
+- [AGREGAR] Animaciones de entrada/salida para transiciones
+- [AGREGAR] Efectos de "pulse" y "highlight" para elementos importantes
+- [AGREGAR] Sistema de alertas con colores codificados por tipo
+- [AGREGAR] Feedback visual para acciones exitosas/erróneas
+
+### D. Mejoras de Información
+- [AGREGAR] Panel de modificadores activos con iconos y tooltips
+- [AGREGAR] Preview de resultados antes de confirmar acciones
+- [AGREGAR] Comparador de estado antes/después de decisiones
+- [AGREGAR] Historial de eventos con componentes de Bootstrap
+
+### E. Experiencia de Usuario Mejorada
+- [AGREGAR] Sistema de onboarding para nuevos jugadores
+- [AGREGAR] Indicadores de progreso visual
+- [AGREGAR] Sistema de logros con UI de Bootstrap
+- [AGREGAR] Panel de estadísticas del jugador
+- [AGREGAR] Vista de historial de decisiones tomadas
+
+---
+
+## V. ARQUITECTURA TÉCNICA A IMPLEMENTAR
+
+### A. Frontend
+- [AGREGAR] Bootstrap 5.x como framework CSS principal
+- [AGREGAR] Sistema de personalización de Bootstrap para estilo retro
+- [AGREGAR] Clases CSS con variables para mantenibilidad
+- [AGREGAR] Componentes React reutilizables con estilos de Bootstrap
+
+### B. Interacciones
+- [MODIFICAR] Implementar tooltips y popovers de Bootstrap
+- [MODIFICAR] Usar modales de Bootstrap para diálogos importantes
+- [MODIFICAR] Implementar feedback con alertas y toasts de Bootstrap
+- [AGREGAR] Animaciones con utilidades de Bootstrap
+
+### C. Experiencia de Usuario
+- [AGREGAR] Indicadores de carga y estado
+- [AGREGAR] Feedback inmediato para todas las acciones
+- [AGREGAR] Sistema de ayuda contextual
+- [AGREGAR] Previsualización de resultados
+
+---
+
+## VI. PRIORIDADES DE IMPLEMENTACIÓN
+
+### Fase 1: Infraestructura
+1. Integrar Bootstrap al proyecto
+2. Crear sistema de estilos retro personalizados
+3. Reemplazar estilos CSS modules por clases de Bootstrap
+
+### Fase 2: Componentes Básicos
+1. Modificar componentes principales con Bootstrap
+2. Implementar tooltips básicos
+3. Añadir feedback visual simple
+
+### Fase 3: Experiencia Avanzada
+1. Implementar sistema de información detallada
+2. Añadir animaciones y efectos visuales
+3. Crear paneles de información avanzados
+
+### Fase 4: Perfeccionamiento
+1. Afinar todos los componentes
+2. Optimizar rendimiento
+3. Asegurar consistencia visual
+
+---
+
+## VII. CONSIDERACIONES DE DISEÑO DE JUEGO
+
+### A. Balance
+- [MANTENER] Sistema de equilibrio actual de pactos y mecánicas
+- [MODIFICAR] Mejorar transparencia de información para decisiones estratégicas
+
+### B. Feedback del Jugador
+- [AGREGAR] Mejor sistema de feedback para entender consecuencias de decisiones
+- [AGREGAR] Visualización clara de modificadores acumulados
+- [AGREGAR] Previsualización de resultados de acciones
+
+### C. Adicción al Juego
+- [AGREGAR] Elementos visuales que refuercen la progresión
+- [AGREGAR] Feedback positivo para logros y avances
+- [AGREGAR] Sistema de recompensas visualmente satisfactorio
+
+---
+
+ESTE ANÁLISIS PROPORCIONA UNA HOJA DE RUTA CLARA PARA MEJORAR LA EXPERIENCIA DE USUARIO Y LA ARQUITECTURA VISUAL DEL JUEGO MANTENIENDO TODO EL VALOR LÓGICO Y DE JUEGO EXISTENTE.
