@@ -88,7 +88,7 @@ const CombateScreen: React.FC = () => {
           {partidaState.dadosLanzados ? 'DADOS LANZADOS' : 'LANZAR DADOS'}
         </button>
 
-        {selectedDice.length >= 2 && selectedDice.length <= partidaState.getMaxDadosSeleccionables() && (
+        {selectedDice.length === 2 && (
           <button
             onClick={handleConfirmarSeleccion}
             className="retro-button success chunky-shadow"
