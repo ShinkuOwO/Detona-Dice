@@ -1,4 +1,4 @@
-const { salas, jugadores, partidas } = require('../store/memoryStore');
+const { salas, jugadores, partidas, usuarios } = require('../store/memoryStore');
 const { generarTienda, comprarItem, POOL_ITEMS } = require('../game/items');
 const {
   crearDadoCorrupcion,
@@ -253,6 +253,26 @@ function registerGameHandlers(io, socket) {
     // Actualizar carrera pรบblica
     jugadorCarrera.piso = partida.piso;
     jugadorCarrera.hp = partida.hp;
+
+    // Actualizar estadísticas del usuario
+    const usuario = usuarios.get(socket.id);
+    if (usuario) {
+      // Si es victoria (piso aumentó), actualizar estadísticas como ganador
+      if (partida.piso > jugadorCarrera.piso_anterior || jugadorCarrera.piso_anterior === undefined) {
+        usuario.actualizarEstadisticas(true, partida.piso);
+        // Otorgar experiencia por victoria
+        usuario.agregarExperiencia(50);
+      } else if (partida.hp <= 0) {
+        // Si fue eliminado, actualizar estadísticas como derrota
+        usuario.actualizarEstadisticas(false, partida.piso);
+        // Otorgar experiencia proporcional al piso alcanzado
+        usuario.agregarExperiencia(partida.piso * 10);
+      } else {
+        // Si no fue eliminado pero tampoco subió de piso, actualizar experiencia por supervivencia
+        usuario.agregarExperiencia(10);
+      }
+      jugadorCarrera.piso_anterior = partida.piso;
+    }
 
     if (partida.hp <= 0) {
       jugadorCarrera.estado = 'eliminado';

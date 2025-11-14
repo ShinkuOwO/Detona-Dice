@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useGame } from '../contexts/GameContext';
 import { socket } from '../socket';
 import DadoComponent from './DadoComponent';
+import styles from './CombateScreen.module.css';
 
 const CombateScreen: React.FC = () => {
   const { state } = useGame();
@@ -51,29 +52,20 @@ const CombateScreen: React.FC = () => {
   const todosLosDados = [...dadosBase, ...dadosCorrupcion];
 
   return (
-    <div className="combate-screen" style={{ padding: '20px', textAlign: 'center' }}>
-      <h2>{encuentroActual.nombre}</h2>
-      <h1>OBJETIVO: {encuentroActual.objetivo}+</h1>
-      <p className="mensaje">{mensaje}</p>
+    <div className={styles.combateScreen}>
+      <h2 className={styles.encuentroNombre}>{encuentroActual.nombre}</h2>
+      <h1 className={styles.objetivo}>OBJETIVO: {encuentroActual.objetivo}+</h1>
+      <p className={styles.mensaje}>{mensaje}</p>
 
       {/* Barra superior de info rápida */}
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          gap: '30px',
-          marginBottom: '10px',
-          fontSize: '14px',
-          color: 'var(--text-dim)',
-        }}
-      >
+      <div className={styles.infoBar}>
         <span>ENERGÍA: {partidaState.energia} / {partidaState.energiaMax}</span>
         <span>DADOS CORRUPTOS: {dadosCorrupcion.length}</span>
         <span>CONSUMIBLES: {consumibles?.length || 0}</span>
       </div>
 
       {/* Área de Dados */}
-      <div className="dado-area">
+      <div className={styles.dadoArea}>
         {todosLosDados.map((dado) => (
           <DadoComponent
             key={dado.id}
@@ -86,7 +78,7 @@ const CombateScreen: React.FC = () => {
       </div>
 
       {/* Acciones principales */}
-      <div className="action-area">
+      <div className={styles.actionArea}>
         <button
           onClick={handleLanzarDados}
           disabled={partidaState.dadosLanzados}
@@ -117,31 +109,15 @@ const CombateScreen: React.FC = () => {
 
       {/* Panel de Bolsa (simple dropdown) */}
       {showBag && (
-        <div
-          style={{
-            marginTop: '15px',
-            padding: '10px',
-            border: '2px solid var(--color-panel-border)',
-            backgroundColor: 'var(--color-panel-dark)',
-            maxWidth: '400px',
-            marginInline: 'auto',
-            textAlign: 'left',
-          }}
-        >
+        <div className={styles.bolsaPanel}>
           {(!consumibles || consumibles.length === 0) && (
-            <p style={{ color: 'var(--text-dim)' }}>No tienes consumibles.</p>
+            <p className={styles.bolsaVacia}>No tienes consumibles.</p>
           )}
           {consumibles &&
             consumibles.map((itemId, idx) => (
               <div
                 key={`${itemId}-${idx}`}
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  marginBottom: '5px',
-                  fontSize: '12px',
-                }}
+                className={styles.itemConsumible}
               >
                 <span>{itemId}</span>
                 <button

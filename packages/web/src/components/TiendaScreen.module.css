@@ -1,0 +1,73 @@
+.tiendaScreen {
+  padding: 20px;
+  text-align: center;
+}
+
+.tituloTienda {
+  margin-bottom: 10px;
+}
+
+.mensajeTienda {
+  color: #aaa;
+ min-height: 24px;
+  margin-bottom: 15px;
+}
+
+.dineroActual {
+  margin-bottom: 15px;
+}
+
+.dineroCantidad {
+  color: var(--color-accent-yellow);
+}
+
+.listaItems {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 400px;
+  margin: 0 auto 20px;
+}
+
+.itemTienda {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.descripcionItem {
+  text-align: left;
+  max-width: 260px;
+}
+
+.nombreItem {
+  font-size: 16px;
+}
+
+.tipoItem {
+  color: #888;
+  font-size: 12px;
+}
+
+.descripcionItemTexto {
+ font-size: 12px;
+  color: var(--text-dim);
+  margin-top: 4px;
+}
+
+.precioItem {
+  color: var(--color-accent-yellow);
+  margin-bottom: 5px;
+}
+
+.botonComprar {
+  cursor: pointer;
+}
+
+.botonSalir {
+  cursor: pointer;
+}
+
+.sinItems {
+  color: #888;
+}

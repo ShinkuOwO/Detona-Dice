@@ -1,0 +1,89 @@
+.combateScreen {
+  padding: 20px;
+  text-align: center;
+}
+
+.encuentroNombre {
+  font-size: 2em;
+  margin-bottom: 10px;
+}
+
+.objetivo {
+  font-size: 3em;
+  color: var(--color-accent-red);
+  margin: 10px 0;
+}
+
+.mensaje {
+  color: var(--text-dim);
+  min-height: 24px;
+  font-style: italic;
+  margin-bottom: 20px;
+}
+
+.infoBar {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: var(--text-dim);
+}
+
+.dadoArea {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 20px;
+  min-height: 150px;
+  gap: 30px;
+  margin: 20px 0;
+}
+
+.actionArea {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin: 20px 0;
+}
+
+.botonLanzar {
+  font-size: 20px;
+  padding: 15px;
+  min-width: 200px;
+  cursor: pointer;
+}
+
+.botonConfirmar {
+  cursor: pointer;
+}
+
+.botonBolsa {
+  cursor: pointer;
+}
+
+.bolsaPanel {
+  margin-top: 15px;
+  padding: 10px;
+  border: 2px solid var(--color-panel-border);
+  background-color: var(--color-panel-dark);
+  max-width: 400px;
+  margin-inline: auto;
+  text-align: left;
+}
+
+.bolsaVacia {
+  color: var(--text-dim);
+}
+
+.itemConsumible {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+ margin-bottom: 5px;
+  font-size: 12px;
+}
+
+.botonUsar {
+  cursor: pointer;
+}

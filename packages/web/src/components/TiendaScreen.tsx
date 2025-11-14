@@ -1,6 +1,7 @@
 import React from 'react';
 import { useGame } from '../contexts/GameContext';
 import { socket } from '../socket';
+import styles from './TiendaScreen.module.css';
 
 const TiendaScreen: React.FC = () => {
   const { state } = useGame();
@@ -16,9 +17,9 @@ const TiendaScreen: React.FC = () => {
   // Si por alguna razón el servidor no envió tiendaActual
   if (partidaState.estadoJuego !== 'tienda' || !tiendaActual) {
     return (
-      <div style={{ padding: '20px', textAlign: 'center' }}>
-        <h2>TIENDA</h2>
-        <p style={{ color: '#aaa', minHeight: '24px' }}>
+      <div className={styles.tiendaScreen}>
+        <h2 className={styles.tituloTienda}>TIENDA</h2>
+        <p className={styles.mensajeTienda}>
           No hay tienda disponible ahora mismo.
         </p>
         <button
@@ -42,28 +43,20 @@ const TiendaScreen: React.FC = () => {
   };
 
   return (
-    <div style={{ padding: '20px', textAlign: 'center' }}>
-      <h2>🛒 TIENDA - PISO {tiendaActual.piso}</h2>
+    <div className={styles.tiendaScreen}>
+      <h2 className={styles.tituloTienda}>🛒 TIENDA - PISO {tiendaActual.piso}</h2>
 
-      <p style={{ color: '#aaa', minHeight: '24px' }}>{mensaje}</p>
+      <p className={styles.mensajeTienda}>{mensaje}</p>
 
-      <p style={{ marginBottom: '15px' }}>
+      <p className={styles.dineroActual}>
         <strong>Tu oro:</strong>{' '}
-        <span style={{ color: 'var(--color-accent-yellow)' }}>{oro} G</span>
+        <span className={styles.dineroCantidad}>{oro} G</span>
       </p>
 
       {items.length === 0 ? (
-        <p style={{ color: '#888' }}>El mercader no tiene nada que vender...</p>
+        <p className={styles.sinItems}>El mercader no tiene nada que vender...</p>
       ) : (
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '10px',
-            maxWidth: '400px',
-            margin: '0 auto 20px',
-          }}
-        >
+        <div className={styles.listaItems}>
           {items.map((item) => (
             <div
               key={item.id}
@@ -74,31 +67,20 @@ const TiendaScreen: React.FC = () => {
                 alignItems: 'center',
               }}
             >
-              <div style={{ textAlign: 'left', maxWidth: '260px' }}>
-                <div style={{ fontSize: '16px' }}>
+              <div className={styles.descripcionItem}>
+                <div className={styles.nombreItem}>
                   <strong>{item.nombre}</strong>{' '}
-                  <span style={{ color: '#888', fontSize: '12px' }}>
+                  <span className={styles.tipoItem}>
                     ({item.tipo})
                   </span>
                 </div>
-                <div
-                  style={{
-                    fontSize: '12px',
-                    color: 'var(--text-dim)',
-                    marginTop: '4px',
-                  }}
-                >
+                <div className={styles.descripcionItemTexto}>
                   {item.descripcion}
                 </div>
               </div>
 
               <div style={{ textAlign: 'right' }}>
-                <div
-                  style={{
-                    color: 'var(--color-accent-yellow)',
-                    marginBottom: '5px',
-                  }}
-                >
+                <div className={styles.precioItem}>
                   {item.precio} G
                 </div>
                 <button

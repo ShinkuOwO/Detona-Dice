@@ -1,7 +1,8 @@
-const { salas, jugadores, partidas } = require('../store/memoryStore');
+const { salas, jugadores, partidas, usuarios } = require('../store/memoryStore');
 const Jugador = require('../models/Jugador');
 const Sala = require('../models/Sala');
 const PartidaState = require('../models/PartidaState');
+const Usuario = require('../models/Usuario');
 const { generarEncuentro } = require('../game/map');
 
 function findSalaBySocketId(socketId) {
@@ -11,6 +12,13 @@ function findSalaBySocketId(socketId) {
 function registerLobbyHandlers(io, socket) {
   // Crear sala
   socket.on('cliente:crear_sala', ({ nick }) => {
+    // Crear o recuperar usuario
+    let usuario = usuarios.get(socket.id);
+    if (!usuario) {
+      usuario = new Usuario(socket.id, nick);
+      usuarios.set(socket.id, usuario);
+    }
+
     const jugador = new Jugador(socket.id, nick);
     jugadores.set(socket.id, jugador);
 
@@ -41,6 +49,13 @@ function registerLobbyHandlers(io, socket) {
 
     if (sala.jugadores.some((j) => j.id === socket.id)) {
       return socket.emit('servidor:error', { mensaje: 'Ya estás en esta sala' });
+    }
+
+    // Crear o recuperar usuario
+    let usuario = usuarios.get(socket.id);
+    if (!usuario) {
+      usuario = new Usuario(socket.id, nick);
+      usuarios.set(socket.id, usuario);
     }
 
     const jugador = new Jugador(socket.id, nick);

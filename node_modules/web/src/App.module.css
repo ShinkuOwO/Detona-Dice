@@ -1,0 +1,162 @@
+/* Estilos generales para la aplicación */
+
+/* Variables de tema */
+:root {
+  --color-background: #1a1a2d;      /* Tapete de la mesa */
+  --color-panel-dark: #12121b;      /* Paneles */
+  --color-panel-border: #4a4a6b;    /* Borde de paneles */
+
+  --color-accent-red: #ff0055;      /* Peligro, HP, Cráneos */
+  --color-accent-blue: #00e0ff;     /* Info, Energía, Botones */
+  --color-accent-green: #00ff7b;    /* Éxito, Dinero */
+  --color-accent-yellow: #ffff00;   /* Oro, Élite */
+
+  --text-light: #e0e0e0;            /* Texto normal */
+  --text-dark: #12121b;             /* Texto sobre botones brillantes */
+  --text-dim: #77779a;              /* Mensajes, placeholders */
+}
+
+/* Fuente personalizada */
+@font-face {
+  font-family: 'RetroGaming';
+  src: url('./assets/fonts/retro_gaming.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-synthesis: none;
+}
+
+/* Estilos base */
+* {
+  box-sizing: border-box;
+  /* Scrollbars retro (Firefox) */
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-accent-blue) var(--color-panel-dark);
+}
+
+body {
+  background-color: var(--color-background);
+ color: var(--text-light);
+  font-family: 'RetroGaming', monospace;
+  margin: 0;
+
+  /* Hacks para pixel art */
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+  font-smooth: never;
+  -webkit-font-smoothing: none;
+}
+
+/* Clases de utilidad */
+.chunkyShadow {
+  box-shadow: 4px 4px 0px #000;
+}
+
+.chunkyShadowActive {
+  box-shadow: 1px 1px 0px #000;
+  transform: translate(3px, 3px);
+}
+
+.retroPanel {
+  background-color: var(--color-panel-dark);
+  border: 2px solid var(--color-panel-border);
+  padding: 15px;
+  overflow-y: auto;
+}
+
+.retroButton {
+  font-family: 'RetroGaming', monospace;
+  font-size: 16px;
+  padding: 12px 18px;
+ background-color: var(--color-accent-blue);
+  color: var(--text-dark);
+  border: 2px solid var(--color-panel-border);
+  cursor: pointer;
+  text-transform: uppercase;
+}
+
+.retroButtonDanger {
+  background-color: var(--color-accent-red);
+  color: var(--text-light);
+}
+
+.retroButtonSuccess {
+  background-color: var(--color-accent-green);
+  color: var(--text-dark);
+}
+
+.retroButtonSmall {
+  font-size: 10px;
+  padding: 2px 4px;
+  background-color: #444;
+ color: #fff;
+  border: 1px solid #888;
+  box-shadow: 2px 2px 0px #000;
+}
+
+.retroButtonSmallActive {
+  box-shadow: none;
+  transform: translate(2px, 2px);
+}
+
+.rerollButton {
+  background-color: var(--color-accent-green);
+  color: var(--text-dark);
+  border-color: var(--color-accent-green);
+  box-shadow: 4px 4px 0px var(--color-accent-yellow);
+}
+
+.retroInput {
+  font-family: 'RetroGaming', monospace;
+  font-size: 20px;
+ background-color: var(--color-panel-dark);
+  color: var(--color-accent-green);
+  border: 2px solid var(--color-panel-border);
+  padding: 10px;
+  text-align: center;
+}
+
+.retroInputFocus {
+  outline: 2px solid var(--color-accent-blue);
+}
+
+/* Barra de estado */
+.statusBar {
+  width: 100%;
+  height: 10px;
+  background-color: var(--color-panel-dark);
+  border: 2px solid var(--color-panel-border);
+  box-shadow: 2px 2px 0px #000;
+  margin-top: 2px;
+  overflow: hidden;
+}
+
+.statusBarFill {
+  height: 100%;
+  transition: width 0.3s ease-out;
+}
+
+.hpFill {
+  background-color: var(--color-accent-red);
+}
+
+.energyFill {
+  background-color: var(--color-accent-blue);
+}
+
+.xpFill {
+  background-color: var(--color-accent-green);
+}
+
+.hpLow {
+  animation: hpPulse 0.5s infinite alternate;
+}
+
+@keyframes hpPulse {
+  0% {
+    filter: brightness(1);
+  }
+  100% {
+    filter: brightness(1.7);
+  }
+}
