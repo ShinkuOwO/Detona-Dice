@@ -72,7 +72,7 @@ const PanelDerecho: React.FC = () => {
                     </div>
                   </div>
                   <div className={styles.barraProgreso}>
-                    <div className={`${styles.barraProgresoLlena} ${esEliminado ? styles.barraProgresoLlenaEliminado : ''}`} style={{ width: `${(j.piso / 20) * 100}%` }} />
+                    <div className={`${styles.barraProgresoLlena} ${esEliminado ? styles.barraProgresoLlenaEliminado : ''}`} style={{ width: `${(j.piso / 20) * 100}%` }}></div>
                   </div>
                 </li>
               );
