@@ -93,12 +93,12 @@ export interface PartidaState {
   hpMax: number;
   oro: number;
   energia: number;
-  energiaMax: number;
+ energiaMax: number;
   dadosLanzados: boolean;
   estadoJuego: 'combate' | 'subiendo_nivel' | 'evento_pacto' | 'tienda' | 'mapa' | 'eliminado';
   nivel: number;
   xp: number;
-  xpParaNivel: number;
+ xpParaNivel: number;
   dadosBase: Dado[];
   dadosCorrupcion: Dado[];
   mapaActual: Mapa | null;
@@ -113,16 +113,12 @@ export interface PartidaState {
   reliquias: ReliquiaId[];
   pactosHechos: PactoId[];
 
-  // Métodos
-  aplicarEfecto: (efecto: any) => void;
-  limpiarEfectos: () => void;
-  aplicarModificador: (nombre: string, valor: number) => void;
-  getModificador: (nombre: string) => number;
-  aplicarReliquia: (reliquiaId: string) => void;
-  getMaxDadosSeleccionables: () => number;
-  getModificadorObjetivo: () => number;
-  puedeRevivir: () => boolean;
-  cambiarDadoCorrupto: () => boolean;
+  // Campos calculados que reemplazan métodos
+  maxDadosSeleccionables: number;
+  modificadorObjetivo: number;
+  puedeRevivir: boolean;
+  dadosACambiar: number;
+  modificadores: Record<string, number>;
 }
 
 export interface ResultadosFin {

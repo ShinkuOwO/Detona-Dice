@@ -68,7 +68,7 @@ function registerGameHandlers(io, socket) {
       partida.mensaje = `¡Te enfrentas a ${partida.encuentroActual.nombre}!`;
     }
 
-    socket.emit('servidor:partida_actualizada', { partidaState: partida });
+    socket.emit('servidor:partida_actualizada', { partidaState: partida.serializarParaCliente() });
   });
 
   // Lanzar dados
@@ -103,7 +103,7 @@ function registerGameHandlers(io, socket) {
     partida.energia = partida.energiaMax;
     partida.mensaje = '¡Dados lanzados! Elige 2 dados para confirmar o usa habilidades.';
 
-    socket.emit('servidor:partida_actualizada', { partidaState: partida });
+    socket.emit('servidor:partida_actualizada', { partidaState: partida.serializarParaCliente() });
   });
 
   // Usar habilidad
@@ -149,7 +149,7 @@ function registerGameHandlers(io, socket) {
     partida.energia -= energiaGastada;
     partida.mensaje = `Habilidad ${habilidadId} usada.`;
 
-    socket.emit('servidor:partida_actualizada', { partidaState: partida });
+    socket.emit('servidor:partida_actualizada', { partidaState: partida.serializarParaCliente() });
   });
 
   // Seleccionar dados (resolver encuentro)
@@ -321,7 +321,7 @@ function registerGameHandlers(io, socket) {
       });
     }
 
-    socket.emit('servidor:partida_actualizada', { partidaState: partida });
+    socket.emit('servidor:partida_actualizada', { partidaState: partida.serializarParaCliente() });
   });
 
   // Elegir mejora de nivel
@@ -347,7 +347,7 @@ function registerGameHandlers(io, socket) {
     partida.mapaActual = generarMapa(partida.piso);
     partida.encuentroActual = null;
 
-    socket.emit('servidor:partida_actualizada', { partidaState: partida });
+    socket.emit('servidor:partida_actualizada', { partidaState: partida.serializarParaCliente() });
   });
 
   // Aceptar pacto

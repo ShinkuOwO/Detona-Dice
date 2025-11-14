@@ -23,7 +23,7 @@ const TiendaScreen: React.FC = () => {
           No hay tienda disponible ahora mismo.
         </p>
         <button
-          className={styles.botonSalir}
+          className={`${styles.botonSalir} retro-button chunky-shadow`}
           onClick={() => socket.emit('cliente:salir_tienda')}
         >
           VOLVER AL MAPA

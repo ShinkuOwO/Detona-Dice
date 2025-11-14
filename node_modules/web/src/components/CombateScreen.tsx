@@ -29,7 +29,7 @@ const CombateScreen: React.FC = () => {
     if (!allowSelection) return;
     if (selectedDice.includes(dadoId)) {
       setSelectedDice((prev) => prev.filter((id) => id !== dadoId));
-    } else if (selectedDice.length < partidaState.getMaxDadosSeleccionables()) {
+    } else if (selectedDice.length < partidaState.maxDadosSeleccionables) {
       setSelectedDice((prev) => [...prev, dadoId]);
     }
   };

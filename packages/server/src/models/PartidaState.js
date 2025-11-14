@@ -130,6 +130,39 @@ class PartidaState {
     }
     return false;
   }
+
+  // Método para serializar el estado para enviar al cliente
+  serializarParaCliente() {
+    return {
+      piso: this.piso,
+      hp: this.hp,
+      hpMax: this.hpMax,
+      oro: this.oro,
+      energia: this.energia,
+      energiaMax: this.energiaMax,
+      dadosLanzados: this.dadosLanzados,
+      estadoJuego: this.estadoJuego,
+      nivel: this.nivel,
+      xp: this.xp,
+      xpParaNivel: this.xpParaNivel,
+      dadosBase: this.dadosBase,
+      dadosCorrupcion: this.dadosCorrupcion,
+      mapaActual: this.mapaActual,
+      encuentroActual: this.encuentroActual,
+      opcionesMejora: this.opcionesMejora,
+      opcionesPacto: this.opcionesPacto,
+      mensaje: this.mensaje,
+      tiendaActual: this.tiendaActual,
+      consumibles: this.consumibles,
+      reliquias: this.reliquias,
+      pactosHechos: this.pactosHechos,
+      maxDadosSeleccionables: this.getMaxDadosSeleccionables(),
+      modificadorObjetivo: this.getModificadorObjetivo(),
+      puedeRevivir: this.puedeRevivir(),
+      dadosACambiar: this.getModificador('cambio_dados') || 0,
+      modificadores: this.modificadores
+    };
+  }
 }
 
 module.exports = PartidaState;
