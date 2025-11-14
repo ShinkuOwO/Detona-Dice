@@ -185,13 +185,13 @@ const LobbyScreen: React.FC = () => {
 
         {/* Formulario de Chat */}
         <form onSubmit={handleEnviarChat} className="chat-form">
-          <input
-            type="text"
-            value={mensajeChat}
-            onChange={(e) => setMensajeChat(e.target.value)}
-            className="retro-input"
-            placeholder="Escribe un mensaje..."
-          />
+            <input
+              type="text"
+              value={mensajeChat}
+              onChange={(e) => setMensajeChat(e.target.value)}
+              className="retro-input chunky-shadow"
+              placeholder="Escribe un mensaje..."
+            />
           <button type="submit" className="retro-button chunky-shadow">
             ENVIAR
           </button>
