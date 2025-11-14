@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useGame } from '../contexts/GameContext';
 import { socket } from '../socket';
 
 const MapaScreen: React.FC = () => {
   const { state } = useGame();
   const { partidaState } = state;
+  const [selectedNode, setSelectedNode] = useState<string | null>(null);
 
   // Si no hay partida o no estamos en mapa, mostramos algo neutro
   if (!partidaState || partidaState.estadoJuego !== 'mapa') {
@@ -18,9 +19,25 @@ const MapaScreen: React.FC = () => {
   }
 
   const handleElegirNodo = (nodoId: string) => {
-  if (partidaState?.mapaActual?.nodoActual) return; // ya hay nodo elegido
-  socket.emit('cliente:elegir_nodo_mapa', { nodoId });
-};
+    if (partidaState?.mapaActual?.nodoActual) return; // ya hay nodo elegido
+    socket.emit('cliente:elegir_nodo_mapa', { nodoId });
+  };
+
+  const handleOpenNodeModal = (nodoId: string) => {
+    if (partidaState?.mapaActual?.nodoActual) return; // ya hay nodo elegido
+    setSelectedNode(nodoId);
+  };
+
+  const handleConfirmNodeSelection = () => {
+    if (selectedNode) {
+      handleElegirNodo(selectedNode);
+      setSelectedNode(null);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setSelectedNode(null);
+  };
 
   const screenStyle: React.CSSProperties = {
     padding: '20px',
@@ -44,9 +61,10 @@ const MapaScreen: React.FC = () => {
   const getButtonClass = (tipo: string, isSelected: boolean) => {
     let base = 'retro-button chunky-shadow';
 
+    if (tipo === 'combate') base = 'retro-button chunky-shadow';
     if (tipo === 'elite') base = 'retro-button retro-button-danger chunky-shadow';
+    if (tipo === 'evento_pacto') base = 'retro-button retro-button-purple chunky-shadow';
     if (tipo === 'tienda') base = 'retro-button retro-button-success chunky-shadow';
-    // evento_pacto podría tener su propia clase púrpura si la defines
 
     // Si este nodo es el elegido, podrías añadir algún modificador
     if (isSelected) {
@@ -70,7 +88,7 @@ const MapaScreen: React.FC = () => {
           return (
             <button
               key={nodo.id}
-              onClick={() => handleElegirNodo(nodo.id)}
+              onClick={() => handleOpenNodeModal(nodo.id)}
               className={getButtonClass(nodo.tipo, isSelected)}
               style={{ minWidth: '170px', padding: '25px' }}
               disabled={!!mapaActual.nodoActual && !isSelected} // solo clic antes de elegir
@@ -85,6 +103,29 @@ const MapaScreen: React.FC = () => {
           );
         })}
       </div>
+
+      {/* Modal de selección de nodo */}
+      {selectedNode && (
+        <div className="modal-overlay" onClick={handleCloseModal}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>¿ESTÁS SEGURO?</h3>
+              <button className="close-button retro-button" onClick={handleCloseModal}>X</button>
+            </div>
+            <div className="modal-body">
+              <p>¿Quieres elegir este camino?</p>
+              <div className="modal-actions">
+                <button className="retro-button retro-button-danger chunky-shadow" onClick={handleCloseModal}>
+                  CANCELAR
+                </button>
+                <button className="retro-button retro-button-success chunky-shadow" onClick={handleConfirmNodeSelection}>
+                  CONFIRMAR
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
