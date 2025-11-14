@@ -8,7 +8,7 @@ import { useNotification } from '../contexts/NotificationContext';
 const CombateScreen: React.FC = () => {
   const { state } = useGame();
   const { partidaState } = state;
-  const [selectedDice, setSelectedDice] = useState<string[]>([]);
+   const [selectedDice, setSelectedDice] = useState<string[]>([]);
   const [showBag, setShowBag] = useState(false);
   const { addNotification } = useNotification();
 
@@ -103,8 +103,8 @@ const CombateScreen: React.FC = () => {
         {/* Botón de bolsa */}
         <button
           type="button"
-          onClick={() => setShowBag((prev) => !prev)}
-            className="retro-button chunky-shadow"
+          onClick={() => setShowBag(true)}
+          className="retro-button chunky-shadow"
         >
           BOLSA ({consumibles?.length || 0})
         </button>
@@ -143,28 +143,39 @@ const CombateScreen: React.FC = () => {
         </div>
       )}
 
-      {/* Panel de Bolsa (simple dropdown) */}
+      {/* Modal de Bolsa */}
       {showBag && (
-        <div className={styles.bolsaPanel}>
-          {(!consumibles || consumibles.length === 0) && (
-            <p className={styles.bolsaVacia}>No tienes consumibles.</p>
-          )}
-          {consumibles &&
-            consumibles.map((itemId, idx) => (
-              <div
-                key={`${itemId}-${idx}`}
-                className={styles.itemConsumible}
-              >
-                <span>{itemId}</span>
-                <button
-                  type="button"
-                  className="retro-button retro-button-small"
-                  onClick={() => handleUsarConsumible(itemId)}
-                >
-                  USAR
-                </button>
-              </div>
-            ))}
+        <div className={styles.modalOverlay} onClick={() => setShowBag(false)}>
+          <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+            <div className={styles.modalHeader}>
+              <h3>BOLSA DE CONSUMIBLES</h3>
+              <button className={`${styles.closeButton} retro-button`} onClick={() => setShowBag(false)}>X</button>
+            </div>
+            <div className={styles.modalBody}>
+              {(!consumibles || consumibles.length === 0) && (
+                <p className={styles.bolsaVacia}>No tienes consumibles.</p>
+              )}
+              {consumibles &&
+                consumibles.map((itemId, idx) => (
+                  <div
+                    key={`${itemId}-${idx}`}
+                    className={styles.itemConsumible}
+                  >
+                    <span>{itemId}</span>
+                    <button
+                      type="button"
+                      className="retro-button retro-button-small chunky-shadow"
+                      onClick={() => {
+                        handleUsarConsumible(itemId);
+                        setShowBag(false); // Close the modal after using an item
+                      }}
+                    >
+                      USAR
+                    </button>
+                  </div>
+                ))}
+            </div>
+          </div>
         </div>
       )}
     </div>
