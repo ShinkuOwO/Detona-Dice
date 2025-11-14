@@ -104,12 +104,12 @@ const AppContent: React.FC = () => {
 
 const App: React.FC = () => {
   return (
-    <>
+    <div className="app-container">
       <NotificationProvider>
         <AppContent />
         <NotificationBar />
       </NotificationProvider>
-    </>
+    </div>
   );
 };
 

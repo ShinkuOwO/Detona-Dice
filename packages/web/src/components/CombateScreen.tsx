@@ -115,8 +115,8 @@ const CombateScreen: React.FC = () => {
         <button
           onClick={handleLanzarDados}
           disabled={partidaState.dadosLanzados}
-          className="retro-button retro-button-danger chunky-shadow"
-          style={{ fontSize: '20px', padding: '15px', minWidth: '200px', cursor: 'pointer' }}
+          className="retro-button retro-button-danger chunky-shadow responsive-button"
+          style={{ fontSize: '18px', padding: '12px 20px', minWidth: '150px', cursor: 'pointer' }}
         >
           {partidaState.dadosLanzados ? 'DADOS LANZADOS' : 'LANZAR DADOS'}
         </button>

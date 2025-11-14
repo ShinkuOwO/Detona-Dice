@@ -50,33 +50,48 @@ const LobbyScreen: React.FC = () => {
       className="retro-panel"
       style={{
         display: 'flex',
-        height: '100vh',
-        padding: '20px',
+        flexDirection: 'column',
+        minHeight: '100vh',
+        padding: '15px',
         boxSizing: 'border-box',
       }}
     >
-      {/* Columna Izquierda: Jugadores y Acciones */}
-      <div
-        style={{
+      {/* Encabezado de la sala */}
+      <div style={{ marginBottom: '15px' }}>
+        <h2 style={{ color: 'var(--color-accent-blue)', margin: '0 0 10px 0', fontSize: '1.5em' }}>
+          SALA: {sala.codigoSala}
+        </h2>
+      </div>
+
+      {/* Contenido principal: jugadores y chat */}
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '15px',
+        flex: 1,
+        overflow: 'hidden'
+      }}>
+        {/* Sección de jugadores */}
+        <div style={{
           flex: 1,
-          paddingRight: '20px',
-          borderRight: '2px solid var(--color-panel-border)',
           display: 'flex',
           flexDirection: 'column',
-        }}
-      >
-        <div>
-          <h2 style={{ color: 'var(--color-accent-blue)', marginTop: 0 }}>
-            SALA: {sala.codigoSala}
-          </h2>
-          <h3>Jugadores:</h3>
-          <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+          border: '2px solid var(--color-panel-border)',
+          borderRadius: '8px',
+          padding: '10px',
+          backgroundColor: 'var(--color-panel-dark)'
+        }}>
+          <h3 style={{ margin: '0 0 10px 0', color: 'var(--color-accent-blue)' }}>Jugadores:</h3>
+          <ul style={{ listStyle: 'none', padding: 0, margin: 0, flex: 1, overflowY: 'auto' }}>
             {sala.jugadores.map((j) => (
               <li
                 key={j.id}
                 style={{
-                  fontSize: '18px',
-                  margin: '8px 0',
+                  fontSize: '16px',
+                  margin: '6px 0',
+                  padding: '5px',
+                  borderRadius: '4px',
+                  backgroundColor: 'rgba(0,0,0,0.2)',
                   color: j.listo
                     ? 'var(--color-accent-green)'
                     : 'var(--text-dim)',
@@ -89,7 +104,7 @@ const LobbyScreen: React.FC = () => {
                   style={{
                     textTransform: 'uppercase',
                     letterSpacing: '1px',
-                    fontSize: '12px',
+                    fontSize: '11px',
                   }}
                 >
                   {j.listo ? '[LISTO]' : '[PENDIENTE]'}
@@ -100,11 +115,18 @@ const LobbyScreen: React.FC = () => {
         </div>
 
         {/* Acciones */}
-        <div style={{ marginTop: 'auto' }}>
+        <div style={{ 
+          display: 'flex', 
+          justifyContent: 'center', 
+          alignItems: 'center',
+          gap: '15px',
+          padding: '10px',
+          flexWrap: 'wrap'
+        }}>
           {!esHost && (
             <button
               onClick={handleListo}
-              className="retro-button chunky-shadow"
+              className="retro-button chunky-shadow responsive-button"
               style={{
                 backgroundColor: jugadorActual?.listo
                   ? 'var(--color-accent-green)'
@@ -112,6 +134,8 @@ const LobbyScreen: React.FC = () => {
                 color: jugadorActual?.listo
                   ? 'var(--text-dark)'
                   : 'var(--text-light)',
+                flex: '0 0 auto',
+                minWidth: '120px'
               }}
             >
               {jugadorActual?.listo ? 'NO LISTO' : '¡LISTO!'}
@@ -121,8 +145,8 @@ const LobbyScreen: React.FC = () => {
           {esHost && (
             <button
               onClick={handleIniciar}
-              className="retro-button retro-button-success chunky-shadow"
-              style={{ minWidth: '220px' }}
+              className="retro-button retro-button-success chunky-shadow responsive-button"
+              style={{ minWidth: '150px' }}
             >
               COMENZAR PARTIDA
             </button>
@@ -131,71 +155,73 @@ const LobbyScreen: React.FC = () => {
           {!esHost && (
             <p
               style={{
-                marginTop: '10px',
+                margin: '0',
                 fontSize: '12px',
                 color: 'var(--text-dim)',
+                textAlign: 'center'
               }}
             >
               Espera a que el host inicie la partida.
             </p>
           )}
         </div>
-      </div>
 
-      {/* Columna Derecha: Chat */}
-      <div
-        style={{
+        {/* Chat */}
+        <div style={{
           flex: 1,
-          paddingLeft: '20px',
           display: 'flex',
           flexDirection: 'column',
-          minWidth: 0,
-        }}
-      >
-        <h3 style={{ color: 'var(--color-accent-blue)', marginTop: 0 }}>
-          💬 Chat del Lobby
-        </h3>
+          border: '2px solid var(--color-panel-border)',
+          borderRadius: '8px',
+          padding: '10px',
+          backgroundColor: 'var(--color-panel-dark)'
+        }}>
+          <h3 style={{ color: 'var(--color-accent-blue)', margin: '0 10px 0', fontSize: '1.2em' }}>
+            💬 Chat del Lobby
+          </h3>
 
-        {/* Ventana de Chat */}
-        <div
-          className="chat-window"
-          style={{
-            flex: 1,
-            border: '1px solid var(--color-panel-border)',
-            padding: '10px',
-            overflowY: 'auto',
-            marginBottom: '10px',
-            fontSize: '13px',
-            backgroundColor: 'var(--color-panel-dark)',
-          }}
-        >
-          {sala.chat.length === 0 && (
-            <div style={{ color: 'var(--text-dim)' }}>
-              No hay mensajes todavía.
-            </div>
-          )}
+          {/* Ventana de Chat */}
+          <div
+            className="chat-window"
+            style={{
+              flex: 1,
+              border: '1px solid var(--color-panel-border)',
+              padding: '10px',
+              overflowY: 'auto',
+              marginBottom: '10px',
+              fontSize: '12px',
+              backgroundColor: 'var(--color-background)',
+            }}
+          >
+            {sala.chat.length === 0 && (
+              <div style={{ color: 'var(--text-dim)' }}>
+                No hay mensajes todavía.
+              </div>
+            )}
 
-          {sala.chat.map((m, i) => (
-            <div key={i} style={{ marginBottom: '4px' }}>
-              <strong>{m.nick}:</strong> {m.mensaje}
-            </div>
-          ))}
-          <div ref={chatEndRef} />
-        </div>
+            {sala.chat.map((m, i) => (
+              <div key={i} style={{ marginBottom: '4px' }}>
+                <strong>{m.nick}:</strong> {m.mensaje}
+              </div>
+            ))}
+            <div ref={chatEndRef} />
+          </div>
 
-        {/* Formulario de Chat */}
-        <form onSubmit={handleEnviarChat} className="chat-form">
+          {/* Formulario de Chat */}
+          <form onSubmit={handleEnviarChat} className="chat-form" style={{ display: 'flex', gap: '10px' }}>
             <input
               type="text"
               value={mensajeChat}
               onChange={(e) => setMensajeChat(e.target.value)}
-              className="retro-input chunky-shadow"
+              className="retro-input chunky-shadow responsive-input"
               placeholder="Escribe un mensaje..."
+              style={{ flex: 1, margin: 0 }}
             />
-          <button type="submit" className="retro-button chunky-shadow">
-            ENVIAR
-          </button>
-        </form>
+            <button type="submit" className="retro-button chunky-shadow responsive-button">
+              ENVIAR
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   );

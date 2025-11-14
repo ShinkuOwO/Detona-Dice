@@ -76,10 +76,10 @@ const MapaScreen: React.FC = () => {
 
   return (
     <div style={screenStyle}>
-      <h2>PISO {mapaActual.piso}</h2>
+      <h2 style={{ fontSize: '1.8em', marginBottom: '10px' }}>PISO {mapaActual.piso}</h2>
       <p style={messageStyle}>{mensaje}</p>
 
-      <h3>Elige tu próximo camino:</h3>
+      <h3 style={{ fontSize: '1.3em', margin: '15px 0' }}>Elige tu próximo camino:</h3>
 
       <div style={buttonContainerStyle}>
         {mapaActual.nodos.map((nodo) => {
@@ -89,8 +89,13 @@ const MapaScreen: React.FC = () => {
             <button
               key={nodo.id}
               onClick={() => handleOpenNodeModal(nodo.id)}
-              className={getButtonClass(nodo.tipo, isSelected)}
-              style={{ minWidth: '170px', padding: '25px' }}
+              className={`${getButtonClass(nodo.tipo, isSelected)} responsive-button`}
+              style={{ 
+                minWidth: '150px', 
+                padding: '20px 10px', 
+                fontSize: '14px',
+                margin: '5px'
+              }}
               disabled={!!mapaActual.nodoActual && !isSelected} // solo clic antes de elegir
             >
               {/* Si quieres reactivar los iconos temáticos, puedes descomentar esto */}
@@ -115,10 +120,10 @@ const MapaScreen: React.FC = () => {
             <div className="modal-body">
               <p>¿Quieres elegir este camino?</p>
               <div className="modal-actions">
-                <button className="retro-button retro-button-danger chunky-shadow" onClick={handleCloseModal}>
+                <button className="retro-button retro-button-danger chunky-shadow responsive-button" onClick={handleCloseModal}>
                   CANCELAR
                 </button>
-                <button className="retro-button retro-button-success chunky-shadow" onClick={handleConfirmNodeSelection}>
+                <button className="retro-button retro-button-success chunky-shadow responsive-button" onClick={handleConfirmNodeSelection}>
                   CONFIRMAR
                 </button>
               </div>

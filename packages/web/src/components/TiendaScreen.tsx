@@ -58,6 +58,7 @@ const TiendaScreen: React.FC = () => {
             <div
               key={item.id}
               className={styles.itemTienda}
+              style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'center' }}
             >
               <div className={styles.descripcionItem}>
                 <div className={styles.nombreItem}>
@@ -71,14 +72,15 @@ const TiendaScreen: React.FC = () => {
                 </div>
               </div>
 
-              <div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', width: '100%', justifyContent: 'space-between' }}>
                 <div className={styles.precioItem}>
                   {item.precio} G
                 </div>
                 <button
-                  className={`${styles.botonComprar} retro-button retro-button-small chunky-shadow`}
+                  className={`${styles.botonComprar} retro-button retro-button-small chunky-shadow responsive-button`}
                   onClick={() => handleComprar(item.id)}
                   disabled={oro < item.precio}
+                  style={{ padding: '6px 12px', fontSize: '12px' }}
                 >
                   Comprar
                 </button>
@@ -89,8 +91,9 @@ const TiendaScreen: React.FC = () => {
       )}
 
       <button
-        className={`${styles.botonSalir} retro-button chunky-shadow`}
+        className={`${styles.botonSalir} retro-button chunky-shadow responsive-button`}
         onClick={handleSalir}
+        style={{ marginTop: '20px' }}
       >
         VOLVER AL MAPA
       </button>

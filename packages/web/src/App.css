@@ -77,6 +77,9 @@ body {
  color: var(--text-light);
   font-family: 'RetroGaming', monospace;
   margin: 0;
+  min-height: 100vh;
+  width: 100vw;
+  box-sizing: border-box;
 
   /* Hacks para pixel art */
   image-rendering: pixelated;
@@ -84,6 +87,82 @@ body {
   image-rendering: crisp-edges;
   font-smooth: never;
   -webkit-font-smoothing: none;
+}
+
+/* Responsive container for all screens */
+.app-container {
+  width: 100%;
+  min-height: 100vh;
+ display: flex;
+  flex-direction: column;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+/* Responsive utilities */
+.responsive-button {
+  min-width: 120px;
+  padding: 10px 15px;
+  font-size: 14px;
+}
+
+.responsive-input {
+  padding: 8px 12px;
+  font-size: 16px;
+  min-width: 200px;
+}
+
+/* Media queries for responsiveness */
+@media (max-width: 768px) {
+  .responsive-button {
+    min-width: 100px;
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+  
+  .responsive-input {
+    min-width: 150px;
+    padding: 6px 10px;
+    font-size: 14px;
+  }
+  
+  .retro-button {
+    padding: 10px 15px;
+    font-size: 14px;
+  }
+  
+  .retro-input {
+    font-size: 16px;
+    padding: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .responsive-button {
+    min-width: 80px;
+    padding: 6px 10px;
+    font-size: 10px;
+  }
+  
+  .responsive-input {
+    min-width: 120px;
+    padding: 5px 8px;
+    font-size: 12px;
+  }
+  
+  .retro-button {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+  
+  .retro-input {
+    font-size: 14px;
+    padding: 6px;
+  }
+  
+  .app-container {
+    padding: 5px;
+  }
 }
 
 /* Clases de utilidad */

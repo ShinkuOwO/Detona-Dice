@@ -114,9 +114,98 @@
 .actionArea {
   display: flex;
   justify-content: center;
-  gap: 20px;
+  gap: 15px;
   margin: 20px 0;
   flex-wrap: wrap;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+  .combateScreen {
+    padding: 15px;
+  }
+
+  .encuentroNombre {
+    font-size: 1.5em;
+  }
+
+  .objetivo {
+    font-size: 2em;
+  }
+
+  .infoBar {
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .dadoArea {
+    padding: 15px;
+    gap: 15px;
+  }
+
+  .actionArea {
+    gap: 10px;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .botonLanzar {
+    font-size: 16px;
+    padding: 12px;
+    min-width: 180px;
+  }
+
+  .habilidadesArea {
+    padding: 10px;
+  }
+
+  .habilidadesBotones {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .abilityBtn {
+    padding: 6px 10px;
+    font-size: 12px;
+    min-width: 120px;
+  }
+}
+
+@media (max-width: 480px) {
+  .combateScreen {
+    padding: 10px;
+  }
+
+  .encuentroNombre {
+    font-size: 1.2em;
+  }
+
+  .objetivo {
+    font-size: 1.5em;
+  }
+
+  .mensaje {
+    font-size: 1em;
+  }
+
+  .dadoArea {
+    padding: 10px;
+    gap: 10px;
+    min-height: 100px;
+  }
+
+  .botonLanzar {
+    font-size: 14px;
+    padding: 10px;
+    min-width: 150px;
+  }
+
+  .abilityBtn {
+    padding: 5px 8px;
+    font-size: 11px;
+    min-width: 100px;
+  }
 }
 
 .botonLanzar {
