@@ -121,7 +121,7 @@ const LobbyScreen: React.FC = () => {
           {esHost && (
             <button
               onClick={handleIniciar}
-              className="retro-button success chunky-shadow"
+              className="retro-button retro-button-success chunky-shadow"
               style={{ minWidth: '220px' }}
             >
               COMENZAR PARTIDA

@@ -44,8 +44,8 @@ const MapaScreen: React.FC = () => {
   const getButtonClass = (tipo: string, isSelected: boolean) => {
     let base = 'retro-button chunky-shadow';
 
-    if (tipo === 'elite') base = 'retro-button danger chunky-shadow';
-    if (tipo === 'tienda') base = 'retro-button success chunky-shadow';
+    if (tipo === 'elite') base = 'retro-button retro-button-danger chunky-shadow';
+    if (tipo === 'tienda') base = 'retro-button retro-button-success chunky-shadow';
     // evento_pacto podría tener su propia clase púrpura si la defines
 
     // Si este nodo es el elegido, podrías añadir algún modificador

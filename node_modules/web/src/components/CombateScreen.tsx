@@ -85,7 +85,7 @@ const CombateScreen: React.FC = () => {
         <button
           onClick={handleLanzarDados}
           disabled={partidaState.dadosLanzados}
-          className="retro-button danger chunky-shadow"
+          className="retro-button retro-button-danger chunky-shadow"
           style={{ fontSize: '20px', padding: '15px', minWidth: '200px', cursor: 'pointer' }}
         >
           {partidaState.dadosLanzados ? 'DADOS LANZADOS' : 'LANZAR DADOS'}
@@ -94,7 +94,7 @@ const CombateScreen: React.FC = () => {
         {selectedDice.length === 2 && (
           <button
             onClick={handleConfirmarSeleccion}
-            className="retro-button success chunky-shadow"
+            className="retro-button retro-button-success chunky-shadow"
           >
             CONFIRMAR SELECCIÓN
           </button>
@@ -104,7 +104,7 @@ const CombateScreen: React.FC = () => {
         <button
           type="button"
           onClick={() => setShowBag((prev) => !prev)}
-          className="retro-button chunky-shadow"
+            className="retro-button chunky-shadow"
         >
           BOLSA ({consumibles?.length || 0})
         </button>
@@ -158,7 +158,7 @@ const CombateScreen: React.FC = () => {
                 <span>{itemId}</span>
                 <button
                   type="button"
-                  className="retro-button small"
+                  className="retro-button retro-button-small"
                   onClick={() => handleUsarConsumible(itemId)}
                 >
                   USAR

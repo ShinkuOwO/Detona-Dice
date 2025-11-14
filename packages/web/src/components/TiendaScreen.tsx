@@ -76,7 +76,7 @@ const TiendaScreen: React.FC = () => {
                   {item.precio} G
                 </div>
                 <button
-                  className={`${styles.botonComprar} retro-button small chunky-shadow`}
+                  className={`${styles.botonComprar} retro-button retro-button-small chunky-shadow`}
                   onClick={() => handleComprar(item.id)}
                   disabled={oro < item.precio}
                 >

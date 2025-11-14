@@ -87,23 +87,23 @@ body {
 }
 
 /* Clases de utilidad */
-.chunkyShadow {
+.chunky-shadow {
   box-shadow: 4px 4px 0px #000;
 }
 
-.chunkyShadowActive {
+.chunky-shadow-active {
   box-shadow: 1px 1px 0px #000;
   transform: translate(3px, 3px);
 }
 
-.retroPanel {
+.retro-panel {
   background-color: var(--color-panel-dark);
   border: 2px solid var(--color-panel-border);
   padding: 15px;
   overflow-y: auto;
 }
 
-.retroButton {
+.retro-button {
   font-family: 'RetroGaming', monospace;
   font-size: 16px;
   padding: 12px 18px;
@@ -114,17 +114,17 @@ body {
   text-transform: uppercase;
 }
 
-.retroButtonDanger {
+.retro-button-danger {
   background-color: var(--color-accent-red);
   color: var(--text-light);
 }
 
-.retroButtonSuccess {
+.retro-button-success {
   background-color: var(--color-accent-green);
   color: var(--text-dark);
 }
 
-.retroButtonSmall {
+.retro-button-small {
   font-size: 10px;
   padding: 2px 4px;
   background-color: #444;
@@ -133,19 +133,19 @@ body {
   box-shadow: 2px 2px 0px #000;
 }
 
-.retroButtonSmallActive {
+.retro-button-small-active {
   box-shadow: none;
   transform: translate(2px, 2px);
 }
 
-.rerollButton {
+.reroll-button {
   background-color: var(--color-accent-green);
   color: var(--text-dark);
   border-color: var(--color-accent-green);
   box-shadow: 4px 4px 0px var(--color-accent-yellow);
 }
 
-.retroInput {
+.retro-input {
   font-family: 'RetroGaming', monospace;
   font-size: 20px;
  background-color: var(--color-panel-dark);
@@ -155,7 +155,7 @@ body {
   text-align: center;
 }
 
-.retroInputFocus {
+.retro-input-focus {
   outline: 2px solid var(--color-accent-blue);
 }
 

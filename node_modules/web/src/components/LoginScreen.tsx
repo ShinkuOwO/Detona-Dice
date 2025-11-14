@@ -74,7 +74,7 @@ const LoginScreen: React.FC = () => {
       
       <button 
         onClick={handleUnirseSala} 
-        className="retro-button danger chunky-shadow" // <-- CLASES AÑADIDAS
+        className="retro-button retro-button-danger chunky-shadow" // <-- CLASES AÑADIDAS
       >
         UNIRSE A SALA
       </button>
