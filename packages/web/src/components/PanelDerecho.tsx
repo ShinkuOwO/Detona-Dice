@@ -70,6 +70,7 @@ const PanelDerecho: React.FC = () => {
                     <div className={styles.estadoInfo}>
                       Piso: <span style={{ color: 'var(--color-accent-yellow)' }}>{j.piso}</span> | HP: <span style={{ color: 'var(--color-accent-red)' }}>{j.hp}</span>
                     </div>
+                  </div>
                   <div className={styles.barraProgreso}>
                     <div className={`${styles.barraProgresoLlena} ${esEliminado ? styles.barraProgresoLlenaEliminado : ''}`} style={{ width: `${(j.piso / 20) * 100}%` }} />
                   </div>
