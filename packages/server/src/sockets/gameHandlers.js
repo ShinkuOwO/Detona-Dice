@@ -194,15 +194,24 @@ function registerGameHandlers(io, socket) {
     const objetivo = partida.objetivoEncuentro;
     const encuentro = partida.encuentroActual;
 
+    // Limpiar efectos al final del turno
+    partida.limpiarEfectos();
+
     if (tieneCranio) {
-      partida.hp = Math.max(0, partida.hp - encuentro.danoCranio);
-      partida.mensaje = `¡Penalidad por cráneo! -${encuentro.danoCranio} HP.`;
+      let dano = encuentro.danoCranio;
+      const reduccion = partida.getModificador('reduccion_dano_craneo') || 0;
+      dano = Math.max(0, dano - reduccion);
+      partida.hp = Math.max(0, partida.hp - dano);
+      partida.mensaje = `ยกPenalidad por crรกneo! -${dano} HP.`;
     } else if (suma >= objetivo) {
       // VICTORIA
       partida.piso += 1;
-      partida.oro += encuentro.recompensaOro;
+      let recompensaOro = encuentro.recompensaOro;
+      const oroBonus = partida.getModificador('oro_bonus') || 0;
+      recompensaOro += Math.floor(recompensaOro * oroBonus / 100);
+      partida.oro += recompensaOro;
       partida.xp += encuentro.recompensaXp;
-      // Corrupción pasiva: cada 4 pisos ganas 1 dado corrupto
+      // Corrupciรณn pasiva: cada 4 pisos ganas 1 dado corrupto
       if (partida.piso % 4 === 0) {
         const nuevoDado = crearDadoCorrupcion(
           `dc-${(partida.dadosCorrupcion?.length || 0) + 1}`,
@@ -211,7 +220,7 @@ function registerGameHandlers(io, socket) {
           partida.dadosCorrupcion = [];
         }
         partida.dadosCorrupcion.push(nuevoDado);
-        partida.mensaje += ' La corrupción crece... has ganado 1 dado corrupto.';
+        partida.mensaje += ' La corrupciรณn crece... has ganado 1 dado corrupto.';
       }
 
       if (partida.xp >= partida.xpParaNivel) {
@@ -221,13 +230,13 @@ function registerGameHandlers(io, socket) {
         partida.xpParaNivel = calcularXPParaNivel(partida.nivel);
         partida.opcionesMejora = generarOpciones(POOL_MEJORAS);
         partida.estadoJuego = 'subiendo_nivel';
-        partida.mensaje = `¡Victoria! ¡SUBISTE DE NIVEL! (Nivel ${partida.nivel})`;
+        partida.mensaje = `ยกVictoria! ยกSUBISTE DE NIVEL! (Nivel ${partida.nivel})`;
       } else {
         // Solo victoria, vas al mapa
         partida.estadoJuego = 'mapa';
         partida.mapaActual = generarMapa(partida.piso);
         partida.encuentroActual = null;
-        partida.mensaje = `¡Victoria! +${encuentro.recompensaOro} oro. Elige tu próximo camino.`;
+        partida.mensaje = `ยกVictoria! +${recompensaOro} oro. Elige tu prรณximo camino.`;
       }
     } else {
       // DERROTA
@@ -236,26 +245,18 @@ function registerGameHandlers(io, socket) {
       partida.estadoJuego = 'mapa';
       partida.mapaActual = generarMapa(partida.piso);
       partida.encuentroActual = null;
-      if (tieneCranio) {
-        let dano = encuentro.danoCranio;
-        const reduccion = partida.modificadores?.reduccionDanoCraneo || 0;
-        dano = Math.max(0, dano - reduccion);
-        partida.hp = Math.max(0, partida.hp - dano);
-        partida.mensaje = `¡Penalidad por cráneo! -${dano} HP.`;
-      }
-
     }
 
     // Reset bloqueo para el siguiente turno
     partida.dadosLanzados = false;
 
-    // Actualizar carrera pública
+    // Actualizar carrera pรบblica
     jugadorCarrera.piso = partida.piso;
     jugadorCarrera.hp = partida.hp;
 
     if (partida.hp <= 0) {
       jugadorCarrera.estado = 'eliminado';
-      partida.mensaje = '¡Has sido eliminado!';
+      partida.mensaje = 'ยกHas sido eliminado!';
       partida.estadoJuego = 'eliminado';
 
       io.to(sala.codigoSala).emit('servidor:jugador_eliminado', {
@@ -344,14 +345,10 @@ function registerGameHandlers(io, socket) {
   // Comprar en tienda
   socket.on('cliente:comprar_tienda', ({ itemId }) => {
     const jugador = jugadores.get(socket.id);
-    if (!jugador) {
-      return socket.emit('servidor:error', { mensaje: 'No estás autenticado' });
-    }
+    if (!jugador) return socket.emit('servidor:error', { mensaje: 'No estás autenticado' });
 
     const partida = partidas.get(socket.id);
-    if (!partida) {
-      return socket.emit('servidor:error', { mensaje: 'Partida no encontrada' });
-    }
+    if (!partida) return socket.emit('servidor:error', { mensaje: 'Partida no encontrada' });
 
     if (partida.estadoJuego !== 'tienda' || !partida.tiendaActual) {
       return socket.emit('servidor:error', { mensaje: 'No estás en una tienda' });
@@ -362,9 +359,16 @@ function registerGameHandlers(io, socket) {
       return socket.emit('servidor:error', { mensaje: resultado.error });
     }
 
+    // 🔥 REMOVER EL ITEM DE LA TIENDA
+    partida.tiendaActual.items = partida.tiendaActual.items.filter(
+      (i) => i.id !== itemId
+    );
+
     partida.mensaje = `Has comprado ${resultado.item.nombre}.`;
+
     socket.emit('servidor:partida_actualizada', { partidaState: partida });
   });
+
 
   // Salir de la tienda y volver al mapa
   socket.on('cliente:salir_tienda', () => {

@@ -41,9 +41,7 @@ const POOL_ITEMS = [
     costoBase: 50,
     descripcion: 'Reduce en 2 el daño por CRÁNEO.',
     aplicarReliquia(partida) {
-      if (!partida.modificadores) partida.modificadores = {};
-      partida.modificadores.reduccionDanoCraneo =
-        (partida.modificadores.reduccionDanoCraneo || 0) + 2;
+      partida.aplicarModificador('reduccion_dano_craneo', 2);
     },
   },
   {
@@ -59,6 +57,36 @@ const POOL_ITEMS = [
         valor: null,
         esCorrupto: false,
       });
+    },
+  },
+  {
+    id: 'reliquia_vida',
+    nombre: 'Amuleto de Vida',
+    tipo: 'reliquia',
+    costoBase: 10,
+    descripcion: '+5 HP Máximo',
+    aplicarReliquia(partida) {
+      partida.aplicarReliquia('reliquia_vida');
+    },
+  },
+  {
+    id: 'reliquia_energia',
+    nombre: 'Cristal de Energía',
+    tipo: 'reliquia',
+    costoBase: 80,
+    descripcion: '+1 Energía Máxima',
+    aplicarReliquia(partida) {
+      partida.aplicarReliquia('reliquia_energia');
+    },
+  },
+  {
+    id: 'reliquia_oro',
+    nombre: 'Ídolo Dorado',
+    tipo: 'reliquia',
+    costoBase: 120,
+    descripcion: '+10% Oro adicional',
+    aplicarReliquia(partida) {
+      partida.aplicarReliquia('reliquia_oro');
     },
   },
 ];

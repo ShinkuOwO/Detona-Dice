@@ -1,0 +1,49 @@
+# Detona Dice - Componentes y Rutas
+
+## Componentes del Frontend (React)
+
+### Ruta: packages/web/src/components/
+- CombateScreen.tsx
+- DadoComponent.tsx
+- EspectadorScreen.tsx
+- GameRouter.tsx
+- Header.tsx
+- LobbyScreen.tsx
+- LoginScreen.tsx
+- MapaScreen.tsx
+- PactoScreen.tsx
+- PanelDerecho.tsx
+- PanelIzquierdo.tsx
+- ResultsScreen.tsx
+- SubirNivelScreen.tsx
+- TiendaScreen.tsx
+
+### Contextos del Frontend
+- GameContext.tsx
+
+### Otros archivos del Frontend
+- socket.ts
+
+## Rutas del Backend (Node.js/Express)
+
+### Handlers de Socket
+- gameHandlers.js
+- lobbyHandlers.js
+- index.js (principal)
+
+### Modelos del Backend
+- Jugador.js
+- PartidaState.js
+- Sala.js
+
+### Lógica del Juego
+- dice.js
+- items.js
+- map.js
+- mejoras.js
+
+### Almacenamiento
+- memoryStore.js
+
+### Punto de entrada del servidor
+- index.js (principal)

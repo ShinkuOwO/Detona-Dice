@@ -44,6 +44,54 @@ class PartidaState {
     this.modificadores = {};     
     // this.reliquias ya existe y se reutiliza
   }
+
+  // Método para aplicar un efecto temporal
+  aplicarEfecto(efecto) {
+    this.efectos.push(efecto);
+    efecto.aplicar(this);
+  }
+
+  // Método para limpiar efectos expirados
+  limpiarEfectos() {
+    this.efectos = this.efectos.filter(efecto => {
+      if (efecto.turnos > 0) {
+        efecto.turnos--;
+        return true;
+      }
+      return false;
+    });
+  }
+
+  // Método para aplicar modificadores
+  aplicarModificador(nombre, valor) {
+    if (!this.modificadores[nombre]) {
+      this.modificadores[nombre] = 0;
+    }
+    this.modificadores[nombre] += valor;
+  }
+
+  // Método para obtener el valor de un modificador
+  getModificador(nombre) {
+    return this.modificadores[nombre] || 0;
+  }
+
+  // Método para aplicar una reliquia
+  aplicarReliquia(reliquiaId) {
+    this.reliquias.push(reliquiaId);
+    // Aquí se aplicaría el efecto permanente de la reliquia
+    switch(reliquiaId) {
+      case 'reliquia_vida':
+        this.hpMax += 5;
+        this.hp += 5;
+        break;
+      case 'reliquia_energia':
+        this.energiaMax += 1;
+        break;
+      case 'reliquia_oro':
+        this.aplicarModificador('oro_bonus', 10);
+        break;
+    }
+  }
 }
 
 module.exports = PartidaState;
