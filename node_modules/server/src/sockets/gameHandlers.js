@@ -1,11 +1,14 @@
 const { salas, jugadores, partidas, usuarios } = require('../store/memoryStore');
 const { generarTienda, comprarItem, POOL_ITEMS } = require('../game/items');
 const {
+  crearDadoBase,
   crearDadoCorrupcion,
+  crearDadoBendito,
   relanzarDado,
   aumentarDado,
   voltearDado,
   calcularSumaDados,
+  aplicarEfectoDadoBendito
 } = require('../game/dice');
 const {
   generarMapa,
@@ -99,6 +102,23 @@ function registerGameHandlers(io, socket) {
     partida.dadosBase = partida.dadosBase.map((dado) => relanzarDado(dado));
     // Lanzar dados de corrupción
     partida.dadosCorrupcion = partida.dadosCorrupcion.map((dado) => relanzarDado(dado));
+
+    // Aplicar efecto del pacto "Vidente": +2 a todos los lanzamientos
+    const ventajaLanzamiento = partida.getModificador('ventaja_lanzamiento') || 0;
+    if (ventajaLanzamiento > 0) {
+      partida.dadosBase = partida.dadosBase.map(dado => {
+        if (typeof dado.valor === 'number' && !dado.esCorrupto) {
+          return { ...dado, valor: Math.min(dado.valor + ventajaLanzamiento, 6) };
+        }
+        return dado;
+      });
+      partida.dadosCorrupcion = partida.dadosCorrupcion.map(dado => {
+        if (typeof dado.valor === 'number' && dado.esCorrupto && dado.valor !== 'CRÁNEO') {
+          return { ...dado, valor: dado.valor + ventajaLanzamiento };
+        }
+        return dado;
+      });
+    }
 
     partida.energia = partida.energiaMax;
     partida.mensaje = '¡Dados lanzados! Elige 2 dados para confirmar o usa habilidades.';
@@ -205,12 +225,20 @@ function registerGameHandlers(io, socket) {
       partida.mensaje = `ยกPenalidad por crรกneo! -${dano} HP.`;
     } else if (suma >= objetivo) {
       // VICTORIA
+      let pisoAntesVictoria = partida.piso;
       partida.piso += 1;
       let recompensaOro = encuentro.recompensaOro;
       const oroBonus = partida.getModificador('oro_bonus') || 0;
       recompensaOro += Math.floor(recompensaOro * oroBonus / 100);
       partida.oro += recompensaOro;
       partida.xp += encuentro.recompensaXp;
+      
+      // Aplicar efecto de reliquia "Moneda Maldita": +10 oro cada piso
+      const oroPorPiso = partida.getModificador('oro_por_piso') || 0;
+      if (oroPorPiso > 0) {
+        partida.oro += oroPorPiso;
+      }
+      
       // Corrupciรณn pasiva: cada 4 pisos ganas 1 dado corrupto
       if (partida.piso % 4 === 0) {
         const nuevoDado = crearDadoCorrupcion(
@@ -221,6 +249,32 @@ function registerGameHandlers(io, socket) {
         }
         partida.dadosCorrupcion.push(nuevoDado);
         partida.mensaje += ' La corrupciรณn crece... has ganado 1 dado corrupto.';
+      }
+
+      // Aplicar efecto de pacto "Ladrรณn de Almas": Pierdes 1 XP por piso
+      const penalidadXP = partida.getModificador('penalidad_piso_xp') || 0;
+      if (penalidadXP > 0 && partida.xp > 0) {
+        partida.xp = Math.max(0, partida.xp - penalidadXP);
+      }
+
+      // Aplicar efecto de pacto "Vidente": Cada piso pierdes 1 HP permanente
+      const penalidadHP = partida.getModificador('penalidad_piso_hp') || 0;
+      if (penalidadHP > 0) {
+        partida.hp = Math.max(0, partida.hp - penalidadHP);
+        partida.hpMax = Math.max(1, partida.hpMax - penalidadHP); // Asegurar que HP mรกximo no baje de 1
+        if (partida.hp > partida.hpMax) {
+          partida.hp = partida.hpMax;
+        }
+      }
+
+      // Aplicar efecto de pacto "Caos": Cada combate ganas +1 dado corrupto
+      const dadosCorrupcionVictoria = partida.getModificador('dado_corrupcion_victoria') || 0;
+      if (dadosCorrupcionVictoria > 0) {
+        for (let i = 0; i < dadosCorrupcionVictoria; i++) {
+          const nuevoDado = crearDadoCorrupcion(`dc-${partida.dadosCorrupcion.length + 1}`);
+          partida.dadosCorrupcion.push(nuevoDado);
+        }
+        partida.mensaje += ` El Caos te corrompe... has ganado ${dadosCorrupcionVictoria} dado(s) corrupto(s).`;
       }
 
       if (partida.xp >= partida.xpParaNivel) {
@@ -238,12 +292,27 @@ function registerGameHandlers(io, socket) {
         partida.encuentroActual = null;
         partida.mensaje = `ยกVictoria! +${recompensaOro} oro. Elige tu prรณximo camino.`;
       }
+      
+      // Aplicar efecto de reliquia "Moneda Maldita": recibes 1 corrupciรณn al subir de piso
+      const corrupcionAlSubir = partida.getModificador('corrupcion_al_subir') || 0;
+      if (corrupcionAlSubir > 0 && pisoAntesVictoria !== partida.piso) { // Si efectivamente subiรณ de piso
+        for (let i = 0; i < corrupcionAlSubir; i++) {
+          const nuevoDado = crearDadoCorrupcion(`dc-${partida.dadosCorrupcion.length + 1}`);
+          partida.dadosCorrupcion.push(nuevoDado);
+        }
+        partida.mensaje += ` La maldiciรณn de la moneda te corrompe... has ganado ${corrupcionAlSubir} dado(s) corrupto(s).`;
+      }
     } else {
       // DERROTA
       // Verificar si el jugador puede revivir
-      if (partida.puedeRevivir()) {
+      const resultadoRevivir = partida.puedeRevivir();
+      if (resultadoRevivir.puedeRevivir) {
         partida.hp = 1; // Revivir con 1 HP
-        partida.mensaje = `ยกMilagrosamente sobrevives con 1 HP!`;
+        if (resultadoRevivir.tipoRevivir === 'sin_reliquias') {
+          partida.mensaje = `ยกMilagrosamente sobrevives con 1 HP, pero has perdido todas tus reliquias!`;
+        } else {
+          partida.mensaje = `ยกMilagrosamente sobrevives con 1 HP!`;
+        }
         // Actualizar carrera pรบblica
         jugadorCarrera.piso = partida.piso;
         jugadorCarrera.hp = partida.hp;

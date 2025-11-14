@@ -85,12 +85,9 @@ const POOL_ITEMS = [
     costoBase: 60,
     descripcion: '+1 dado base permanente.',
     aplicarReliquia(partida) {
+      const { crearDadoBase } = require('./dice'); // Importar la función crearDadoBase
       const nuevoId = `d-extra-${partida.dadosBase.length + 1}`;
-      partida.dadosBase.push({
-        id: nuevoId,
-        valor: null,
-        esCorrupto: false,
-      });
+      partida.dadosBase.push(crearDadoBase(nuevoId));
     },
   },
   {
@@ -100,7 +97,8 @@ const POOL_ITEMS = [
     costoBase: 10,
     descripcion: '+5 HP Máximo',
     aplicarReliquia(partida) {
-      partida.aplicarReliquia('reliquia_vida');
+      partida.hpMax += 5;
+      partida.hp += 5;
     },
   },
   {
@@ -110,7 +108,7 @@ const POOL_ITEMS = [
     costoBase: 80,
     descripcion: '+1 Energía Máxima',
     aplicarReliquia(partida) {
-      partida.aplicarReliquia('reliquia_energia');
+      partida.energiaMax += 1;
     },
   },
   {
@@ -120,7 +118,7 @@ const POOL_ITEMS = [
     costoBase: 120,
     descripcion: '+10% Oro adicional',
     aplicarReliquia(partida) {
-      partida.aplicarReliquia('reliquia_oro');
+      partida.aplicarModificador('oro_bonus', 10);
     },
   },
   {
@@ -171,6 +169,58 @@ const POOL_ITEMS = [
     descripcion: 'Revive con 1 HP si mueres.',
     aplicarReliquia(partida) {
       partida.aplicarModificador('revivir', 1);
+    },
+  },
+  // Nuevas reliquias según las especificaciones
+  {
+    id: 'anillo_estelar',
+    nombre: 'Anillo Estelar',
+    tipo: 'reliquia',
+    costoBase: 10,
+    descripcion: 'Si haces 10+, +1 energía.',
+    aplicarReliquia(partida) {
+      partida.aplicarModificador('energia_por_10plus', 1);
+    },
+  },
+  {
+    id: 'moneda_maldita',
+    nombre: 'Moneda Maldita',
+    tipo: 'reliquia',
+    costoBase: 75,
+    descripcion: '+10 oro cada piso, pero recibes 1 corrupción al subir.',
+    aplicarReliquia(partida) {
+      partida.aplicarModificador('oro_por_piso', 10);
+      partida.aplicarModificador('corrupcion_al_subir', 1);
+    },
+  },
+  {
+    id: 'garra_afilada',
+    nombre: 'Garra Afilada',
+    tipo: 'reliquia',
+    costoBase: 85,
+    descripcion: 'Los 1 se convierten en 2.',
+    aplicarReliquia(partida) {
+      partida.aplicarModificador('convertir_uno_en_dos', 1);
+    },
+  },
+  {
+    id: 'corona_cristal',
+    nombre: 'Corona de Cristal',
+    tipo: 'reliquia',
+    costoBase: 250,
+    descripcion: 'Los 6 cuentan como 10.',
+    aplicarReliquia(partida) {
+      partida.aplicarModificador('seis_cuentan_diez', 1);
+    },
+  },
+  {
+    id: 'corazon_profano',
+    nombre: 'Corazón Profano',
+    tipo: 'reliquia',
+    costoBase: 300,
+    descripcion: 'Si mueres, revives con 1 HP pero pierdes todas tus reliquias.',
+    aplicarReliquia(partida) {
+      partida.aplicarModificador('revivir_sin_reliquias', 1);
     },
   },
 ];

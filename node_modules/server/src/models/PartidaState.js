@@ -14,11 +14,12 @@ class PartidaState {
     this.xp = 0;
     this.xpParaNivel = 100;
 
-    this.dadosBase = [
-      { id: 'd1', valor: null, esCorrupto: false },
-      { id: 'd2', valor: null, esCorrupto: false },
-    ];
+    this.dadosBase = [];
     this.dadosCorrupcion = [];
+    
+    // Inicializar dados base en el constructor
+    const { crearDadoBase } = require('../game/dice');
+    this.dadosBase = [crearDadoBase('d1'), crearDadoBase('d2')];
 
     // ya existían o las mantienes:
     this.reliquias = [];
@@ -106,12 +107,23 @@ class PartidaState {
 
   // Método para verificar si el jugador revive al morir
   puedeRevivir() {
+    // Verificar si tiene el modificador de revivir normal
     const revivir = this.getModificador('revivir') || 0;
     if (revivir > 0) {
       this.aplicarModificador('revivir', -1); // Disminuir el contador de revivir
-      return true;
+      return { puedeRevivir: true, tipoRevivir: 'normal' };
     }
-    return false;
+    
+    // Verificar si tiene la reliquia "Corazón Profano" que revivifica sin reliquias
+    const revivirSinReliquias = this.getModificador('revivir_sin_reliquias') || 0;
+    if (revivirSinReliquias > 0) {
+      // Revivir sin reliquias significa que se pierden todas las reliquias
+      this.reliquias = [];
+      this.modificadores = {}; // Limpiar todos los modificadores de reliquias
+      return { puedeRevivir: true, tipoRevivir: 'sin_reliquias' };
+    }
+    
+    return { puedeRevivir: false, tipoRevivir: null };
   }
 
   // Método para cambiar dados corruptos por normales
@@ -132,7 +144,7 @@ class PartidaState {
   }
 
   // Método para serializar el estado para enviar al cliente
-  serializarParaCliente() {
+ serializarParaCliente() {
     return {
       piso: this.piso,
       hp: this.hp,
@@ -158,7 +170,7 @@ class PartidaState {
       pactosHechos: this.pactosHechos,
       maxDadosSeleccionables: this.getMaxDadosSeleccionables(),
       modificadorObjetivo: this.getModificadorObjetivo(),
-      puedeRevivir: this.puedeRevivir(),
+      puedeRevivir: this.puedeRevivir().puedeRevivir, // Solo enviar el booleano al cliente
       dadosACambiar: this.getModificador('cambio_dados') || 0,
       modificadores: this.modificadores
     };
