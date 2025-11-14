@@ -74,7 +74,7 @@ const TiendaScreen: React.FC = () => {
                   {item.precio} G
                 </div>
                 <button
-                  className={styles.botonComprar}
+                  className={`${styles.botonComprar} retro-button small chunky-shadow`}
                   onClick={() => handleComprar(item.id)}
                   disabled={oro < item.precio}
                 >
@@ -87,7 +87,7 @@ const TiendaScreen: React.FC = () => {
       )}
 
       <button
-        className={styles.botonSalir}
+        className={`${styles.botonSalir} retro-button chunky-shadow`}
         onClick={handleSalir}
       >
         VOLVER AL MAPA

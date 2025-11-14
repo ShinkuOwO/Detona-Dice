@@ -97,7 +97,7 @@ const PanelIzquierdo: React.FC = () => {
             <div key={idx} className={styles.consumibleItem}>
               <span>{itemId}</span>
               <button
-                className={styles.usarBtn}
+                className={`${styles.usarBtn} retro-button small chunky-shadow`}
                 onClick={() => handleUsarConsumible(itemId)}
               >
                 Usar
