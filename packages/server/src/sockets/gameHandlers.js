@@ -21,9 +21,29 @@ const {
   generarOpciones,
   aplicarMejora,
 } = require('../game/mejoras');
+const { LOGICA_PACTOS } = require('../game/pactosLogic');
 
 function findSalaBySocketId(socketId) {
   return [...salas.values()].find((s) => s.jugadores.some((j) => j.id === socketId));
+}
+
+// Función para generar opciones de pactos según la rareza basada en el piso
+function generarOpcionesPactosPorPiso(pisoActual) {
+  let rareza;
+  if (pisoActual >= 8) {
+    rareza = 'epico';
+  } else if (pisoActual >= 4) {
+    rareza = 'raro';
+  } else {
+    rareza = 'comun';
+  }
+
+  // Filtrar pactos por rareza
+  const pactosPorRareza = POOL_PACTOS.filter(pacto => pacto.rareza === rareza);
+  
+  // Mezclar y tomar 3 pactos aleatorios
+  const pactosMezclados = [...pactosPorRareza].sort(() => 0.5 - Math.random());
+  return pactosMezclados.slice(0, 3);
 }
 
 function registerGameHandlers(io, socket) {
@@ -48,8 +68,9 @@ function registerGameHandlers(io, socket) {
     partida.mapaActual.nodoActual = nodoElegido.id;
 
     if (nodoElegido.tipo === 'evento_pacto') {
-      partida.opcionesPacto = generarOpciones(POOL_PACTOS);
-      partida.estadoJuego = 'evento_pacto';
+      // Generar pactos según la rareza basada en el piso actual
+      partida.opcionesPacto = generarOpcionesPactosPorPiso(partida.piso);
+      partida.estadoJuego = 'pacto'; // Cambiado de 'evento_pacto' a 'pacto' según especificación
       partida.mensaje = 'Un eco siniestro te ofrece poder...';
     } else if (nodoElegido.tipo === 'tienda') {
       partida.estadoJuego = 'tienda';
@@ -277,13 +298,13 @@ function registerGameHandlers(io, socket) {
         partida.mensaje += ` El Caos te corrompe... has ganado ${dadosCorrupcionVictoria} dado(s) corrupto(s).`;
       }
 
-      if (partida.xp >= partida.xpParaNivel) {
+    if (partida.xp >= partida.xpParaNivel) {
         // SUBES DE NIVEL
         partida.xp -= partida.xpParaNivel;
         partida.nivel += 1;
         partida.xpParaNivel = calcularXPParaNivel(partida.nivel);
         partida.opcionesMejora = generarOpciones(POOL_MEJORAS);
-        partida.estadoJuego = 'subiendo_nivel';
+        partida.estadoJuego = 'subir_nivel'; // Cambiado de 'subiendo_nivel' a 'subir_nivel' según especificación
         partida.mensaje = `ยกVictoria! ยกSUBISTE DE NIVEL! (Nivel ${partida.nivel})`;
       } else {
         // Solo victoria, vas al mapa
@@ -302,17 +323,19 @@ function registerGameHandlers(io, socket) {
         }
         partida.mensaje += ` La maldiciรณn de la moneda te corrompe... has ganado ${corrupcionAlSubir} dado(s) corrupto(s).`;
       }
+      
+      // Llamar al hook de fin de combate con éxito
+      partida.onFinCombate(true);
     } else {
       // DERROTA
+      // Llamar al hook de fin de combate con fracaso
+      partida.onFinCombate(false);
+      
       // Verificar si el jugador puede revivir
-      const resultadoRevivir = partida.puedeRevivir();
-      if (resultadoRevivir.puedeRevivir) {
+      const resultadoRevivir = partida.onAntesDeMorir(); // Usar el nuevo hook
+      if (resultadoRevivir.evitarMuerte) {
         partida.hp = 1; // Revivir con 1 HP
-        if (resultadoRevivir.tipoRevivir === 'sin_reliquias') {
-          partida.mensaje = `ยกMilagrosamente sobrevives con 1 HP, pero has perdido todas tus reliquias!`;
-        } else {
-          partida.mensaje = `ยกMilagrosamente sobrevives con 1 HP!`;
-        }
+        partida.mensaje = `ยกMilagrosamente sobrevives con 1 HP!`;
         // Actualizar carrera pรบblica
         jugadorCarrera.piso = partida.piso;
         jugadorCarrera.hp = partida.hp;
@@ -326,11 +349,34 @@ function registerGameHandlers(io, socket) {
           },
         });
       } else {
-        partida.hp = Math.max(0, partida.hp - encuentro.danoFallo);
-        partida.mensaje = `Derrota. Objetivo ${objetivo} no alcanzado. -${encuentro.danoFallo} HP.`;
-        partida.estadoJuego = 'mapa';
-        partida.mapaActual = generarMapa(partida.piso);
-        partida.encuentroActual = null;
+        // Verificar si puede revivir de forma tradicional
+        const resultadoRevivirTradicional = partida.puedeRevivir();
+        if (resultadoRevivirTradicional.puedeRevivir) {
+          partida.hp = 1; // Revivir con 1 HP
+          if (resultadoRevivirTradicional.tipoRevivir === 'sin_reliquias') {
+            partida.mensaje = `ยกMilagrosamente sobrevives con 1 HP, pero has perdido todas tus reliquias!`;
+          } else {
+            partida.mensaje = `ยกMilagrosamente sobrevives con 1 HP!`;
+          }
+          // Actualizar carrera pรบblica
+          jugadorCarrera.piso = partida.piso;
+          jugadorCarrera.hp = partida.hp;
+          io.to(sala.codigoSala).emit('servidor:actualizacion_carrera', {
+            carreraState: {
+              jugadorId: socket.id,
+              nick: jugador.nick,
+              piso: partida.piso,
+              hp: partida.hp,
+              estado: 'vivo',
+            },
+          });
+        } else {
+          partida.hp = Math.max(0, partida.hp - encuentro.danoFallo);
+          partida.mensaje = `Derrota. Objetivo ${objetivo} no alcanzado. -${encuentro.danoFallo} HP.`;
+          partida.estadoJuego = 'mapa';
+          partida.mapaActual = generarMapa(partida.piso);
+          partida.encuentroActual = null;
+        }
       }
     }
 
@@ -401,7 +447,7 @@ function registerGameHandlers(io, socket) {
     }
 
     const partida = partidas.get(socket.id);
-    if (!partida || partida.estadoJuego !== 'subiendo_nivel') {
+    if (!partida || partida.estadoJuego !== 'subir_nivel') { // Cambiado de 'subiendo_nivel' a 'subir_nivel' según especificación
       return socket.emit('servidor:error', { mensaje: 'Estado inválido' });
     }
 
@@ -427,13 +473,22 @@ function registerGameHandlers(io, socket) {
     }
 
     const partida = partidas.get(socket.id);
-    if (!partida || partida.estadoJuego !== 'evento_pacto') {
+    if (!partida || partida.estadoJuego !== 'pacto') { // Cambiado de 'evento_pacto' a 'pacto'
       return socket.emit('servidor:error', { mensaje: 'Estado inválido' });
     }
 
     const exito = aplicarMejora(partida, pactoId);
     if (!exito) {
       return socket.emit('servidor:error', { mensaje: 'Pacto inválido' });
+    }
+
+    // Aceptar el pacto en el estado de la partida
+    partida.aceptarPacto(pactoId);
+    
+    // Aplicar lógica específica del pacto si existe
+    const logicaPacto = LOGICA_PACTOS[pactoId];
+    if (logicaPacto && logicaPacto.onAceptar) {
+      logicaPacto.onAceptar({ jugador: partida });
     }
 
     const nuevoDado = crearDadoCorrupcion(`dc-${partida.dadosCorrupcion.length + 1}`);
@@ -446,7 +501,7 @@ function registerGameHandlers(io, socket) {
     partida.mapaActual = generarMapa(partida.piso);
     partida.encuentroActual = null;
 
-    socket.emit('servidor:partida_actualizada', { partidaState: partida });
+    socket.emit('servidor:partida_actualizada', { partidaState: partida.serializarParaCliente() }); // Cambiado para serializar correctamente
   });
 
   // Comprar en tienda

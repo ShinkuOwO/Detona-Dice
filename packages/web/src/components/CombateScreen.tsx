@@ -5,6 +5,18 @@ import DadoComponent from './DadoComponent';
 import styles from './CombateScreen.module.css';
 import { useNotification } from '../contexts/NotificationContext';
 
+// Helper functions to calculate game state info
+const getMaxDadosSeleccionables = (partida: any) => {
+  const dadosExtra = partida.getModificador('dados_extra') || 0;
+  return 2 + dadosExtra; // Por defecto se pueden seleccionar 2 dados, más los dados extra de las reliquias
+};
+
+const getSumaSeleccionados = (partida: any, selectedDice: string[]) => {
+  const todosLosDados = [...partida.dadosBase, ...partida.dadosCorrupcion];
+  const dadosSeleccionados = todosLosDados.filter(d => selectedDice.includes(d.id));
+  return dadosSeleccionados.reduce((sum, dado) => sum + (dado.valor || 0), 0);
+};
+
 const CombateScreen: React.FC = () => {
   const { state } = useGame();
   const { partidaState } = state;
@@ -17,22 +29,26 @@ const CombateScreen: React.FC = () => {
     return <div>Cargando encuentro...</div>;
   }
 
-  const { encuentroActual, dadosBase, dadosCorrupcion, mensaje, consumibles } =
-    partidaState;
+  const { encuentroActual, dadosBase, dadosCorrupcion, mensaje, consumibles } = partidaState;
 
   const allowSelection = partidaState.dadosLanzados && partidaState.estadoJuego === 'combate';
+  const maxSeleccionables = getMaxDadosSeleccionables(partidaState);
+  const sumaSeleccionados = getSumaSeleccionados(partidaState, selectedDice);
+  const faltan = Math.max(0, encuentroActual.objetivo - sumaSeleccionados);
+  const seleccionCompleta = selectedDice.length === maxSeleccionables;
+
+  const allDiceIds = [...dadosBase, ...dadosCorrupcion].map(d => d.id);
 
   const handleLanzarDados = () => {
     if (partidaState.dadosLanzados) return;
     setSelectedDice([]);
     
     // Trigger rolling animation for all dice
-    const allDiceIds = [...dadosBase, ...dadosCorrupcion].map(d => d.id);
     const animationState: Record<string, 'rolling'> = {};
     allDiceIds.forEach(id => {
       animationState[id] = 'rolling';
     });
-    setAnimatingDice(animationState);
+    setAnimatingDice(prev => ({ ...prev, ...animationState }));
     
     // Emit the socket event after a short delay to allow animation to start
     setTimeout(() => {
@@ -55,14 +71,14 @@ const CombateScreen: React.FC = () => {
     if (!allowSelection) return;
     if (selectedDice.includes(dadoId)) {
       setSelectedDice((prev) => prev.filter((id) => id !== dadoId));
-    } else if (selectedDice.length < partidaState.maxDadosSeleccionables) {
+    } else if (selectedDice.length < maxSeleccionables) {
       setSelectedDice((prev) => [...prev, dadoId]);
     }
   };
 
   const handleConfirmarSeleccion = () => {
-    if (selectedDice.length !== 2) {
-      addNotification('error', 'Debes seleccionar exactamente 2 dados para confirmar.');
+    if (selectedDice.length !== maxSeleccionables) {
+      addNotification('error', `Debes seleccionar exactamente ${maxSeleccionables} dados para confirmar.`);
       return;
     }
     socket.emit('cliente:seleccionar_dados', {
@@ -76,75 +92,69 @@ const CombateScreen: React.FC = () => {
     socket.emit('cliente:usar_consumible', { itemId });
   };
 
-  const todosLosDados = [...dadosBase, ...dadosCorrupcion];
+  const botonPrincipalLabel = (() => {
+    if (!partidaState.dadosLanzados) return 'LANZAR DADOS';
+    if (!seleccionCompleta) return `ELIGE ${maxSeleccionables} DADOS`;
+    return 'CONFIRMAR SELECCIÓN';
+  })();
 
   return (
     <div className={styles.combateScreen}>
-      <h2 className={styles.encuentroNombre}>{encuentroActual.nombre}</h2>
-      <h1 className={styles.objetivo}>OBJETIVO: {encuentroActual.objetivo}+</h1>
-      <p className={styles.mensaje}>{mensaje}</p>
+      {/* Zona superior */}
+      <section className={styles.combateTop}>
+        <div className={styles.encuentroInfo}>
+          <h2>{encuentroActual.nombre}</h2>
+          <h1 className={styles.objetivo}>OBJETIVO: {encuentroActual.objetivo}+</h1>
+          <p className={styles.mensajeTurno}>{mensaje}</p>
+          <div className={styles.tagsMods}>
+            <span>DADOS CORRUPTOS: {dadosCorrupcion.length}</span>
+            <span>CONSUMIBLES: {consumibles?.length || 0}</span>
+            {/* Más tags de pactos/mods si quieres */}
+          </div>
+        </div>
+      </section>
 
-      {/* Barra superior de info rápida */}
-      <div className={styles.infoBar}>
-        <span>DADOS CORRUPTOS: {dadosCorrupcion.length}</span>
-        <span>CONSUMIBLES: {consumibles?.length || 0}</span>
-      </div>
+      {/* Zona central: dados + resumen */}
+      <section className={styles.combateMiddle}>
+        <div className={styles.dadosRow}>
+          {[...dadosBase, ...dadosCorrupcion].map((dado) => {
+            // Determine animation state for this die
+            const animationState = animatingDice[dado.id] || 
+              (partidaState.dadosLanzados && !dado.valor ? 'rolling' : 'none');
+            
+            return (
+              <DadoComponent
+                key={dado.id}
+                dado={dado}
+                disabled={!allowSelection}
+                isSelected={selectedDice.includes(dado.id)}
+                animationState={animationState}
+                onClick={() => handleSeleccionarDado(dado.id)}
+              />
+            );
+          })}
+        </div>
 
-      {/* Área de Dados */}
-      <div className={styles.dadoArea}>
-        {todosLosDados.map((dado) => {
-          // Determine animation state for this die
-          const animationState = animatingDice[dado.id] || 
-            (partidaState.dadosLanzados && !dado.valor ? 'rolling' : 'none');
-          
-          return (
-          <DadoComponent
-            key={dado.id}
-            dado={dado}
-            disabled={!allowSelection}
-            isSelected={selectedDice.includes(dado.id)}
-            animationState={animationState}
-            onClick={() => handleSeleccionarDado(dado.id)}
-          />
-          );
-        })}
-      </div>
+        <div className={styles.resumenSeleccion}>
+          <span>
+            DADOS SELECCIONADOS ({selectedDice.length}/{maxSeleccionables})
+          </span>
+          <span>
+            SUMA: {sumaSeleccionados} / OBJETIVO: {encuentroActual.objetivo}
+            {' '}
+            {sumaSeleccionados >= encuentroActual.objetivo
+              ? '✓ CUMPLIDO'
+              : ` · FALTAN ${faltan}`}
+          </span>
+        </div>
+      </section>
 
-      {/* Acciones principales */}
-      <div className={styles.actionArea}>
-        <button
-          onClick={handleLanzarDados}
-          disabled={partidaState.dadosLanzados}
-          className="retro-button retro-button-danger chunky-shadow responsive-button"
-          style={{ fontSize: '18px', padding: '12px 20px', minWidth: '150px', cursor: 'pointer' }}
-        >
-          {partidaState.dadosLanzados ? 'DADOS LANZADOS' : 'LANZAR DADOS'}
-        </button>
-
-        {selectedDice.length === 2 && (
-          <button
-            onClick={handleConfirmarSeleccion}
-            className="retro-button retro-button-success chunky-shadow"
-          >
-            CONFIRMAR SELECCIÓN
-          </button>
-        )}
-
-        {/* Botón de bolsa */}
-        <button
-          type="button"
-          onClick={() => setShowBag(true)}
-          className="retro-button chunky-shadow"
-        >
-          BOLSA ({consumibles?.length || 0})
-        </button>
-      </div>
-
-      {/* Habilidades */}
-      {partidaState.dadosLanzados && (
-        <div className={styles.habilidadesArea}>
+      {/* Zona inferior: habilidades + acción + bolsa */}
+      <section className={styles.combateBottom}>
+        {/* Habilidades */}
+        <div className={styles.habilidadesColumn}>
           <h3>HABILIDADES</h3>
-          <div className={styles.habilidadesBotones}>
+          <div className={styles.habilidadesList}>
             <button
               className={`${styles.abilityBtn} retro-button chunky-shadow`}
               onClick={() => {
@@ -172,7 +182,7 @@ const CombateScreen: React.FC = () => {
               disabled={selectedDice.length !== 1 || partidaState.energia < 1}
               title="Aumentar Dado (+1 al valor, cuesta 1 energía)"
             >
-              [+] Aumentar
+              [+] Aumentar (1⚡)
             </button>
             <button
               className={`${styles.abilityBtn} retro-button chunky-shadow`}
@@ -201,7 +211,7 @@ const CombateScreen: React.FC = () => {
               disabled={selectedDice.length !== 1 || partidaState.energia < 2}
               title="Voltear Dado (7 - valor, cuesta 2 energía)"
             >
-              [⇄] Voltear
+              [⇄] Voltear (2⚡)
             </button>
             <button
               className={`${styles.abilityBtn} retro-button chunky-shadow`}
@@ -230,11 +240,40 @@ const CombateScreen: React.FC = () => {
               disabled={selectedDice.length !== 1 || partidaState.energia < 1}
               title="Relanzar Dado (cuesta 1 energía)"
             >
-              [↻] Relanzar
+              [↻] Relanzar (1⚡)
             </button>
           </div>
+          <div className={styles.energiaInfo}>
+            ENERGÍA: {partidaState.energia}/{partidaState.energiaMax}
+          </div>
         </div>
-      )}
+
+        {/* Acción principal */}
+        <div className={styles.accionColumn}>
+          <button
+            onClick={partidaState.dadosLanzados ? handleConfirmarSeleccion : handleLanzarDados}
+            disabled={botonPrincipalLabel !== 'LANZAR DADOS' && !seleccionCompleta}
+            className="retro-button retro-button-danger chunky-shadow responsive-button accionPrincipal"
+            style={{ fontSize: '18px', padding: '12px 20px', minWidth: '150px', cursor: 'pointer' }}
+          >
+            {botonPrincipalLabel}
+          </button>
+        </div>
+
+        {/* Bolsa */}
+        <div className={styles.bolsaColumn}>
+          <button
+            type="button"
+            onClick={() => setShowBag(true)}
+            className="retro-button chunky-shadow"
+          >
+            BOLSA ({consumibles?.length || 0})
+          </button>
+          {(!consumibles || consumibles.length === 0) && (
+            <p className={styles.bolsaVacia}>No tienes consumibles.</p>
+          )}
+        </div>
+      </section>
 
       {/* Modal de Bolsa */}
       {showBag && (
