@@ -1,7 +1,7 @@
 import React from 'react';
 import { useGame } from '../contexts/GameContext';
 import { socket } from '../socket';
-import styles from './PanelIzquierdo.module.css';
+import DadoComponent from './DadoComponent';
 
 const PanelIzquierdo: React.FC = () => {
   const { state } = useGame();
@@ -9,14 +9,14 @@ const PanelIzquierdo: React.FC = () => {
 
   if (!partidaState) {
     return (
-      <div className={styles.panelIzquierdo}>
-        <h2 className={styles.tituloPanel}>DETONA DICE</h2>
-        <p style={{ color: 'var(--text-dim)' }}>Esperando partida...</p>
+      <div className="h-100 d-flex flex-column">
+        <h3 className="text-retro-primary mb-3">DETONA DICE</h3>
+        <p className="text-center text-muted">Esperando partida...</p>
       </div>
     );
   }
 
-  const { piso, nivel, reliquias, consumibles } = partidaState;
+  const { piso, nivel, reliquias, consumibles, dadosBase, dadosCorrupcion, energia, energiaMax } = partidaState;
 
   const handleUsarConsumible = (itemId: string) => {
     socket.emit('cliente:usar_consumible', { itemId });
@@ -33,80 +33,129 @@ const PanelIzquierdo: React.FC = () => {
   };
 
   const estadoColorMap: Record<string, string> = {
-    combate: 'var(--color-accent-red)',
-    mapa: 'var(--color-accent-blue)',
-    subiendo_nivel: 'var(--color-accent-green)',
+    combate: '#f44336',
+    mapa: '#2196f3',
+    subiendo_nivel: '#4caf50',
     evento_pacto: '#b84dff',
-    tienda: 'var(--color-accent-yellow)',
-    eliminado: 'var(--text-dim)',
+    tienda: '#ff9800',
+    eliminado: '#6c757d',
   };
 
   const estadoLabel =
     estadoLabelMap[partidaState.estadoJuego] ?? partidaState.estadoJuego;
 
   const estadoColor =
-    estadoColorMap[partidaState.estadoJuego] ?? 'var(--text-light)';
+    estadoColorMap[partidaState.estadoJuego] ?? '#e0e0e0';
 
   return (
-    <div className={styles.panelIzquierdo}>
-      <h2 className={styles.tituloPanel}>{nick}</h2>
-      
-      <div className={styles.infoJugador}>
-        <div className={styles.nombreJugador}>Piso {piso} · Nivel {nivel}</div>
-        <div className={styles.estadoJugador}>
-          <span style={{ color: estadoColor, textTransform: 'uppercase' }}>
-            {estadoLabel}
-          </span>
+    <div className="h-100 d-flex flex-column">
+      <div className="mb-3">
+        <h4 className="text-retro-primary mb-2">{nick}</h4>
+        <div className="d-flex justify-content-between mb-2">
+          <span className="badge-retro badge-retro-warning">Piso {piso}</span>
+          <span className="badge-retro badge-retro-success">Nivel {nivel}</span>
+        </div>
+        <div className="text-center mb-2" style={{ color: estadoColor, textTransform: 'uppercase', fontWeight: 'bold' }}>
+          {estadoLabel}
         </div>
       </div>
 
+      {/* DADOS */}
+      <div className="mb-3">
+        <h5 className="text-retro text-center mb-2">TUS DADOS</h5>
+        <div className="d-flex flex-wrap justify-content-center gap-2">
+          {dadosBase.map((dado) => (
+            <DadoComponent
+              key={dado.id}
+              dado={dado}
+              isSelected={false}
+              onClick={() => {}}
+              disabled={true}
+              animationState="none"
+            />
+          ))}
+          {dadosCorrupcion.map((dado) => (
+            <DadoComponent
+              key={dado.id}
+              dado={dado}
+              isSelected={false}
+              onClick={() => {}}
+              disabled={true}
+              animationState="none"
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* ENERGÍA */}
+      <div className="mb-3">
+        <h5 className="text-retro text-center mb-2">ENERGÍA</h5>
+        <div className="progress-retro mb-1" style={{ height: '20px' }}>
+          <div 
+            className="progress-retro-bar" 
+            role="progressbar" 
+            style={{ width: `${(energia / energiaMax) * 100}%` }}
+          >
+            {energia}/{energiaMax}
+          </div>
+        </div>
+      </div>
 
       {/* HABILIDADES */}
-      <h3 className={styles.tituloPanel}>HABILIDADES</h3>
-      <ul style={{ paddingLeft: '20px' }}>
-        <li style={{ marginBottom: '4px', fontSize: '14px', color: 'var(--text-light)' }}>
-          [+] Aumentar — <span style={{ color: 'var(--color-accent-blue)' }}>1⚡</span>
-        </li>
-        <li style={{ marginBottom: '4px', fontSize: '14px', color: 'var(--text-light)' }}>
-          [⇄] Voltear — <span style={{ color: 'var(--color-accent-blue)' }}>2⚡</span>
-        </li>
-        <li style={{ marginBottom: '4px', fontSize: '14px', color: 'var(--text-light)' }}>
-          [↻] Relanzar — <span style={{ color: 'var(--color-accent-blue)' }}>1⚡</span>
-        </li>
-      </ul>
+      <div className="mb-3 flex-grow-1">
+        <h5 className="text-retro text-center mb-2">HABILIDADES</h5>
+        <div className="d-flex flex-column gap-2">
+          <div className="card-retro p-2 text-center">
+            <div className="fw-bold">[+] Aumentar</div>
+            <div className="text-primary">1⚡</div>
+          </div>
+          <div className="card-retro p-2 text-center">
+            <div className="fw-bold">[⇄] Voltear</div>
+            <div className="text-primary">2⚡</div>
+          </div>
+          <div className="card-retro p-2 text-center">
+            <div className="fw-bold">[↻] Relanzar</div>
+            <div className="text-primary">1⚡</div>
+          </div>
+        </div>
+      </div>
 
       {/* RELIQUIAS */}
-      <h3 className={styles.reliquiasTitulo}>RELIQUIAS ({reliquias.length})</h3>
-      <div>
-        {reliquias.length === 0 ? (
-          <div className={styles.reliquiaItem}>Ninguna</div>
-        ) : (
-          reliquias.map((reliquia, idx) => (
-            <div key={idx} className={styles.reliquiaItem}>
-              {reliquia}
-            </div>
-          ))
-        )}
+      <div className="mb-3">
+        <h5 className="text-retro text-center mb-2">RELIQUIAS ({reliquias.length})</h5>
+        <div className="d-flex flex-wrap gap-2 justify-content-center">
+          {reliquias.length === 0 ? (
+            <div className="text-center text-muted fst-italic">Ninguna</div>
+          ) : (
+            reliquias.map((reliquia, idx) => (
+              <span key={idx} className="badge-retro badge-retro-info" style={{fontSize: '0.8rem'}}>
+                {reliquia}
+              </span>
+            ))
+          )}
+        </div>
       </div>
 
       {/* INVENTARIO DE CONSUMIBLES */}
-      <h3 className={styles.inventarioTitulo}>INVENTARIO ({consumibles?.length || 0})</h3>
       <div>
-        {(consumibles && consumibles.length > 0) ? (
-          consumibles.map((itemId, idx) => (
-            <div key={idx} className={styles.consumibleItem}>
-              <span>{itemId}</span>
-              <button
-                className={`${styles.usarBtn} retro-button small chunky-shadow`}
-                onClick={() => handleUsarConsumible(itemId)}
-              >
-                Usar
-              </button>
-            </div>
-          ))
-        ) : (
-          <div className={styles.consumibleItem}>Vacío</div>
-        )}
+        <h5 className="text-retro text-center mb-2">INVENTARIO ({consumibles?.length || 0})</h5>
+        <div className="d-flex flex-column gap-2 max-h-100 overflow-auto">
+          {(consumibles && consumibles.length > 0) ? (
+            consumibles.map((itemId, idx) => (
+              <div key={idx} className="d-flex justify-content-between align-items-center card-retro p-2">
+                <span className="flex-grow-1 me-2">{itemId}</span>
+                <button
+                  className="btn-retro btn-retro-sm btn-retro-success"
+                  onClick={() => handleUsarConsumible(itemId)}
+                >
+                  Usar
+                </button>
+              </div>
+            ))
+          ) : (
+            <div className="text-center text-muted fst-italic">Vacío</div>
+          )}
+        </div>
       </div>
     </div>
   );

@@ -21,7 +21,7 @@ const GameRouter: React.FC = () => {
   const renderEstadoJuego = () => {
     if (!partidaState) {
       // Antes de tener partida cargada
-      return <div>Esperando partida...</div>;
+      return <div className="text-center p-5">Esperando partida...</div>;
     }
 
     if (partidaState.estadoJuego === 'eliminado') {
@@ -41,7 +41,7 @@ const GameRouter: React.FC = () => {
         return <TiendaScreen />;
       default:
         return (
-          <div>
+          <div className="text-center p-5">
             Estado de juego desconocido: {partidaState.estadoJuego}
           </div>
         );
@@ -49,34 +49,39 @@ const GameRouter: React.FC = () => {
   };
 
   return (
-    <div
-      style={{
-        display: 'grid',
-        gridTemplateAreas: `
-          "header header header"
-          "left main right"
-        `,
-        gridTemplateRows: 'auto 1fr',
-        gridTemplateColumns: '300px 1fr 300px',
-        minHeight: '100vh',
-        gap: '10px',
-        padding: '10px',
-      }}
-    >
-      <div className="retro-panel" style={{ gridArea: 'header' }}>
-        <Header />
+    // Contenedor principal de Bootstrap: Toma el 100% del viewport
+    <div className="container-fluid vh-100 d-flex flex-column p-0 app-root-bg"> 
+      
+      {/* PRIMERA ZONA: HEADER (Fila superior de estadísticas) */}
+      <div className="row g-0">
+        <div className="col-12 p-2 app-header-bg">
+          <Header /> 
+        </div>
       </div>
-
-      <div className="retro-panel" style={{ gridArea: 'left' }}>
-        <PanelIzquierdo />
-      </div>
-
-      <main className="retro-panel" style={{ gridArea: 'main' }}>
-        {renderEstadoJuego()}
-      </main>
-
-      <div className="retro-panel" style={{ gridArea: 'right' }}>
-        <PanelDerecho />
+      
+      {/* SEGUNDA ZONA: CONTENIDO PRINCIPAL (3 Columnas) */}
+      <div className="row g-0 flex-grow-1">
+        
+        {/* Columna Izquierda (3/12): Info. del Jugador / Habilidades */}
+        <div className="col-3 h-100">
+          <div className="panel-content h-100 retro-panel-left">
+            <PanelIzquierdo />
+          </div>
+        </div>
+        
+        {/* Columna Central (6/12): El Tapete / Acción Principal */}
+        <div className="col-6 h-100">
+          <main className="panel-content h-100 retro-panel-main">
+            {renderEstadoJuego()}
+          </main>
+        </div>
+        
+        {/* Columna Derecha (3/12): Carrera / Chat */}
+        <div className="col-3 h-100">
+          <div className="panel-content h-100 retro-panel-right">
+            <PanelDerecho />
+          </div>
+        </div>
       </div>
     </div>
   );

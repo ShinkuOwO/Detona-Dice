@@ -1,13 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useGame } from '../contexts/GameContext';
 import { socket } from '../socket';
-import styles from './PanelDerecho.module.css';
 
 const PanelDerecho: React.FC = () => {
   const { state } = useGame();
   const { carreraState, sala } = state;
   const [mensajeChat, setMensajeChat] = useState('');
-  const chatEndRef = useRef<HTMLDivElement | null>(null);
+  const chatEndRef = useRef<HTMLDivElement>(null);
 
   // Enviar mensaje de chat
   const handleEnviarChat = (e: React.FormEvent) => {
@@ -32,96 +31,84 @@ const PanelDerecho: React.FC = () => {
   const mensajesChat = sala?.chat ?? [];
 
   return (
-    <div className={styles.panelDerecho}>
-      <h2 className={styles.tituloPanel}>Panel Derecho</h2>
-      
+    <div className="h-100 d-flex flex-column">
       {/* Sección de Carrera */}
-      <div>
-        <h3 className={styles.carreraTitulo}>🏁 CARRERA EN VIVO</h3>
+      <div className="mb-3 flex-grow-1 overflow-auto">
+        <h5 className="text-retro text-center mb-2">🏁 CARRERA EN VIVO</h5>
 
         {!haySala && (
-          <p style={{ color: 'var(--text-dim)', fontSize: '14px' }}>
+          <p className="text-center text-muted fst-italic">
             Únete o crea una sala para ver la carrera.
           </p>
         )}
 
         {haySala && carreraOrdenada.length === 0 && (
-          <p style={{ color: 'var(--text-dim)', fontSize: '14px' }}>
+          <p className="text-center text-muted fst-italic">
             Esperando a que el host inicie la partida...
           </p>
         )}
 
         {carreraOrdenada.length > 0 && (
-          <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+          <div className="d-flex flex-column gap-2">
             {carreraOrdenada.map((j) => {
               const esEliminado = j.estado === 'eliminado';
+              const posicion = carreraOrdenada.findIndex(item => item.jugadorId === j.jugadorId) + 1;
+              
               return (
-                <li
+                <div
                   key={j.jugadorId}
-                  className={styles.jugadorCarrera}
+                  className={`card-retro p-2 ${esEliminado ? 'bg-dark bg-opacity-50' : ''}`}
                 >
-                  <div className={styles.nombreJugador}>
-                    <strong>{j.nick}</strong>
-                  </div>
-                  <div className={styles.estadoJugador}>
-                    <span className={esEliminado ? styles.estadoEliminado : styles.estadoVivo}>
+                  <div className="d-flex justify-content-between align-items-center mb-1">
+                    <div className="d-flex align-items-center gap-2">
+                      <span className={`badge ${posicion === 1 ? 'bg-warning text-dark' : posicion === 2 ? 'bg-secondary' : posicion === 3 ? 'bg-danger' : 'bg-info'}`}>
+                        {posicion}
+                      </span>
+                      <strong className={esEliminado ? 'text-danger' : 'text-light'}>{j.nick}</strong>
+                    </div>
+                    <span className={`badge ${esEliminado ? 'badge-retro-danger' : 'badge-retro-success'}`}>
                       {esEliminado ? 'ELIMINADO' : 'VIVO'}
                     </span>
-                    <div className={styles.estadoInfo}>
-                      Piso: <span style={{ color: 'var(--color-accent-yellow)' }}>{j.piso}</span> | HP: <span style={{ color: 'var(--color-accent-red)' }}>{j.hp}</span>
-                    </div>
                   </div>
-                  <div className={styles.barraProgreso}>
-                    <div className={`${styles.barraProgresoLlena} ${esEliminado ? styles.barraProgresoLlenaEliminado : ''}`} style={{ width: `${(j.piso / 20) * 100}%` }}></div>
+                  <div className="d-flex justify-content-between text-sm">
+                    <span className="text-warning">Piso: {j.piso}</span>
+                    <span className="text-danger">HP: {j.hp}</span>
                   </div>
-                </li>
+                  <div className="progress-retro mt-1" style={{ height: '8px' }}>
+                    <div 
+                      className={`progress-retro-bar ${esEliminado ? 'bg-danger' : 'bg-warning'}`} 
+                      role="progressbar" 
+                      style={{ width: `${Math.min(100, (j.piso / 20) * 100)}%` }}
+                    />
+                  </div>
+                </div>
               );
             })}
-          </ul>
+          </div>
         )}
       </div>
 
-      <hr
-        style={{
-          width: '100%',
-          borderColor: 'var(--color-panel-border)',
-          margin: '10px 0',
-        }}
-      />
+      <hr className="border-retro" />
 
       {/* Sección de Chat */}
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          flex: 1,
-          minHeight: 0,
-        }}
-      >
-        <h3 className={styles.chatTitulo}>💬 CHAT</h3>
+      <div className="flex-grow-1 d-flex flex-column">
+        <h5 className="text-retro text-center mb-2">💬 CHAT</h5>
 
         <div
-          className="chat-window"
-          style={{
-            flex: 1,
-            border: '1px solid var(--color-panel-border)',
-            padding: '10px',
-            overflowY: 'auto',
-            marginBottom: '10px',
-            fontSize: '13px',
-            backgroundColor: 'var(--color-panel-dark)',
-          }}
+          className="flex-grow-1 border rounded p-2 mb-2 overflow-auto"
+          style={{ fontSize: '0.8rem', backgroundColor: '#2c3e50' }}
         >
           {mensajesChat.length === 0 && (
-            <div className={styles.mensajeSistema}>
+            <div className="text-center text-muted fst-italic py-2">
               No hay mensajes todavía. Escribe algo para romper el hielo.
             </div>
           )}
 
           {mensajesChat.map((m, i) => (
-            <div key={i} className={styles.mensajeChat}>
-              <div className={styles.mensajeChatRemitente}>{m.nick}:</div>
-              <div className={styles.mensajeChatContenido}>{m.mensaje}</div>
+            <div key={i} className="mb-1 p-1 bg-dark bg-opacity-25 rounded">
+              <div className="fw-bold text-info">{m.nick}:</div>
+              <div>{m.mensaje}</div>
+              <small className="text-muted">{new Date(m.timestamp).toLocaleTimeString()}</small>
             </div>
           ))}
 
@@ -129,15 +116,15 @@ const PanelDerecho: React.FC = () => {
         </div>
 
         {/* Formulario de Chat */}
-        <form onSubmit={handleEnviarChat} className={`chat-form ${styles.formularioChat}`}>
+        <form onSubmit={handleEnviarChat} className="d-flex gap-2">
           <input
             type="text"
             value={mensajeChat}
             onChange={(e) => setMensajeChat(e.target.value)}
-            className={`retro-input ${styles.inputChat}`}
+            className="form-control flex-grow-1"
             placeholder="Escribe un mensaje..."
           />
-          <button type="submit" className={`retro-button ${styles.botonEnviar}`}>
+          <button type="submit" className="btn-retro btn-retro-primary btn-sm">
             ENVIAR
           </button>
         </form>
