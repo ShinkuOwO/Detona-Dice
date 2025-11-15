@@ -109,7 +109,7 @@ const AppContent: React.FC = () => {
 
 const App: React.FC = () => {
   return (
-    <div className="app-container">
+    <div className="app-container crt-effect">
       <NotificationProvider>
         <AppContent />
         <NotificationBar />

@@ -10,14 +10,14 @@
   --retro-light: #f8f9fa;
   --retro-dark: #212529;
   
-  /* Fondo y texto */
+ /* Fondo y texto */
   --retro-bg: #1a1a1a;
   --retro-text: #e0e0e0;
   --retro-border: #444;
   
   /* Colores específicos para dados */
   --dado-normal-bg: #2c3e50;
-  --dado-corrupto-bg: #8b0000;
+  --dado-corrupto-bg: #8b000;
   --dado-bendito-bg: #3498db;
   --dado-seleccionado: #f39c12;
   
@@ -30,27 +30,42 @@
 body {
   background-color: var(--retro-bg);
   color: var(--retro-text);
-  font-family: 'retro_gaming', monospace;
- line-height: 1.6;
+  font-family: 'retro_gaming', 'Courier New', monospace;
+  line-height: 1.6;
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* Estilo de fuente pixel */
+.font-pixel {
+  font-family: 'retro_gaming', 'Courier New', monospace;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
 }
 
 /* Botones con estilo retro */
 .btn-retro {
   border: var(--chunky-border);
   box-shadow: var(--chunky-shadow);
-  font-family: 'retro_gaming', monospace;
+  font-family: 'retro_gaming', 'Courier New', monospace;
   font-weight: bold;
   text-transform: uppercase;
   letter-spacing: 1px;
   transition: all 0.2s ease;
   position: relative;
  background-image: linear-gradient(to bottom, rgba(255,255,255,0.1), rgba(0,0,0,0.1));
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
 }
 
 .btn-retro:hover {
   transform: translate(2px, 2px);
   box-shadow: 1px 1px 0px rgba(0,0,0,0.3);
-  background-image: linear-gradient(to bottom, rgba(255,255,255,0.2), rgba(0,0,0,0.2));
+  background-image: linear-gradient(to bottom, rgba(255,255,0.2), rgba(0,0,0,0.2));
 }
 
 .btn-retro:active {
@@ -84,6 +99,10 @@ body {
   color: var(--retro-text);
   position: relative;
   overflow: hidden;
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(25, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 10px 10px;
 }
 
 .card-retro::before {
@@ -102,28 +121,37 @@ body {
   background-color: #333;
   border: 1px solid var(--retro-border);
   box-shadow: inset 0 1px 2px rgba(0,0,0,0.3);
+  border-radius: 0;
+  overflow: hidden;
+  background-image: 
+    linear-gradient(45deg, rgba(255,255,255,0.1) 25%, transparent 25%, transparent 50%, rgba(255,255,25,0.1) 50%, rgba(255,255,255,0.1) 75%, transparent 75%, transparent);
+  background-size: 20px 20px;
 }
 
 .progress-retro-bar {
   background: linear-gradient(to right, var(--retro-primary), var(--retro-secondary));
-  box-shadow: inset 0 -1px 0 rgba(0,0,0,0.3);
+  box-shadow: inset 0 -1px 0 rgba(0,0,0.3);
   font-size: 12px;
- font-weight: bold;
+  font-weight: bold;
   display: flex;
   align-items: center;
   justify-content: center;
   text-shadow: 1px 1px 0px rgba(0,0,0,0.5);
+  border-radius: 0;
+  font-family: 'retro_gaming', 'Courier New', monospace;
+  text-transform: uppercase;
 }
 
 /* Badges con estilo retro */
 .badge-retro {
- font-family: 'retro_gaming', monospace;
+  font-family: 'retro_gaming', 'Courier New', monospace;
   font-weight: bold;
   text-transform: uppercase;
   letter-spacing: 1px;
   border: 1px solid var(--retro-border);
   box-shadow: 1px 1px 2px rgba(0,0,0,0.3);
   text-shadow: 1px 1px 0px rgba(0,0,0,0.5);
+  border-radius: 0;
 }
 
 .badge-retro-primary {
@@ -145,10 +173,11 @@ body {
 .alert-retro {
   border: var(--chunky-border);
   box-shadow: var(--chunky-shadow);
-  font-family: 'retro_gaming', monospace;
+  font-family: 'retro_gaming', 'Courier New', monospace;
   font-weight: bold;
   text-transform: uppercase;
   letter-spacing: 1px;
+  border-radius: 0;
 }
 
 .alert-retro-primary {
@@ -181,17 +210,20 @@ body {
   border: var(--chunky-border);
   box-shadow: 0 10px 20px rgba(0,0,0,0.5);
   color: var(--retro-text);
-  font-family: 'retro_gaming', monospace;
+  font-family: 'retro_gaming', 'Courier New', monospace;
+  border-radius: 0;
 }
 
 .modal-header-retro {
   border-bottom: 2px solid var(--retro-primary);
   background: linear-gradient(to bottom, var(--retro-secondary), #3a4e29);
+  border-radius: 0;
 }
 
 .modal-footer-retro {
   border-top: 2px solid var(--retro-primary);
   background: linear-gradient(to top, var(--retro-secondary), #3a4e29);
+  border-radius: 0;
 }
 
 /* Tooltips con estilo retro */
@@ -199,31 +231,36 @@ body {
   background-color: #333;
   color: var(--retro-text);
   border: 1px solid var(--retro-primary);
-  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-  font-family: 'retro_gaming', monospace;
- font-size: 12px;
+  box-shadow: 0 2px 5px rgba(0,0,0.3);
+  font-family: 'retro_gaming', 'Courier New', monospace;
+  font-size: 12px;
+ border-radius: 0;
 }
 
 .tooltip-retro .tooltip-arrow::before {
   border-top-color: var(--retro-primary);
 }
 
-/* Estilo para dados */
+/* Estilo para dados - con aspecto más pixelado */
 .dado-retro {
-  width: 60px;
+ width: 60px;
   height: 60px;
   display: flex;
   align-items: center;
   justify-content: center;
   border: 2px solid var(--retro-border);
   font-size: 24px;
-  font-weight: bold;
+ font-weight: bold;
   text-shadow: 1px 1px 0px rgba(0,0,0,0.5);
   box-shadow: var(--chunky-shadow);
   background: linear-gradient(145deg, #232f3d, #3a4e61);
   position: relative;
   transition: all 0.3s ease;
-  font-family: 'retro_gaming', monospace;
+  font-family: 'retro_gaming', 'Courier New', monospace;
+  border-radius: 0;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
 }
 
 .dado-retro.dado-seleccionado {
@@ -245,21 +282,28 @@ body {
   cursor: pointer;
 }
 
+/* Efecto de pixelado para elementos importantes */
+.pixelated {
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+}
+
 /* Animaciones retro */
 @keyframes pulse-retro {
   0% { transform: scale(1); }
- 50% { transform: scale(1.05); }
+  50% { transform: scale(1.05); }
   100% { transform: scale(1); }
 }
 
 @keyframes shake-retro {
   0% { transform: translate(1px, 1px) rotate(0deg); }
   10% { transform: translate(-1px, -2px) rotate(-1deg); }
- 20% { transform: translate(-3px, 0px) rotate(1deg); }
+  20% { transform: translate(-3px, 0px) rotate(1deg); }
   30% { transform: translate(3px, 2px) rotate(0deg); }
   40% { transform: translate(1px, -1px) rotate(1deg); }
   50% { transform: translate(-1px, 2px) rotate(-1deg); }
-  60% { transform: translate(-3px, 1px) rotate(0deg); }
+ 60% { transform: translate(-3px, 1px) rotate(0deg); }
   70% { transform: translate(3px, 1px) rotate(-1deg); }
   80% { transform: translate(-1px, -1px) rotate(1deg); }
   90% { transform: translate(1px, 2px) rotate(0deg); }
@@ -286,15 +330,18 @@ body {
 
 /* Efecto de "glow" para elementos importantes */
 .glow-retro {
-  box-shadow: 0 0 10px var(--retro-primary), 0 0 20px var(--retro-primary);
+  box-shadow: 0 10px var(--retro-primary), 0 0 20px var(--retro-primary);
 }
 
 /* Estilo de texto retro */
 .text-retro {
-  font-family: 'retro_gaming', monospace;
+  font-family: 'retro_gaming', 'Courier New', monospace;
   text-transform: uppercase;
   letter-spacing: 2px;
-  text-shadow: 2px 2px 0px rgba(0,0,0,0.5);
+  text-shadow: 2px 2px 0px rgba(0,0,0.5);
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
 }
 
 .text-retro-primary {
@@ -311,12 +358,16 @@ body {
 
 /* Estilo de contenedores retro */
 .container-retro {
-  background-color: rgba(26, 26, 26, 0.8);
+  background-color: rgba(26, 26, 0.8);
   border: var(--chunky-border);
   box-shadow: var(--chunky-shadow);
   padding: 20px;
   border-radius: 0;
   position: relative;
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 20px 20px;
 }
 
 /* Efecto de borde animado */
@@ -332,13 +383,94 @@ body {
   width: 100%;
   height: 100%;
   border: 2px solid transparent;
- border-top: 2px solid var(--retro-primary);
+  border-top: 2px solid var(--retro-primary);
   animation: border-move 3s linear infinite;
   pointer-events: none;
- border-radius: 0;
+  border-radius: 0;
 }
 
 @keyframes border-move {
   0% { transform: translateY(-100%); }
   100% { transform: translateY(100%); }
+}
+
+/* Efecto de scanlines para aspecto retro */
+.scanlines {
+  position: relative;
+  overflow: hidden;
+}
+
+.scanlines::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 10%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0, 0, 0, 0.1) 0.5%,
+    transparent 1%
+  );
+  pointer-events: none;
+  z-index: 10;
+  animation: scanline 8s linear infinite;
+}
+
+@keyframes scanline {
+  0% {
+    transform: translateY(0%);
+  }
+  10% {
+    transform: translateY(100%);
+  }
+}
+
+/* Efecto de CRT para contenedores principales */
+.crt-effect {
+  position: relative;
+  border: 8px solid #333;
+  box-shadow: 
+    inset 0 0 20px rgba(0, 0, 0, 0.8),
+    0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.crt-effect::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 255, 0, 0.02);
+  pointer-events: none;
+  z-index: 10;
+}
+
+.crt-effect::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
+    linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+  background-size: 100% 2px, 3px 100%;
+  pointer-events: none;
+  z-index: 10;
+  animation: flicker 0.15s infinite;
+}
+
+@keyframes flicker {
+  0% { opacity: 0.95; }
+  5% { opacity: 0.99; }
+ 10% { opacity: 0.94; }
+  15% { opacity: 0.98; }
+ 20% { opacity: 0.96; }
+ 25% { opacity: 0.97; }
+  30% { opacity: 0.96; }
+  100% { opacity: 0.98; }
 }
