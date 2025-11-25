@@ -114,15 +114,15 @@ const CombateScreen: React.FC = () => {
   return (
     <div className="combat-shell">
       <div className="combat-top">
-        <div className="combat-card dossier">
-          <div className="eyebrow">ENCUENTRO ACTUAL</div>
-          <div className="dossier-head">
-            <div>
-              <h2 className="title">{encuentroActual.nombre}</h2>
-              <p className="subtitle">{mensaje}</p>
+          <div className="combat-card dossier">
+            <div className="eyebrow">ENCUENTRO ACTUAL</div>
+            <div className="dossier-head">
+              <div>
+                <h2 className="title glitch-text" data-text={encuentroActual.nombre}>{encuentroActual.nombre}</h2>
+                <p className="subtitle">{mensaje}</p>
+              </div>
+              <div className="seal-retro">RUNA #{partidaState.rondaActual ?? 1}</div>
             </div>
-            <div className="seal-retro">RUNA #{partidaState.rondaActual ?? 1}</div>
-          </div>
           <div className="chip-row">
             <span className="chip chip-danger">Dados corruptos: {dadosCorrupcion.length}</span>
             <span className="chip chip-mono">Dados totales: {dadosBase.length + dadosCorrupcion.length}</span>
@@ -132,7 +132,7 @@ const CombateScreen: React.FC = () => {
 
         <div className="combat-card objective">
           <div className="eyebrow">OBJETIVO</div>
-          <div className="objective-value">{encuentroActual.objetivo}+</div>
+          <div className="objective-value glitch-text" data-text={`${encuentroActual.objetivo}+`}>{encuentroActual.objetivo}+</div>
           <div className="progress-retro thick">
             <div
               className="progress-retro-bar"
@@ -357,7 +357,7 @@ const CombateScreen: React.FC = () => {
         <button
           onClick={partidaState.dadosLanzados ? handleConfirmarSeleccion : handleLanzarDados}
           disabled={botonPrincipalLabel !== 'LANZAR DADOS' && !seleccionCompleta}
-          className={primaryActionClass}
+          className={`${primaryActionClass} floaty pixel-glow`}
         >
           {botonPrincipalLabel}
         </button>

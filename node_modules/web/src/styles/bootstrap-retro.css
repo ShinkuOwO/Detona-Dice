@@ -114,6 +114,45 @@ body {
   background-size: 20px 20px;
 }
 
+/* --- Overrides to align with new palette --- */
+.panel-content,
+.retro-panel-main,
+.retro-panel-left,
+.retro-panel-right {
+  background: linear-gradient(160deg, rgba(20, 35, 64, 0.95), rgba(13, 26, 48, 0.95)) !important;
+  border-color: rgba(34, 58, 96, 0.8) !important;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05), 0 8px 20px rgba(0, 0, 0, 0.45) !important;
+}
+
+.card-retro {
+  background: linear-gradient(145deg, rgba(20, 35, 64, 0.92), rgba(17, 32, 56, 0.92));
+  border: 1px solid rgba(34, 58, 96, 0.8);
+  color: var(--ui-text);
+}
+
+.btn-retro {
+  background: linear-gradient(180deg, var(--tone-cyan), var(--tone-teal));
+  border-color: rgba(34, 58, 96, 0.9);
+  color: #0b1b2d !important;
+  box-shadow: 0 6px 0 rgba(19, 35, 68, 0.8), 0 0 12px rgba(142, 216, 226, 0.3);
+  text-shadow: none;
+}
+
+.btn-retro:hover {
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+}
+
+.btn-retro-danger {
+  background: linear-gradient(180deg, var(--tone-magenta), var(--tone-wine));
+  color: #fff !important;
+}
+
+.btn-retro-warning {
+  background: linear-gradient(180deg, #f6c344, #e0a72c);
+  color: #1a1200 !important;
+}
+
 /* Estilo de fuente pixel */
 .font-pixel {
   font-family: 'retro_gaming', 'Courier New', monospace;

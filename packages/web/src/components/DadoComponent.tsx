@@ -12,7 +12,7 @@ interface DadoProps {
 
 const DadoComponent: React.FC<DadoProps> = ({ dado, isSelected, onClick, disabled, animationState = 'none' }) => {
   // Clases de Bootstrap con estilo retro
-  let dadoClasses = `dado-retro ${isSelected ? 'dado-seleccionado glow-retro' : ''} ${dado.esCorrupto ? 'dado-corrupto' : ''}`;
+  let dadoClasses = `dado-retro scanline ${isSelected ? 'dado-seleccionado glow-retro pixel-glow pixel-glitch' : ''} ${dado.esCorrupto ? 'dado-corrupto' : ''}`;
   
   if (animationState === 'rolling') dadoClasses += ' shake-retro';
   if (animationState === 'increasing') dadoClasses += ' pulse-retro';

@@ -2,54 +2,61 @@
 
 /* Variables de tema */
 :root {
-  /* Paleta de colores tipo Balatro con toque retro */
-  /* Fondo principal */
-  --color-background: #1a1a1d;
-  
-  /* Colores de cartas/juego */
-  --card-red: #e0245e;
-  --card-black: #1a1a1d;
-  --card-back: #3a3a5c;
-  --card-gold: #ffd700;
-  --card-blue: #5d8aa8;
-  --card-green: #3cb371;
-  
-  /* Colores de interfaz */
-  --ui-panel: #2c2c3a;
-  --ui-panel-border: #4a4a6a;
-  --ui-highlight: #ffcc00;
-  --ui-text: #ffffff;
-  --ui-text-dim: #aaaaaa;
-  --ui-accent: #ff6b35;
-  --ui-success: #4ade80;
-  --ui-warning: #facc15;
-  --ui-error: #f87171;
-  
-  /* Colores para dados */
-  --dado-normal-bg: #4f46e5;
-  --dado-corrupto-bg: #7c3aed;
-  --dado-bendito-bg: #059669;
-  --dado-selected: #fbbf24;
-  --dado-border: #1e293b;
-  
-  /* Efectos visuales */
-  --glow-primary: 0 0 10px rgba(79, 70, 229, 0.7);
-  --glow-corrupto: 0 0 10px rgba(124, 58, 237, 0.7);
-  --glow-bendito: 0 0 10px rgba(5, 150, 105, 0.7);
-  
-  /* Colores para interfaz de juego */
-  --health-bar-bg: #333333;
-  --health-bar-fill: #ef4444;
-  --energy-bar-bg: #333333;
-  --energy-bar-fill: #3b82f6;
-  --xp-bar-fill: #8b5cf6;
+  /* Paleta inspirada en referencia Balatro + pixel glitch */
+  --color-background: #0d1a30;
+  --color-surface: #14233d;
+  --color-surface-2: #1c2c4f;
+  --color-surface-glow: #16304a;
+  --color-border: #223a60;
+  --color-grid: #0a4761;
 
-  /* Tipografía */
+  --tone-cyan: #8ed8e2;
+  --tone-pink: #d26f9f;
+  --tone-blue: #6f88d0;
+  --tone-sky: #6fb6e5;
+  --tone-mint: #9ed8a5;
+  --tone-lime: #c6dd7c;
+  --tone-green: #56b44f;
+  --tone-magenta: #c53c87;
+  --tone-violet: #6959b4;
+  --tone-teal: #10b3c5;
+  --tone-deep-teal: #0d6f78;
+  --tone-wine: #5d273a;
+  --tone-plum: #3e234f;
+  --tone-navy: #132344;
+  --tone-forest: #0f3c28;
+  --tone-brown: #3f2417;
+
+  --ui-panel: var(--color-surface);
+  --ui-panel-border: var(--color-border);
+  --ui-highlight: var(--tone-lime);
+  --ui-text: #f2f6ff;
+  --ui-text-dim: #a6b7d8;
+  --ui-accent: var(--tone-cyan);
+  --ui-success: var(--tone-green);
+  --ui-warning: #f6c344;
+  --ui-error: #ff6b7d;
+
+  --dado-normal-bg: var(--tone-sky);
+  --dado-corrupto-bg: var(--tone-magenta);
+  --dado-bendito-bg: var(--tone-green);
+  --dado-selected: var(--tone-lime);
+  --dado-border: var(--tone-navy);
+
+  --glow-primary: 0 0 12px rgba(142, 216, 226, 0.5);
+  --glow-corrupto: 0 0 12px rgba(197, 60, 135, 0.55);
+  --glow-bendito: 0 0 12px rgba(86, 180, 79, 0.55);
+
+  --health-bar-bg: #1d2a44;
+  --health-bar-fill: #ef4b4b;
+  --energy-bar-bg: #1a314c;
+  --energy-bar-fill: #6fb6e5;
+  --xp-bar-fill: #7d8cc7;
+
   --font-retro: 'Press Start 2P', 'Courier New', monospace;
   --font-normal: 'VT323', 'Courier New', monospace;
   --font-pixel: 'PixelArt', 'RetroGaming', 'Press Start 2P', monospace;
-  
-  /* Variables adicionales necesarias para evitar errores */
+
   --color-panel-border: var(--ui-panel-border);
   --color-accent-red: var(--ui-error);
   --color-accent-blue: var(--ui-accent);
@@ -85,9 +92,11 @@
 }
 
 body {
-  background: radial-gradient(circle at 20% 20%, rgba(93, 138, 168, 0.12), transparent 30%),
-    radial-gradient(circle at 80% 10%, rgba(255, 107, 53, 0.08), transparent 25%),
-    linear-gradient(135deg, #0a0c1a 0%, #131629 35%, #0b0e1d 100%);
+  background:
+    radial-gradient(40% 50% at 20% 20%, rgba(142, 216, 226, 0.08), transparent 65%),
+    radial-gradient(35% 40% at 80% 10%, rgba(210, 111, 159, 0.1), transparent 65%),
+    radial-gradient(60% 70% at 50% 60%, rgba(19, 35, 68, 0.9), rgba(13, 26, 48, 0.95)),
+    linear-gradient(115deg, rgba(21, 44, 80, 0.9), rgba(17, 33, 64, 0.92));
   color: var(--ui-text);
   font-family: var(--font-pixel);
   margin: 0;
@@ -139,6 +148,95 @@ body {
   filter: blur(4px);
   z-index: 0;
   pointer-events: none;
+}
+
+/* Glitch / pixel vibe */
+.pixel-glow {
+  box-shadow:
+    0 0 0 2px rgba(34, 58, 96, 0.6),
+    0 0 12px rgba(142, 216, 226, 0.35),
+    0 0 26px rgba(198, 221, 124, 0.18);
+}
+
+.glitch-text {
+  position: relative;
+  display: inline-block;
+  text-shadow: 1px 0 var(--tone-pink), -1px 0 var(--tone-cyan);
+}
+
+.glitch-text::before,
+.glitch-text::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  mix-blend-mode: screen;
+  clip-path: inset(0 0 0 0);
+}
+
+.glitch-text::before {
+  color: var(--tone-cyan);
+  animation: glitch-shift 1.8s infinite;
+}
+
+.glitch-text::after {
+  color: var(--tone-pink);
+  animation: glitch-shift 1.6s infinite reverse;
+}
+
+.scanline {
+  position: relative;
+  overflow: hidden;
+}
+
+.scanline::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 3px);
+  background-size: 100% 4px;
+  mix-blend-mode: soft-light;
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.floaty {
+  animation: floaty 3.5s ease-in-out infinite;
+}
+
+.pulse-border {
+  box-shadow: 0 0 0 2px rgba(34, 58, 96, 0.7), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+  animation: pulse 2.4s infinite;
+}
+
+.pixel-glitch {
+  animation: pixel-glitch 1.2s steps(2, end) infinite;
+}
+
+@keyframes pixel-glitch {
+  0% { transform: translate(0,0) skew(0deg); filter: hue-rotate(0deg); }
+  20% { transform: translate(-1px, 1px) skew(-0.5deg); filter: hue-rotate(6deg); }
+  40% { transform: translate(1px, -1px) skew(0.3deg); }
+  60% { transform: translate(-1px, -1px) skew(0deg); filter: hue-rotate(-5deg); }
+  80% { transform: translate(1px, 1px) skew(0.4deg); }
+  100% { transform: translate(0,0) skew(0deg); filter: hue-rotate(0deg); }
+}
+
+@keyframes glitch-shift {
+  0% { clip-path: inset(0 0 0 0); transform: translate(0,0); }
+  20% { clip-path: inset(5% 0 15% 0); transform: translate(-2px,1px); }
+  40% { clip-path: inset(15% 0 5% 0); transform: translate(2px,-1px); }
+  60% { clip-path: inset(8% 0 12% 0); transform: translate(-1px,2px); }
+  100% { clip-path: inset(0 0 0 0); transform: translate(0,0); }
+}
+
+@keyframes floaty {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 2px rgba(34, 58, 96, 0.7), inset 0 0 0 1px rgba(255, 255, 255, 0.05); }
+  50% { box-shadow: 0 0 0 2px rgba(110, 136, 208, 0.6), inset 0 0 0 1px rgba(198, 221, 124, 0.15); }
 }
 
 /* Responsive utilities */
@@ -787,12 +885,13 @@ body {
   gap: 18px;
   padding: 18px;
   min-height: 100vh;
-  background: radial-gradient(circle at 20% 20%, rgba(255, 170, 0, 0.06), transparent 35%),
-    radial-gradient(circle at 80% 0%, rgba(93, 138, 168, 0.08), transparent 40%),
-    linear-gradient(135deg, rgba(10, 12, 26, 0.95), rgba(17, 20, 38, 0.9));
-  border: 2px solid rgba(255, 255, 255, 0.04);
-  border-radius: 12px;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05), 0 0 30px rgba(0, 0, 0, 0.45);
+  background:
+    radial-gradient(50% 60% at 30% 20%, rgba(110, 136, 208, 0.12), transparent 65%),
+    radial-gradient(60% 70% at 70% 30%, rgba(142, 216, 226, 0.08), transparent 65%),
+    linear-gradient(140deg, rgba(20, 35, 64, 0.95), rgba(13, 26, 48, 0.96));
+  border: 2px solid rgba(34, 58, 96, 0.6);
+  border-radius: 14px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04), 0 0 38px rgba(0, 0, 0, 0.5);
 }
 
 .combat-top {
@@ -803,8 +902,8 @@ body {
 
 .combat-card {
   padding: 16px;
-  background: linear-gradient(180deg, rgba(52, 52, 73, 0.9), rgba(31, 31, 46, 0.9));
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: linear-gradient(180deg, rgba(20, 35, 64, 0.95), rgba(16, 32, 58, 0.92));
+  border: 1px solid rgba(34, 58, 96, 0.8);
   border-radius: 12px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
   position: relative;
@@ -999,10 +1098,44 @@ body {
   grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
   gap: 12px;
   padding: 12px;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px dashed rgba(255, 255, 255, 0.12);
-  border-radius: 10px;
-  min-height: 160px;
+  background: radial-gradient(circle at 30% 30%, rgba(110, 136, 208, 0.08), transparent 55%), rgba(10, 19, 36, 0.6);
+  border: 1px dashed rgba(34, 58, 96, 0.75);
+  border-radius: 12px;
+  min-height: 200px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+}
+
+.dado-retro {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 96px;
+  width: 96px;
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.05), transparent 60%), var(--dado-normal-bg);
+  border: 3px solid var(--dado-border);
+  color: #0c1627;
+  font-size: 28px;
+  text-shadow: 0 2px 0 rgba(0,0,0,0.4);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.dado-retro:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 18px rgba(0, 0, 0, 0.45), 0 0 12px rgba(142, 216, 226, 0.35);
+}
+
+.dado-retro.dado-seleccionado {
+  background: radial-gradient(circle at 40% 40%, rgba(255, 255, 255, 0.12), transparent 65%), var(--dado-selected);
+  color: #0a1b2f;
+  box-shadow: var(--glow-primary);
+}
+
+.dado-retro.dado-corrupto {
+  background: radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.08), transparent 60%), var(--dado-corrupto-bg);
+}
+
+.dado-retro.dado-bendito {
+  background: radial-gradient(circle at 40% 40%, rgba(255, 255, 255, 0.1), transparent 65%), var(--dado-bendito-bg);
 }
 
 .dice-toolbar {
@@ -1024,11 +1157,13 @@ body {
 }
 
 .rail-badge {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(0, 0, 0, 0.35));
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(135deg, rgba(20, 45, 82, 0.95), rgba(15, 36, 62, 0.9));
+  border: 1px solid rgba(34, 58, 96, 0.85);
   border-radius: 10px;
   padding: 10px;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.03), 0 8px 18px rgba(0, 0, 0, 0.35);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.03), 0 10px 20px rgba(0, 0, 0, 0.4);
+  position: relative;
+  overflow: hidden;
 }
 
 .rail-badge .label {
@@ -1043,6 +1178,7 @@ body {
   font-size: 18px;
   letter-spacing: 0.04em;
   margin-top: 4px;
+  text-shadow: 0 0 8px rgba(142, 216, 226, 0.35);
 }
 
 .rail-badge small {
