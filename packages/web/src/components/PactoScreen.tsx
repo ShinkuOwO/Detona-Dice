@@ -50,7 +50,7 @@ const PactoScreen: React.FC = () => {
       <div className="row justify-content-center mb-4">
         <div className="col-12">
           <div className="d-flex flex-wrap justify-content-center gap-4">
-            {opcionesPacto.map((opcion) => { 
+            {opcionesPacto.map((opcion, index) => { 
               // Separar el texto en nombre y descripción
               const [nombre, descripcion] = opcion.texto.split(' - ');
               return (

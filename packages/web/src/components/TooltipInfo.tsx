@@ -35,7 +35,7 @@ const TooltipInfo: React.FC<TooltipInfoProps> = ({
         {children}
       </div>
       {visible && (
-        <div className={`tooltip-retro bs-tooltip-${position} ${getPositionClasses()} show position-absolute`}>
+        <div className={`tooltip-retro bs-tooltip-${position} show position-absolute`}>
           <div className="tooltip-inner bg-dark text-light p-2 rounded">
             {content}
           </div>
