@@ -7,7 +7,7 @@ const LoginScreen: React.FC = () => {
   const { dispatch } = useGame();
   const [nick, setNick] = useState('');
   const [codigoSala, setCodigoSala] = useState('');
- const { addNotification } = useNotification();
+  const { addNotification } = useNotification();
 
   const handleCrearSala = () => {
     if (nick.trim() === '') {
@@ -27,85 +27,134 @@ const LoginScreen: React.FC = () => {
     socket.emit('cliente:unirse_sala', { nick, codigoSala: codigoSala.toUpperCase() });
   };
 
-  // Estilos en línea para el layout de esta pantalla
-  const containerStyle: React.CSSProperties = {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    minHeight: '100vh',
-    padding: '20px',
-    gap: '20px',
-  };
-
   return (
-    <div style={containerStyle}>
-      {/* Puedes reemplazar esto con tu logo pixelado */}
-      <h1 style={{ fontSize: '64px', color: 'white', textShadow: '4px 4px 0px #00', margin: '10px 0' }}>
-        DETONA DICE
-      </h1>
-      
-      <input
-        type="text"
-        placeholder="INTRODUCE TU NICK"
-        value={nick}
-        onChange={(e) => setNick(e.target.value)}
-        maxLength={15}
-        className="retro-input chunky-shadow responsive-input"
-        style={{ marginBottom: '15px', width: '100%', maxWidth: '300px' }}
-      />
-      
-      <button 
-        onClick={handleCrearSala} 
-        className="retro-button chunky-shadow responsive-button"
-        style={{ marginBottom: '10px' }}
-      >
-        CREAR SALA
-      </button>
+    <div className="landing-shell">
+      <section className="landing-hero">
+        <div className="badge-row">
+          <span className="logo-badge pixel-border">Roguelike en tiempo real</span>
+          <span className="glow-badge">Modo online</span>
+        </div>
+        <h1 className="logo-title">Detona Dice</h1>
+        <p className="hero-tagline">
+          Dados que explotan, pactos peligrosos y partidas en simultáneo. Entra, arma tu build y
+          corre más rápido que tus rivales antes de que el mapa te trague.
+        </p>
 
-      <div style={{ margin: '15px 0', borderTop: `2px solid var(--color-accent-red)`, width: '80%', maxWidth: '300px' }}></div>
+        <div className="balatro-showcase">
+          <div className="balatro-card prime">
+            <div className="card-top">
+              <span className="card-label">Bendito</span>
+              <span className="card-rank">x2</span>
+            </div>
+            <div className="card-body">
+              <div className="pixel-dice dice-bendito">
+                <span className="pip" />
+                <span className="pip" />
+                <span className="pip" />
+                <span className="pip" />
+                <span className="pip" />
+              </div>
+              <p className="card-text">Duplica tu combo si mantienes viva la llama sagrada.</p>
+            </div>
+            <div className="card-footer">
+              <span className="card-tag">+Energía</span>
+              <span className="card-tag soft">Mejoras baratas</span>
+            </div>
+          </div>
 
-      <input
-        type="text"
-        placeholder="CÓDIGO DE SALA"
-        value={codigoSala}
-        onChange={(e) => setCodigoSala(e.target.value)}
-        maxLength={6}
-        className="retro-input chunky-shadow responsive-input"
-        style={{ marginBottom: '15px', width: '100%', maxWidth: '300px' }}
-      />
-      
-      <button 
-        onClick={handleUnirseSala} 
-        className="retro-button retro-button-danger chunky-shadow responsive-button"
-        style={{ marginBottom: '20px' }}
-      >
-        UNIRSE A SALA
-      </button>
-      
-      {/* Tutorial */}
-      <div style={{ 
-        marginTop: '20px', 
-        maxWidth: '100%', 
-        textAlign: 'left', 
-        padding: '15px', 
-        border: '3px solid var(--color-accent-blue)', 
-        backgroundColor: 'var(--color-panel-dark)', 
-        borderRadius: '8px',
-        width: '100%'
-      }}>
-        <h2 style={{ color: 'var(--color-accent-yellow)', textAlign: 'center', marginBottom: '15px', fontSize: '1.2em' }}>¿CÓMO JUGAR?</h2>
-        <ul style={{ listStyle: 'none', padding: '0 10px', margin: 0 }}>
-          <li style={{ marginBottom: '8px', fontSize: '0.9em' }}><strong>1. OBJETIVO:</strong> Sube de nivel y sobrevive más que los demás jugadores.</li>
-          <li style={{ marginBottom: '8px', fontSize: '0.9em' }}><strong>2. DADOS:</strong> Lanza dados y selecciona 2 para intentar alcanzar el objetivo del encuentro.</li>
-          <li style={{ marginBottom: '8px', fontSize: '0.9em' }}><strong>3. ENERGÍA:</strong> Selecciona dados, usa habilidades y compra items con tu energía.</li>
-          <li style={{ marginBottom: '8px', fontSize: '0.9em' }}><strong>4. TIENDAS:</strong> Gasta oro para comprar mejoras y consumibles.</li>
-          <li style={{ marginBottom: '8px', fontSize: '0.9em' }}><strong>5. PACTOS:</strong> Acepta poderosos pactos con efectos permanentes (¡pero peligrosos!).</li>
-          <li style={{ marginBottom: '8px', fontSize: '0.9em' }}><strong>6. SUBIR NIVEL:</strong> Gana recompensas por cada nivel que alcances.</li>
-          <li style={{ marginBottom: '8px', fontSize: '0.9em' }}><strong>7. HABILIDADES:</strong> [+] Aumentar (1⚡), [⇄] Voltear (2⚡), [↻] Relanzar (1⚡).</li>
-          <li style={{ marginBottom: '8px', fontSize: '0.9em' }}><strong>8. GANAR:</strong> Sé el último jugador en pie o el que más piso alcance.</li>
+          <div className="balatro-card ghost">
+            <div className="card-top">
+              <span className="card-label">Corrupto</span>
+              <span className="card-rank">☠</span>
+            </div>
+            <div className="card-body">
+              <div className="pixel-dice dice-corrupto">
+                <span className="pip" />
+                <span className="pip" />
+                <span className="pip" />
+                <span className="pip" />
+                <span className="pip" />
+                <span className="pip" />
+              </div>
+              <p className="card-text">Riesgo permanente, recompensas absurdas. ¿Lo tomas?</p>
+            </div>
+            <div className="card-footer">
+              <span className="card-tag warning">Pacto</span>
+              <span className="card-tag">Loot extra</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="highlight-pills">
+          <span className="pill">⚡  Acciones en tiempo real</span>
+          <span className="pill">🎲  Dados benditos, normales y corruptos</span>
+          <span className="pill">💀  Pactos con riesgo permanente</span>
+          <span className="pill">🛒  Tienda y subida de nivel</span>
+        </div>
+
+        <ul className="feature-list">
+          <li>
+            <span className="feature-icon">➜</span> Lanza 3 dados, combina 2 y alcanza el objetivo.
+          </li>
+          <li>
+            <span className="feature-icon">➜</span> Usa energía para mejorar, relanzar o voltear.
+          </li>
+          <li>
+            <span className="feature-icon">➜</span> Compra items, acepta pactos y escala pisos.
+          </li>
+          <li>
+            <span className="feature-icon">➜</span> Gana siendo el último en pie o el más alto.
+          </li>
         </ul>
-      </div>
+      </section>
+
+      <section className="landing-card">
+        <div className="form-grid">
+          <h2>Entra a la partida</h2>
+
+          <label className="field-label" htmlFor="nick-input">Nick</label>
+          <input
+            id="nick-input"
+            type="text"
+            placeholder="Introduce tu nick"
+            value={nick}
+            onChange={(e) => setNick(e.target.value)}
+            maxLength={15}
+            className="retro-input chunky-shadow responsive-input"
+          />
+
+          <div className="button-stack">
+            <button
+              onClick={handleCrearSala}
+              className="retro-button chunky-shadow responsive-button"
+            >
+              Crear sala
+            </button>
+            <button
+              onClick={handleUnirseSala}
+              className="retro-button retro-button-danger chunky-shadow responsive-button"
+            >
+              Unirse con código
+            </button>
+          </div>
+
+          <hr className="divider-accent" />
+
+          <label className="field-label" htmlFor="codigo-sala">Código de sala</label>
+          <input
+            id="codigo-sala"
+            type="text"
+            placeholder="Ej: ZXQ123"
+            value={codigoSala}
+            onChange={(e) => setCodigoSala(e.target.value)}
+            maxLength={6}
+            className="retro-input chunky-shadow responsive-input"
+          />
+
+          <p className="helper-note">Comparte el código con tu squad o genera uno nuevo al crear sala.</p>
+          <p className="login-footer">Tip: mantén tu nick corto para que encaje mejor en el HUD.</p>
+        </div>
+      </section>
     </div>
   );
 };
