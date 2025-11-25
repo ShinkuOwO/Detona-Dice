@@ -9,13 +9,23 @@ const MapaScreen: React.FC = () => {
 
   // Si no hay partida o no estamos en mapa, mostramos algo neutro
   if (!partidaState || partidaState.estadoJuego !== 'mapa') {
-    return <div>Generando mapa...</div>;
+    return (
+      <div className="d-flex flex-column align-items-center justify-content-center h-100 text-center">
+        <div className="eyebrow">Cargando</div>
+        <p className="muted">Generando mapa...</p>
+      </div>
+    );
   }
 
   const { mapaActual, mensaje } = partidaState;
 
   if (!mapaActual) {
-    return <div>Generando mapa...</div>;
+    return (
+      <div className="d-flex flex-column align-items-center justify-content-center h-100 text-center">
+        <div className="eyebrow">Cargando</div>
+        <p className="muted">Esperando el mapa del host...</p>
+      </div>
+    );
   }
 
   const handleElegirNodo = (nodoId: string) => {
@@ -45,17 +55,16 @@ const MapaScreen: React.FC = () => {
   };
 
   const messageStyle: React.CSSProperties = {
-    color: 'var(--text-dim)',
+    color: 'var(--ui-text-dim)',
     minHeight: '24px',
     fontStyle: 'italic',
   };
 
   const buttonContainerStyle: React.CSSProperties = {
-    display: 'flex',
-    justifyContent: 'center',
-    gap: '20px',
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
+    gap: '16px',
     marginTop: '30px',
-    flexWrap: 'wrap',
   };
 
   const getButtonClass = (tipo: string, isSelected: boolean) => {

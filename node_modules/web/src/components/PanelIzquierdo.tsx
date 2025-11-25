@@ -16,7 +16,7 @@ const PanelIzquierdo: React.FC = () => {
     );
   }
 
-  const { piso, nivel, reliquias, consumibles, dadosBase, dadosCorrupcion, energia, energiaMax } = partidaState;
+  const { piso, nivel, reliquias, consumibles, dadosBase, dadosCorrupcion } = partidaState;
 
   const handleUsarConsumible = (itemId: string) => {
     socket.emit('cliente:usar_consumible', { itemId });
@@ -87,35 +87,12 @@ const PanelIzquierdo: React.FC = () => {
         </div>
       </div>
 
-      {/* ENERGÍA */}
+      {/* RESUMEN */}
       <div className="mb-3">
-        <h5 className="text-retro text-center mb-2">ENERGÍA</h5>
-        <div className="progress-retro mb-1" style={{ height: '20px' }}>
-          <div 
-            className="progress-retro-bar" 
-            role="progressbar" 
-            style={{ width: `${(energia / energiaMax) * 100}%` }}
-          >
-            {energia}/{energiaMax}
-          </div>
-        </div>
-      </div>
-
-      {/* HABILIDADES */}
-      <div className="mb-3 flex-grow-1">
-        <h5 className="text-retro text-center mb-2">HABILIDADES</h5>
-        <div className="d-flex flex-column gap-2">
-          <div className="card-retro p-2 text-center">
-            <div className="fw-bold">[+] Aumentar</div>
-            <div className="text-primary">1⚡</div>
-          </div>
-          <div className="card-retro p-2 text-center">
-            <div className="fw-bold">[⇄] Voltear</div>
-            <div className="text-primary">2⚡</div>
-          </div>
-          <div className="card-retro p-2 text-center">
-            <div className="fw-bold">[↻] Relanzar</div>
-            <div className="text-primary">1⚡</div>
+        <div className="card-retro p-3 text-center">
+          <div className="fw-bold">Accion principal</div>
+          <div className="text-muted" style={{ fontSize: '0.9rem' }}>
+            Gestiona energia y habilidades en el tablero central para mantener esta columna limpia.
           </div>
         </div>
       </div>
