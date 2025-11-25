@@ -20,7 +20,6 @@ const GameRouter: React.FC = () => {
 
   const renderEstadoJuego = () => {
     if (!partidaState) {
-      // Antes de tener partida cargada
       return <div className="text-center p-5">Esperando partida...</div>;
     }
 
@@ -51,36 +50,29 @@ const GameRouter: React.FC = () => {
   };
 
   return (
-    // Contenedor principal de Bootstrap: Toma el 100% del viewport
-    <div className="container-fluid vh-100 d-flex flex-column p-0 app-root-bg"> 
-      
-      {/* PRIMERA ZONA: HEADER (Fila superior de estadísticas) */}
+    // Contenedor principal (permitimos scroll y layout responsive)
+    <div className="container-fluid d-flex flex-column p-0 app-root-bg" style={{ minHeight: '100vh' }}>
       <div className="row g-0">
         <div className="col-12 p-2 app-header-bg">
-          <Header /> 
+          <Header />
         </div>
       </div>
-      
-      {/* SEGUNDA ZONA: CONTENIDO PRINCIPAL (3 Columnas) */}
-      <div className="row g-0 flex-grow-1">
-        
-        {/* Columna Izquierda (3/12): Info. del Jugador / Habilidades */}
-        <div className="col-3 h-100">
-          <div className="panel-content h-100 retro-panel-left">
+
+      <div className="row g-0">
+        <div className="col-12 col-lg-3">
+          <div className="panel-content retro-panel-left">
             <PanelIzquierdo />
           </div>
         </div>
-        
-        {/* Columna Central (6/12): El Tapete / Acción Principal */}
-        <div className="col-6 h-100">
-          <main className="panel-content h-100 retro-panel-main">
+
+        <div className="col-12 col-lg-6">
+          <main className="panel-content retro-panel-main">
             {renderEstadoJuego()}
           </main>
         </div>
-        
-        {/* Columna Derecha (3/12): Carrera / Chat */}
-        <div className="col-3 h-100">
-          <div className="panel-content h-100 retro-panel-right">
+
+        <div className="col-12 col-lg-3">
+          <div className="panel-content retro-panel-right">
             <PanelDerecho />
           </div>
         </div>

@@ -59,9 +59,11 @@
     border-right: 3px solid var(--retro-panel-border);
     border-left: 3px solid var(--retro-panel-border);
     padding: 15px;
-    height: 100%;
+    min-height: 100%;
+    height: auto;
     display: flex;
     flex-direction: column;
+    overflow-y: auto;
 }
 
 /* Fix para el borde izquierdo del panel de la izquierda */
