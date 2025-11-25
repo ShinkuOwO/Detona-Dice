@@ -167,12 +167,14 @@ const CombateScreen: React.FC = () => {
           </div>
 
           <div className="dice-toolbar">
-            <span className="chip chip-ghost">Dados base: {dadosBase.length}</span>
-            <span className="chip chip-danger">Corruptos: {dadosCorrupcion.length}</span>
+            <span className={`chip ${allowSelection ? 'chip-success' : 'chip-warning'}`}>
+              {allowSelection ? 'Marca y confirma tus dados' : 'Pulsa lanzar para empezar'}</span>
+            <span className="chip chip-ghost">Turno: ronda #{partidaState.rondaActual ?? 1}</span>
+            <span className="chip chip-amber">Energía {partidaState.energia}/{partidaState.energiaMax}</span>
             <span className={sumaSeleccionados >= encuentroActual.objetivo ? 'chip chip-success' : 'chip chip-warning'}>
               {sumaSeleccionados >= encuentroActual.objetivo ? 'Objetivo cubierto' : `Faltan ${faltan}`}
             </span>
-            <span className="chip chip-info">Seleccionados: {selectedDice.length}/{maxSeleccionables}</span>
+            <span className="chip chip-info">Selección {selectedDice.length}/{maxSeleccionables}</span>
           </div>
 
           <div className="dice-grid">

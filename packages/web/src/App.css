@@ -484,8 +484,8 @@ body {
   text-transform: uppercase;
   line-height: 1;
   background: linear-gradient(120deg, #ffcc00, #ff6b35 45%, #ffd700);
-  -webkit-background-clip: text;
   background-clip: text;
+  -webkit-background-clip: text;
   color: transparent;
   text-shadow: 0 4px 0 #000, 0 0 24px rgba(255, 204, 0, 0.35);
 }
@@ -1066,5 +1066,220 @@ body {
 
   .combat-shell {
     padding: 14px;
+  }
+}
+
+/* --- Retro lobby rework --- */
+.lobby-shell {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: relative;
+}
+
+.lobby-shell::before {
+  content: '';
+  position: absolute;
+  inset: 12px;
+  border: 1px dashed rgba(255, 255, 255, 0.07);
+  pointer-events: none;
+  filter: drop-shadow(0 0 10px rgba(255, 204, 0, 0.25));
+}
+
+.lobby-header {
+  padding: 18px 20px;
+  background: linear-gradient(120deg, rgba(44, 44, 58, 0.9), rgba(20, 20, 32, 0.95));
+  border: 1px solid var(--ui-panel-border);
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35), inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+  position: relative;
+  overflow: hidden;
+}
+
+.lobby-header::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 15% 30%, rgba(255, 204, 0, 0.14), transparent 35%),
+    radial-gradient(circle at 80% 10%, rgba(255, 107, 53, 0.12), transparent 35%);
+  opacity: 0.8;
+}
+
+.lobby-code {
+  font-size: clamp(26px, 5vw, 40px);
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  color: var(--ui-text);
+  text-shadow: 0 4px 0 #000, 0 0 18px rgba(255, 204, 0, 0.35);
+  margin: 6px 0;
+}
+
+.lobby-sub {
+  margin: 0;
+  color: var(--ui-text-dim);
+  max-width: 760px;
+}
+
+.lobby-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 14px;
+}
+
+.lobby-card {
+  border: 1px solid var(--ui-panel-border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  background: linear-gradient(160deg, rgba(21, 21, 32, 0.92), rgba(44, 44, 58, 0.9));
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35), inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+  position: relative;
+  overflow: hidden;
+}
+
+.lobby-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.04), transparent 50%);
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.lobby-card.roster {
+  grid-row: span 2;
+}
+
+.card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.card-head h3 {
+  margin: 2px 0 0;
+  font-size: 18px;
+}
+
+.roster-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.roster-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.roster-item.ready {
+  box-shadow: 0 0 0 1px rgba(74, 222, 128, 0.25), 0 10px 20px rgba(0, 0, 0, 0.25);
+}
+
+.roster-item.pending {
+  box-shadow: 0 0 0 1px rgba(250, 204, 21, 0.25), 0 10px 20px rgba(0, 0, 0, 0.25);
+}
+
+.roster-item .nick {
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.status-dot {
+  padding: 6px 10px;
+  border-radius: 10px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.status-dot.ok {
+  background: rgba(74, 222, 128, 0.14);
+  color: #86efac;
+  border: 1px solid rgba(74, 222, 128, 0.35);
+}
+
+.status-dot.wait {
+  background: rgba(250, 204, 21, 0.1);
+  color: #facc15;
+  border: 1px dashed rgba(250, 204, 21, 0.35);
+}
+
+.action-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.chat-window {
+  border: 1px solid var(--ui-panel-border);
+  border-radius: 10px;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.3);
+  min-height: 240px;
+  max-height: 340px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.chat-line {
+  display: flex;
+  gap: 6px;
+  align-items: baseline;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 8px;
+  padding: 8px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.chat-line .author {
+  color: #9ddcff;
+  font-weight: 700;
+}
+
+.chat-line .message {
+  color: var(--ui-text);
+}
+
+.empty-chat {
+  text-align: center;
+  color: var(--ui-text-dim);
+  font-size: 13px;
+  padding: 10px;
+}
+
+.chat-form {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.pill.mini {
+  padding: 4px 8px;
+  font-size: 11px;
+  text-transform: uppercase;
+}
+
+@media (max-width: 960px) {
+  .lobby-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .lobby-card.roster {
+    grid-row: auto;
   }
 }
