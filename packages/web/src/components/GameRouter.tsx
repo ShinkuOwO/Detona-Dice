@@ -34,8 +34,10 @@ const GameRouter: React.FC = () => {
       case 'mapa':
         return <MapaScreen />;
       case 'subiendo_nivel':
+      case 'subir_nivel':
         return <SubirNivelScreen />;
       case 'evento_pacto':
+      case 'pacto':
         return <PactoScreen />;
       case 'tienda':
         return <TiendaScreen />;

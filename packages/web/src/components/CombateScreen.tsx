@@ -174,7 +174,7 @@ const CombateScreen: React.FC = () => {
               <small>Turno en curso</small>
             </div>
             <div className="rail-badge accent">
-              <span className="label">Energia</span>
+              <span className="label">energia</span>
               <strong>{energiaLabel}</strong>
               <small>Gestion unica de recursos</small>
             </div>
@@ -270,7 +270,7 @@ const CombateScreen: React.FC = () => {
                   }, 600);
                 }}
                 disabled={selectedDice.length !== 1 || partidaState.energia < 1}
-                title="Aumentar Dado (+1 al valor, cuesta 1 energía)"
+                title="Aumentar Dado (+1 al valor, cuesta 1 energia)"
               >
                 [+] Aumentar (1⚡)
               </button>
@@ -297,9 +297,9 @@ const CombateScreen: React.FC = () => {
                   }, 600);
                 }}
                 disabled={selectedDice.length !== 1 || partidaState.energia < 2}
-                title="Voltear Dado (7 - valor, cuesta 2 energía)"
+                title="Voltear Dado (7 - valor, cuesta 2 energia)"
               >
-                [⇄] Voltear (2⚡)
+                [⇄] Voltear (2?)
               </button>
 
               <button
@@ -324,9 +324,9 @@ const CombateScreen: React.FC = () => {
                   }, 600);
                 }}
                 disabled={selectedDice.length !== 1 || partidaState.energia < 1}
-                title="Relanzar Dado (cuesta 1 energía)"
+                title="Relanzar Dado (cuesta 1 energia)"
               >
-                [↻] Relanzar (1⚡)
+                [↻] Relanzar (1?)
               </button>
             </div>
             <p className="muted small">Selecciona primero un dado para habilitar estas acciones.</p>
@@ -404,3 +404,11 @@ const CombateScreen: React.FC = () => {
 };
 
 export default CombateScreen;
+
+
+
+
+
+
+
+

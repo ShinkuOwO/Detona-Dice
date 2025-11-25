@@ -1,3 +1,5 @@
+const { generarMapa } = require('../game/map');
+
 class PartidaState {
   constructor() {
     // --- lo que ya tenías ---
@@ -29,7 +31,7 @@ class PartidaState {
     this.pactosHechos = [];
     this.habilidadesActivas = [];
 
-    this.mapaActual = null;
+    this.mapaActual = generarMapa(this.piso);
     this.encuentroActual = null;
 
     this.opcionesMejora = [];
@@ -40,7 +42,7 @@ class PartidaState {
     this.historial = [];
     this.efectos = [];
     this.pactos = [];
-    this.mensaje = '¡Bienvenido a Detona Dice!';
+    this.mensaje = 'Bienvenido a Detona Dice!';
 
     // --- NUEVO: tienda / items ---
     this.tiendaActual = null;    // { piso, tipo, items: [...] }
@@ -440,3 +442,5 @@ class PartidaState {
 }
 
 module.exports = PartidaState;
+
+

@@ -47,6 +47,22 @@ function generarOpcionesPactosPorPiso(pisoActual) {
 }
 
 function registerGameHandlers(io, socket) {
+  // Solicitar mapa (resincroniza cuando el cliente no lo tiene)
+  socket.on('cliente:solicitar_mapa', () => {
+    const jugador = jugadores.get(socket.id);
+    if (!jugador) {
+      return socket.emit('servidor:error', { mensaje: 'No estás autenticado' });
+    }
+    const partida = partidas.get(socket.id);
+    if (!partida) {
+      return socket.emit('servidor:error', { mensaje: 'Partida no encontrada' });
+    }
+    if (!partida.mapaActual) {
+      partida.mapaActual = generarMapa(partida.piso);
+    }
+    socket.emit('servidor:partida_actualizada', { partidaState: partida.serializarParaCliente() });
+  });
+
   // Elegir nodo del mapa
   socket.on('cliente:elegir_nodo_mapa', ({ nodoId }) => {
     const jugador = jugadores.get(socket.id);

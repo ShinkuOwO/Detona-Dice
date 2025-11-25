@@ -35,7 +35,7 @@ export interface Sala {
 
 export interface Dado {
   id: string;
-  valor: number | 'CRÁNEO' | null;
+  valor: number | 'CRANEO' | null;
   esCorrupto: boolean;
 }
 
@@ -95,7 +95,15 @@ export interface PartidaState {
   energia: number;
  energiaMax: number;
   dadosLanzados: boolean;
-  estadoJuego: 'combate' | 'subiendo_nivel' | 'evento_pacto' | 'tienda' | 'mapa' | 'eliminado';
+  estadoJuego:
+    | 'combate'
+    | 'subiendo_nivel'
+    | 'subir_nivel'
+    | 'evento_pacto'
+    | 'pacto'
+    | 'tienda'
+    | 'mapa'
+    | 'eliminado';
   nivel: number;
   xp: number;
  xpParaNivel: number;
@@ -252,3 +260,4 @@ export const useGame = () => {
   }
   return context;
 };
+

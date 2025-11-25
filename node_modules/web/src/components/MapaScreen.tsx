@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useGame } from '../contexts/GameContext';
 import { socket } from '../socket';
 
@@ -8,7 +8,16 @@ const MapaScreen: React.FC = () => {
   const [selectedNode, setSelectedNode] = useState<string | null>(null);
 
   // Si no hay partida o no estamos en mapa, mostramos algo neutro
-  if (!partidaState || partidaState.estadoJuego !== 'mapa') {
+  const enMapa = partidaState?.estadoJuego === 'mapa';
+
+  // Intentar solicitar mapa si falta mientras estamos en estado mapa
+  useEffect(() => {
+    if (enMapa && !partidaState?.mapaActual) {
+      socket.emit('cliente:solicitar_mapa');
+    }
+  }, [enMapa, partidaState?.mapaActual]);
+
+  if (!enMapa) {
     return (
       <div className="d-flex flex-column align-items-center justify-content-center h-100 text-center">
         <div className="eyebrow">Cargando</div>
