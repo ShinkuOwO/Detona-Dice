@@ -485,6 +485,7 @@ body {
   line-height: 1;
   background: linear-gradient(120deg, #ffcc00, #ff6b35 45%, #ffd700);
   -webkit-background-clip: text;
+  background-clip: text;
   color: transparent;
   text-shadow: 0 4px 0 #000, 0 0 24px rgba(255, 204, 0, 0.35);
 }
@@ -769,14 +770,6 @@ body {
   font-size: 13px;
   color: var(--ui-text-dim);
 }
-<<<<<<< ours
-<<<<<<< ours
-<<<<<<< ours
-=======
-=======
->>>>>>> theirs
-=======
->>>>>>> theirs
 
 /* --- Combate / Battle screen retro layout --- */
 .combat-shell {
@@ -830,11 +823,6 @@ body {
   font-size: 14px;
 }
 
-<<<<<<< ours
-<<<<<<< ours
-=======
-=======
->>>>>>> theirs
 .dossier-head {
   display: flex;
   align-items: center;
@@ -852,10 +840,6 @@ body {
   box-shadow: 0 0 12px rgba(255, 170, 0, 0.2);
 }
 
-<<<<<<< ours
->>>>>>> theirs
-=======
->>>>>>> theirs
 .eyebrow {
   letter-spacing: 0.12em;
   font-size: 11px;
@@ -959,11 +943,6 @@ body {
   margin-top: 10px;
 }
 
-<<<<<<< ours
-<<<<<<< ours
-=======
-=======
->>>>>>> theirs
 .objective-foot {
   display: flex;
   gap: 8px;
@@ -971,10 +950,6 @@ body {
   margin-top: 8px;
 }
 
-<<<<<<< ours
->>>>>>> theirs
-=======
->>>>>>> theirs
 .combat-body {
   display: grid;
   grid-template-columns: 2fr 1fr;
@@ -1021,16 +996,6 @@ body {
   min-height: 160px;
 }
 
-<<<<<<< ours
-<<<<<<< ours
-.stage-footer {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-  flex-wrap: wrap;
-=======
-=======
->>>>>>> theirs
 .dice-toolbar {
   display: flex;
   gap: 10px;
@@ -1040,10 +1005,6 @@ body {
   border: 1px dashed rgba(255, 255, 255, 0.12);
   border-radius: 10px;
   margin: 8px 0;
-<<<<<<< ours
->>>>>>> theirs
-=======
->>>>>>> theirs
 }
 
 .combat-sidebar {
@@ -1080,26 +1041,20 @@ body {
   background: rgba(0, 0, 0, 0.35);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 12px;
-<<<<<<< ours
-=======
   box-shadow: 0 10px 26px rgba(0, 0, 0, 0.35), inset 0 0 0 1px rgba(255, 255, 255, 0.04);
   backdrop-filter: blur(8px);
   position: sticky;
   bottom: 12px;
->>>>>>> theirs
 }
 
 .cta-copy p {
   max-width: 540px;
 }
 
-<<<<<<< ours
-=======
 .cta-copy .muted {
   color: var(--ui-text-dim);
 }
 
->>>>>>> theirs
 @media (max-width: 960px) {
   .combat-body {
     grid-template-columns: 1fr;
@@ -1113,10 +1068,3 @@ body {
     padding: 14px;
   }
 }
-<<<<<<< ours
-<<<<<<< ours
->>>>>>> theirs
-=======
->>>>>>> theirs
-=======
->>>>>>> theirs

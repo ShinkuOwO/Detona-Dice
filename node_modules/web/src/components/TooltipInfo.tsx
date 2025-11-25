@@ -13,15 +13,6 @@ const TooltipInfo: React.FC<TooltipInfoProps> = ({
 }) => {
   const [visible, setVisible] = useState(false);
 
-  const getPositionClasses = () => {
-    switch(position) {
-      case 'top': return 'tooltip-top';
-      case 'right': return 'tooltip-right';
-      case 'bottom': return 'tooltip-bottom';
-      case 'left': return 'tooltip-left';
-      default: return 'tooltip-top';
-    }
-  };
 
   return (
     <div className="position-relative d-inline-block">
