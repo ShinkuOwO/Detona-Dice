@@ -19,8 +19,7 @@ const DadoComponent: React.FC<DadoProps> = ({ dado, isSelected, onClick, disable
   if (animationState === 'flipping') dadoClasses += ' bounce-retro';
 
   const mostrarValor = () => {
-    if (dado.valor === null) return '?';
-    if (dado.valor === 'CRÁNEO') return '💀'; // opcional, más claro que texto
+    if (dado.valor === 'CRANEO') return '??'; // opcional, mas claro que texto
     return dado.valor;
   };
 

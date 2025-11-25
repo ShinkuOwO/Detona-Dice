@@ -35,6 +35,9 @@ const CombateScreen: React.FC = () => {
   const sumaSeleccionados = getSumaSeleccionados(partidaState, selectedDice);
   const faltan = Math.max(0, encuentroActual.objetivo - sumaSeleccionados);
   const seleccionCompleta = selectedDice.length === maxSeleccionables;
+  const energiaLabel = `${partidaState.energia}/${partidaState.energiaMax}`;
+  const rondaLabel = `Ronda ${partidaState.rondaActual ?? 1}`;
+  const consumiblesTotal = consumibles?.length || 0;
 
   const allDiceIds = [...dadosBase, ...dadosCorrupcion].map(d => d.id);
 
@@ -98,7 +101,7 @@ const CombateScreen: React.FC = () => {
   const botonPrincipalLabel = (() => {
     if (!partidaState.dadosLanzados) return 'LANZAR DADOS';
     if (!seleccionCompleta) return `ELIGE ${maxSeleccionables} DADOS`;
-    return 'CONFIRMAR SELECCIÓN';
+        return 'CONFIRMAR SELECCION';
   })();
 
   const primaryActionClass = `btn-retro ${
@@ -155,26 +158,41 @@ const CombateScreen: React.FC = () => {
           <div className="stage-header">
             <div>
               <div className="eyebrow">MESA DE DADOS</div>
-              <p className="muted">Fase única: lanza, marca y confirma. Menos ruido, más claridad.</p>
-            </div>
-            <div className="chip-row compact">
-              <span className={`chip ${allowSelection ? 'chip-success' : 'chip-muted'}`}>
-                {allowSelection ? 'Selecciona y confirma' : 'Lanza para empezar'}
-              </span>
-              <span className="chip chip-ghost">Máximo: {maxSeleccionables}</span>
-              <span className="chip chip-amber">Energía: {partidaState.energia}/{partidaState.energiaMax} ⚡</span>
+              <p className="muted">Fase unica: lanza, marca y confirma. Menos ruido, mas claridad.</p>
             </div>
           </div>
 
-          <div className="dice-toolbar">
-            <span className={`chip ${allowSelection ? 'chip-success' : 'chip-warning'}`}>
-              {allowSelection ? 'Marca y confirma tus dados' : 'Pulsa lanzar para empezar'}</span>
-            <span className="chip chip-ghost">Turno: ronda #{partidaState.rondaActual ?? 1}</span>
-            <span className="chip chip-amber">Energía {partidaState.energia}/{partidaState.energiaMax}</span>
-            <span className={sumaSeleccionados >= encuentroActual.objetivo ? 'chip chip-success' : 'chip chip-warning'}>
-              {sumaSeleccionados >= encuentroActual.objetivo ? 'Objetivo cubierto' : `Faltan ${faltan}`}
-            </span>
-            <span className="chip chip-info">Selección {selectedDice.length}/{maxSeleccionables}</span>
+          <div className="status-rail">
+            <div className={`rail-badge ${allowSelection ? 'primary' : 'ghost'}`}>
+              <span className="label">Fase</span>
+              <strong>{allowSelection ? 'Seleccion' : 'Lanzamiento'}</strong>
+              <small>{allowSelection ? 'Marca y confirma tus dados' : 'Pulsa lanzar para empezar'}</small>
+            </div>
+            <div className="rail-badge ghost">
+              <span className="label">Ritmo</span>
+              <strong>{rondaLabel}</strong>
+              <small>Turno en curso</small>
+            </div>
+            <div className="rail-badge accent">
+              <span className="label">Energia</span>
+              <strong>{energiaLabel}</strong>
+              <small>Gestion unica de recursos</small>
+            </div>
+            <div className="rail-badge">
+              <span className="label">Bolsa</span>
+              <strong>{consumiblesTotal} item(s)</strong>
+              <small>Listos para usar</small>
+            </div>
+            <div className={`rail-badge ${sumaSeleccionados >= encuentroActual.objetivo ? 'success' : 'warning'}`}>
+              <span className="label">Objetivo</span>
+              <strong>{sumaSeleccionados >= encuentroActual.objetivo ? 'Cubierto' : `Faltan ${faltan}`}</strong>
+              <small>Objetivo {encuentroActual.objetivo}+</small>
+            </div>
+            <div className="rail-badge">
+              <span className="label">Seleccion</span>
+              <strong>{selectedDice.length}/{maxSeleccionables}</strong>
+              <small>Dados marcados</small>
+            </div>
           </div>
 
           <div className="dice-grid">
@@ -220,9 +238,8 @@ const CombateScreen: React.FC = () => {
                   {partidaState.xp}/{partidaState.xpParaNivel}
                 </div>
               </div>
-              <label>Economía</label>
+              <label>Economia</label>
               <div className="chip-row compact">
-                <span className="chip chip-amber">{partidaState.energia}/{partidaState.energiaMax} ⚡</span>
                 <span className="chip chip-ghost">Oro: {partidaState.oro}</span>
               </div>
             </div>
