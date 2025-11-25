@@ -770,7 +770,10 @@ body {
   color: var(--ui-text-dim);
 }
 <<<<<<< ours
+<<<<<<< ours
 =======
+=======
+>>>>>>> theirs
 
 /* --- Combate / Battle screen retro layout --- */
 .combat-shell {
@@ -824,6 +827,26 @@ body {
   font-size: 14px;
 }
 
+<<<<<<< ours
+=======
+.dossier-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.seal-retro {
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px dashed rgba(255, 255, 255, 0.35);
+  border-radius: 10px;
+  font-family: 'VT323', monospace;
+  letter-spacing: 0.08em;
+  box-shadow: 0 0 12px rgba(255, 170, 0, 0.2);
+}
+
+>>>>>>> theirs
 .eyebrow {
   letter-spacing: 0.12em;
   font-size: 11px;
@@ -927,6 +950,16 @@ body {
   margin-top: 10px;
 }
 
+<<<<<<< ours
+=======
+.objective-foot {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+>>>>>>> theirs
 .combat-body {
   display: grid;
   grid-template-columns: 2fr 1fr;
@@ -973,11 +1006,23 @@ body {
   min-height: 160px;
 }
 
+<<<<<<< ours
 .stage-footer {
   display: flex;
   justify-content: space-between;
   gap: 10px;
   flex-wrap: wrap;
+=======
+.dice-toolbar {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 10px 12px;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px dashed rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  margin: 8px 0;
+>>>>>>> theirs
 }
 
 .combat-sidebar {
@@ -1033,4 +1078,7 @@ body {
     padding: 14px;
   }
 }
+<<<<<<< ours
+>>>>>>> theirs
+=======
 >>>>>>> theirs

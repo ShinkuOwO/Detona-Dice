@@ -64,7 +64,7 @@ const CombateScreen: React.FC = () => {
         });
         return newAnimating;
       });
-    }, 60); // 600ms to match the animation duration
+    }, 600); // 600ms para acompañar la animación
   };
 
   const handleSeleccionarDado = (dadoId: string) => {
@@ -81,10 +81,13 @@ const CombateScreen: React.FC = () => {
       addNotification('error', `Debes seleccionar exactamente ${maxSeleccionables} dados para confirmar.`);
       return;
     }
-    socket.emit('cliente:seleccionar_dados', {
-      dadoId1: selectedDice[0],
-      dadoId2: selectedDice[1],
+
+    const payload: Record<string, string> = {};
+    selectedDice.forEach((id, idx) => {
+      payload[`dadoId${idx + 1}`] = id;
     });
+
+    socket.emit('cliente:seleccionar_dados', payload);
     setSelectedDice([]);
   };
 
@@ -98,6 +101,10 @@ const CombateScreen: React.FC = () => {
     return 'CONFIRMAR SELECCIÓN';
   })();
 
+  const primaryActionClass = `btn-retro ${
+    botonPrincipalLabel === 'LANZAR DADOS' ? 'btn-retro-primary' : 'btn-retro-danger'
+  } px-5 py-3 glow-retro`;
+
   // Calcular porcentaje para la barra de progreso del objetivo
   const objetivoPorcentaje = Math.min(100, (sumaSeleccionados / encuentroActual.objetivo) * 100);
 
@@ -106,8 +113,18 @@ const CombateScreen: React.FC = () => {
       <div className="combat-top">
         <div className="combat-card dossier">
           <div className="eyebrow">ENCUENTRO ACTUAL</div>
+<<<<<<< ours
           <h2 className="title">{encuentroActual.nombre}</h2>
           <p className="subtitle">{mensaje}</p>
+=======
+          <div className="dossier-head">
+            <div>
+              <h2 className="title">{encuentroActual.nombre}</h2>
+              <p className="subtitle">{mensaje}</p>
+            </div>
+            <div className="seal-retro">RUNA #{partidaState.rondaActual ?? 1}</div>
+          </div>
+>>>>>>> theirs
           <div className="chip-row">
             <span className="chip chip-danger">Dados corruptos: {dadosCorrupcion.length}</span>
             <span className="chip chip-mono">Dados totales: {dadosBase.length + dadosCorrupcion.length}</span>
@@ -128,8 +145,17 @@ const CombateScreen: React.FC = () => {
             </div>
           </div>
           <div className="objective-readout">
+<<<<<<< ours
             <span className="chip chip-mono">{selectedDice.length}/{maxSeleccionables} dados listos</span>
             <span className="chip chip-info">Suma actual: {sumaSeleccionados}</span>
+=======
+            <span className="chip chip-info">Suma: {sumaSeleccionados}</span>
+            <span className="chip chip-ghost">Selección {selectedDice.length}/{maxSeleccionables}</span>
+          </div>
+          <div className="objective-foot">
+            <span className="chip chip-ghost">Dados base: {dadosBase.length}</span>
+            <span className="chip chip-danger">Corruptos: {dadosCorrupcion.length}</span>
+>>>>>>> theirs
           </div>
         </div>
       </div>
@@ -139,16 +165,36 @@ const CombateScreen: React.FC = () => {
           <div className="stage-header">
             <div>
               <div className="eyebrow">MESA DE DADOS</div>
+<<<<<<< ours
               <p className="muted">Toca para marcar tus elecciones. Usa habilidades sobre un dado seleccionado.</p>
+=======
+              <p className="muted">Fase única: lanza, marca y confirma. Menos ruido, más claridad.</p>
+>>>>>>> theirs
             </div>
             <div className="chip-row compact">
               <span className={`chip ${allowSelection ? 'chip-success' : 'chip-muted'}`}>
                 {allowSelection ? 'Selecciona y confirma' : 'Lanza para empezar'}
               </span>
               <span className="chip chip-ghost">Máximo: {maxSeleccionables}</span>
+<<<<<<< ours
             </div>
           </div>
 
+=======
+              <span className="chip chip-amber">Energía: {partidaState.energia}/{partidaState.energiaMax} ⚡</span>
+            </div>
+          </div>
+
+          <div className="dice-toolbar">
+            <span className="chip chip-ghost">Dados base: {dadosBase.length}</span>
+            <span className="chip chip-danger">Corruptos: {dadosCorrupcion.length}</span>
+            <span className={sumaSeleccionados >= encuentroActual.objetivo ? 'chip chip-success' : 'chip chip-warning'}>
+              {sumaSeleccionados >= encuentroActual.objetivo ? 'Objetivo cubierto' : `Faltan ${faltan}`}
+            </span>
+            <span className="chip chip-info">Seleccionados: {selectedDice.length}/{maxSeleccionables}</span>
+          </div>
+
+>>>>>>> theirs
           <div className="dice-grid">
             {[...dadosBase, ...dadosCorrupcion].map((dado) => {
               const animationState =
@@ -166,7 +212,9 @@ const CombateScreen: React.FC = () => {
               );
             })}
           </div>
+        </div>
 
+<<<<<<< ours
           <div className="stage-footer">
             <div className="chip-row compact">
               <span className="chip chip-info">Seleccionados: {selectedDice.length}/{maxSeleccionables}</span>
@@ -213,6 +261,40 @@ const CombateScreen: React.FC = () => {
             </div>
           </div>
 
+=======
+        <div className="combat-sidebar">
+          <div className="combat-card vitals">
+            <div className="eyebrow">ESTADO DEL JUGADOR</div>
+            <div className="bar-group">
+              <label>HP</label>
+              <div className="progress-retro thin">
+                <div
+                  className="progress-retro-bar"
+                  role="progressbar"
+                  style={{ width: `${(partidaState.hp / partidaState.hpMax) * 100}%` }}
+                >
+                  {partidaState.hp}/{partidaState.hpMax}
+                </div>
+              </div>
+              <label>XP</label>
+              <div className="progress-retro thin xp">
+                <div
+                  className="progress-retro-bar"
+                  role="progressbar"
+                  style={{ width: `${(partidaState.xp / partidaState.xpParaNivel) * 100}%` }}
+                >
+                  {partidaState.xp}/{partidaState.xpParaNivel}
+                </div>
+              </div>
+              <label>Economía</label>
+              <div className="chip-row compact">
+                <span className="chip chip-amber">{partidaState.energia}/{partidaState.energiaMax} ⚡</span>
+                <span className="chip chip-ghost">Oro: {partidaState.oro}</span>
+              </div>
+            </div>
+          </div>
+
+>>>>>>> theirs
           <div className="combat-card abilities">
             <div className="eyebrow">HABILIDADES</div>
             <div className="ability-grid">
@@ -325,7 +407,11 @@ const CombateScreen: React.FC = () => {
         <button
           onClick={partidaState.dadosLanzados ? handleConfirmarSeleccion : handleLanzarDados}
           disabled={botonPrincipalLabel !== 'LANZAR DADOS' && !seleccionCompleta}
+<<<<<<< ours
           className={`btn-retro ${botonPrincipalLabel === 'LANZAR DADOS' ? 'btn-retro-primary' : 'btn-retro-danger'} px-5 py-3 glow-retro`}
+=======
+          className={primaryActionClass}
+>>>>>>> theirs
         >
           {botonPrincipalLabel}
         </button>
