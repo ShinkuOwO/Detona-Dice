@@ -102,41 +102,58 @@ const CombateScreen: React.FC = () => {
   const objetivoPorcentaje = Math.min(100, (sumaSeleccionados / encuentroActual.objetivo) * 100);
 
   return (
-    <div className="d-flex flex-column h-100 p-3">
-      {/* Zona superior */}
-      <div className="mb-4">
-        <div className="card-retro p-4 text-center border-animated-retro">
-          <h2 className="text-retro-primary mb-2">{encuentroActual.nombre}</h2>
-          <div className="d-flex justify-content-center align-items-center gap-3 mb-3">
-            <h1 className="text-retro-warning mb-0">OBJETIVO: {encuentroActual.objetivo}+</h1>
-            <span className="badge-retro badge-retro-primary fs-5">{sumaSeleccionados}/{encuentroActual.objetivo}</span>
+    <div className="combat-shell">
+      <div className="combat-top">
+        <div className="combat-card dossier">
+          <div className="eyebrow">ENCUENTRO ACTUAL</div>
+          <h2 className="title">{encuentroActual.nombre}</h2>
+          <p className="subtitle">{mensaje}</p>
+          <div className="chip-row">
+            <span className="chip chip-danger">Dados corruptos: {dadosCorrupcion.length}</span>
+            <span className="chip chip-mono">Dados totales: {dadosBase.length + dadosCorrupcion.length}</span>
+            <span className="chip chip-amber">Consumibles: {consumibles?.length || 0}</span>
           </div>
-          <div className="progress-retro mb-3" style={{ height: '30px' }}>
-            <div 
-              className="progress-retro-bar" 
-              role="progressbar" 
+        </div>
+
+        <div className="combat-card objective">
+          <div className="eyebrow">OBJETIVO</div>
+          <div className="objective-value">{encuentroActual.objetivo}+</div>
+          <div className="progress-retro thick">
+            <div
+              className="progress-retro-bar"
+              role="progressbar"
               style={{ width: `${objetivoPorcentaje}%` }}
             >
-              {sumaSeleccionados >= encuentroActual.objetivo ? '¡OBJETIVO CUMPLIDO!' : `${faltan} FALTAN`}
+              {sumaSeleccionados >= encuentroActual.objetivo ? '¡LISTO!' : `${faltan} por cubrir`}
             </div>
           </div>
-          <p className="alert-retro alert-retro-info mb-2">{mensaje}</p>
-          <div className="d-flex justify-content-center gap-3 mt-2">
-            <span className="badge-retro badge-retro-danger">DADOS CORRUPTOS: {dadosCorrupcion.length}</span>
-            <span className="badge-retro badge-retro-warning">CONSUMIBLES: {consumibles?.length || 0}</span>
+          <div className="objective-readout">
+            <span className="chip chip-mono">{selectedDice.length}/{maxSeleccionables} dados listos</span>
+            <span className="chip chip-info">Suma actual: {sumaSeleccionados}</span>
           </div>
         </div>
       </div>
 
-      {/* Zona central: dados + resumen */}
-      <div className="flex-grow-1 mb-4 d-flex flex-column">
-        <div className="card-retro p-4 flex-grow-1 d-flex flex-column">
-          <div className="d-flex justify-content-center flex-wrap gap-3 mb-4" style={{ minHeight: '100px' }}>
+      <div className="combat-body">
+        <div className="combat-stage">
+          <div className="stage-header">
+            <div>
+              <div className="eyebrow">MESA DE DADOS</div>
+              <p className="muted">Toca para marcar tus elecciones. Usa habilidades sobre un dado seleccionado.</p>
+            </div>
+            <div className="chip-row compact">
+              <span className={`chip ${allowSelection ? 'chip-success' : 'chip-muted'}`}>
+                {allowSelection ? 'Selecciona y confirma' : 'Lanza para empezar'}
+              </span>
+              <span className="chip chip-ghost">Máximo: {maxSeleccionables}</span>
+            </div>
+          </div>
+
+          <div className="dice-grid">
             {[...dadosBase, ...dadosCorrupcion].map((dado) => {
-              // Determine animation state for this die
-              const animationState = animatingDice[dado.id] || 
-                (partidaState.dadosLanzados && !dado.valor ? 'rolling' : 'none');
-              
+              const animationState =
+                animatingDice[dado.id] || (partidaState.dadosLanzados && !dado.valor ? 'rolling' : 'none');
+
               return (
                 <DadoComponent
                   key={dado.id}
@@ -150,114 +167,129 @@ const CombateScreen: React.FC = () => {
             })}
           </div>
 
-          <div className="d-flex justify-content-between align-items-center bg-dark bg-opacity-25 p-3 rounded mt-auto">
-            <div>
-              <span className="badge-retro badge-retro-secondary me-2">
-                DADOS SELECCIONADOS ({selectedDice.length}/{maxSeleccionables})
-              </span>
-              <span className="badge-retro badge-retro-info">
-                SUMA: {sumaSeleccionados}
+          <div className="stage-footer">
+            <div className="chip-row compact">
+              <span className="chip chip-info">Seleccionados: {selectedDice.length}/{maxSeleccionables}</span>
+              <span className={sumaSeleccionados >= encuentroActual.objetivo ? 'chip chip-success' : 'chip chip-warning'}>
+                {sumaSeleccionados >= encuentroActual.objetivo ? 'Objetivo cubierto' : `Faltan ${faltan}`}
               </span>
             </div>
-            <div>
-              {sumaSeleccionados >= encuentroActual.objetivo ? (
-                <span className="badge-retro badge-retro-success">¡CUMPLIDO!</span>
-              ) : (
-                <span className="badge-retro badge-retro-warning">FALTAN {faltan}</span>
-              )}
+            <div className="chip-row compact">
+              <span className="chip chip-ghost">Dados base: {dadosBase.length}</span>
+              <span className="chip chip-danger">Dados corruptos: {dadosCorrupcion.length}</span>
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Zona inferior: habilidades + acción + bolsa */}
-      <div className="d-flex flex-column flex-lg-row gap-4">
-        {/* Habilidades */}
-        <div className="flex-fill">
-          <h3 className="text-retro text-center mb-3">HABILIDADES</h3>
-          <div className="card-retro p-3 h-100 d-flex flex-column">
-            <div className="d-flex flex-wrap gap-2 justify-content-center mb-3 flex-grow-1 d-flex align-items-center">
+        <div className="combat-sidebar">
+          <div className="combat-card vitals">
+            <div className="eyebrow">ESTADO DEL JUGADOR</div>
+            <div className="bar-group">
+              <label>HP</label>
+              <div className="progress-retro thin">
+                <div
+                  className="progress-retro-bar"
+                  role="progressbar"
+                  style={{ width: `${(partidaState.hp / partidaState.hpMax) * 100}%` }}
+                >
+                  {partidaState.hp}/{partidaState.hpMax}
+                </div>
+              </div>
+              <label>XP</label>
+              <div className="progress-retro thin xp">
+                <div
+                  className="progress-retro-bar"
+                  role="progressbar"
+                  style={{ width: `${(partidaState.xp / partidaState.xpParaNivel) * 100}%` }}
+                >
+                  {partidaState.xp}/{partidaState.xpParaNivel}
+                </div>
+              </div>
+              <label>Energía</label>
+              <div className="chip-row compact">
+                <span className="chip chip-amber">{partidaState.energia}/{partidaState.energiaMax} ⚡</span>
+                <span className="chip chip-ghost">Oro: {partidaState.oro}</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="combat-card abilities">
+            <div className="eyebrow">HABILIDADES</div>
+            <div className="ability-grid">
               <button
-                className="btn-retro btn-retro-secondary flex-fill mx-1"
+                className="btn-retro btn-retro-secondary"
                 onClick={() => {
                   if (selectedDice.length !== 1) return;
-                  // Trigger the increasing animation for the selected die
-                  setAnimatingDice(prev => ({
+                  setAnimatingDice((prev) => ({
                     ...prev,
-                    [selectedDice[0]]: 'increasing'
+                    [selectedDice[0]]: 'increasing',
                   }));
-                  
-                  // After a short delay, emit the socket event
+
                   setTimeout(() => {
                     socket.emit('cliente:usar_habilidad', { habilidadId: 'aumentar_dado', dadoId: selectedDice[0] });
-                  }, 300); // 300ms to allow animation to play
-                  
-                  // Remove the animation class after animation completes
+                  }, 300);
+
                   setTimeout(() => {
-                    setAnimatingDice(prev => {
+                    setAnimatingDice((prev) => {
                       const newAnimating = { ...prev };
                       delete newAnimating[selectedDice[0]];
                       return newAnimating;
                     });
-                  }, 600); // 600ms to match the animation duration
+                  }, 600);
                 }}
                 disabled={selectedDice.length !== 1 || partidaState.energia < 1}
                 title="Aumentar Dado (+1 al valor, cuesta 1 energía)"
               >
                 [+] Aumentar (1⚡)
               </button>
+
               <button
-                className="btn-retro btn-retro-secondary flex-fill mx-1"
+                className="btn-retro btn-retro-secondary"
                 onClick={() => {
                   if (selectedDice.length !== 1) return;
-                  // Trigger the flipping animation for the selected die
-                  setAnimatingDice(prev => ({
+                  setAnimatingDice((prev) => ({
                     ...prev,
-                    [selectedDice[0]]: 'flipping'
+                    [selectedDice[0]]: 'flipping',
                   }));
-                  
-                  // After a short delay, emit the socket event
+
                   setTimeout(() => {
                     socket.emit('cliente:usar_habilidad', { habilidadId: 'voltear_dado', dadoId: selectedDice[0] });
-                  }, 300); // 300ms to allow animation to play
-                  
-                  // Remove the animation class after animation completes
+                  }, 300);
+
                   setTimeout(() => {
-                    setAnimatingDice(prev => {
+                    setAnimatingDice((prev) => {
                       const newAnimating = { ...prev };
                       delete newAnimating[selectedDice[0]];
                       return newAnimating;
                     });
-                  }, 600); // 600ms to match the animation duration
+                  }, 600);
                 }}
                 disabled={selectedDice.length !== 1 || partidaState.energia < 2}
                 title="Voltear Dado (7 - valor, cuesta 2 energía)"
               >
                 [⇄] Voltear (2⚡)
               </button>
+
               <button
-                className="btn-retro btn-retro-secondary flex-fill mx-1"
+                className="btn-retro btn-retro-secondary"
                 onClick={() => {
                   if (selectedDice.length !== 1) return;
-                  // Trigger the rolling animation for the selected die
-                  setAnimatingDice(prev => ({
+                  setAnimatingDice((prev) => ({
                     ...prev,
-                    [selectedDice[0]]: 'rolling'
+                    [selectedDice[0]]: 'rolling',
                   }));
-                  
-                  // After a short delay, emit the socket event
+
                   setTimeout(() => {
                     socket.emit('cliente:usar_habilidad', { habilidadId: 'relanzar_dado', dadoId: selectedDice[0] });
-                  }, 300); // 300ms to allow animation to play
-                  
-                  // Remove the animation class after animation completes
+                  }, 300);
+
                   setTimeout(() => {
-                    setAnimatingDice(prev => {
+                    setAnimatingDice((prev) => {
                       const newAnimating = { ...prev };
                       delete newAnimating[selectedDice[0]];
                       return newAnimating;
                     });
-                  }, 60); // 600ms to match the animation duration
+                  }, 600);
                 }}
                 disabled={selectedDice.length !== 1 || partidaState.energia < 1}
                 title="Relanzar Dado (cuesta 1 energía)"
@@ -265,71 +297,42 @@ const CombateScreen: React.FC = () => {
                 [↻] Relanzar (1⚡)
               </button>
             </div>
-            <div className="text-center">
-              <span className="badge-retro badge-retro-primary fs-5 px-4 py-2">
-                ENERGÍA: {partidaState.energia}/{partidaState.energiaMax}
-              </span>
-            </div>
+            <p className="muted small">Selecciona primero un dado para habilitar estas acciones.</p>
           </div>
-        </div>
 
-        {/* Acción principal */}
-        <div className="d-flex flex-column justify-content-center align-items-center px-3">
-          <button
-            onClick={partidaState.dadosLanzados ? handleConfirmarSeleccion : handleLanzarDados}
-            disabled={botonPrincipalLabel !== 'LANZAR DADOS' && !seleccionCompleta}
-            className={`btn-retro ${botonPrincipalLabel === 'LANZAR DADOS' ? 'btn-retro-primary' : 'btn-retro-danger'} fs-4 px-5 py-3 glow-retro`}
-          >
-            {botonPrincipalLabel}
-          </button>
-          <div className="mt-3 text-center w-100">
-            <div className="progress-retro mb-2" style={{ height: '20px' }}>
-              <div 
-                className="progress-retro-bar" 
-                role="progressbar" 
-                style={{ width: `${(partidaState.hp / partidaState.hpMax) * 100}%` }}
-              >
-                HP: {partidaState.hp}/{partidaState.hpMax}
-              </div>
-            </div>
-            <div className="progress-retro" style={{ height: '20px' }}>
-              <div 
-                className="progress-retro-bar" 
-                role="progressbar" 
-                style={{ width: `${(partidaState.xp / partidaState.xpParaNivel) * 100}%` }}
-              >
-                XP: {partidaState.xp}/{partidaState.xpParaNivel}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Bolsa */}
-        <div className="flex-fill">
-          <h3 className="text-retro text-center mb-3">BOLSA</h3>
-          <div className="card-retro p-3 h-100 d-flex flex-column">
+          <div className="combat-card bag">
+            <div className="eyebrow">BOLSA</div>
+            <p className="muted small mb-2">Consumibles disponibles para el turno.</p>
             <button
               type="button"
               onClick={() => setShowBag(true)}
-              className="btn-retro btn-retro-warning flex-fill mb-3 py-3"
+              className="btn-retro btn-retro-warning w-100"
             >
-              CONSUMIBLES ({consumibles?.length || 0})
+              Abrir bolsa ({consumibles?.length || 0})
             </button>
             {(!consumibles || consumibles.length === 0) && (
-              <p className="text-center text-muted fst-italic flex-fill d-flex align-items-center justify-content-center">
-                No tienes consumibles.
-              </p>
+              <p className="muted small text-center mt-3">No tienes consumibles.</p>
             )}
-            <div className="mt-auto pt-2 border-top border-secondary">
-              <span className="badge-retro badge-retro-warning w-100 d-block">ORO: {partidaState.oro}</span>
-            </div>
           </div>
         </div>
       </div>
 
-      {/* Modal de Bolsa */}
+      <div className="combat-cta">
+        <div className="cta-copy">
+          <div className="eyebrow">SIGUE EL RITUAL</div>
+          <p className="muted">1) Lanza, 2) Marca dados, 3) Confirma. La UI se mantiene limpia: solo lo esencial por fase.</p>
+        </div>
+        <button
+          onClick={partidaState.dadosLanzados ? handleConfirmarSeleccion : handleLanzarDados}
+          disabled={botonPrincipalLabel !== 'LANZAR DADOS' && !seleccionCompleta}
+          className={`btn-retro ${botonPrincipalLabel === 'LANZAR DADOS' ? 'btn-retro-primary' : 'btn-retro-danger'} px-5 py-3 glow-retro`}
+        >
+          {botonPrincipalLabel}
+        </button>
+      </div>
+
       {showBag && (
-        <div className="modal show d-block" tabIndex={-1} style={{ backgroundColor: 'rgba(0,0,0.5)' }} onClick={() => setShowBag(false)}>
+        <div className="modal show d-block" tabIndex={-1} style={{ backgroundColor: 'rgba(0,0,0,0.5)' }} onClick={() => setShowBag(false)}>
           <div className="modal-dialog modal-dialog-centered" onClick={(e) => e.stopPropagation()}>
             <div className="modal-content modal-content-retro">
               <div className="modal-header modal-header-retro d-flex justify-content-between align-items-center">
@@ -352,7 +355,7 @@ const CombateScreen: React.FC = () => {
                         className="btn-retro btn-retro-success ms-2"
                         onClick={() => {
                           handleUsarConsumible(itemId);
-                          setShowBag(false); // Close the modal after using an item
+                          setShowBag(false);
                         }}
                       >
                         USAR

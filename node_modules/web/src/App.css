@@ -769,3 +769,268 @@ body {
   font-size: 13px;
   color: var(--ui-text-dim);
 }
+<<<<<<< ours
+=======
+
+/* --- Combate / Battle screen retro layout --- */
+.combat-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 18px;
+  min-height: 100vh;
+  background: radial-gradient(circle at 20% 20%, rgba(255, 170, 0, 0.06), transparent 35%),
+    radial-gradient(circle at 80% 0%, rgba(93, 138, 168, 0.08), transparent 40%),
+    linear-gradient(135deg, rgba(10, 12, 26, 0.95), rgba(17, 20, 38, 0.9));
+  border: 2px solid rgba(255, 255, 255, 0.04);
+  border-radius: 12px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05), 0 0 30px rgba(0, 0, 0, 0.45);
+}
+
+.combat-top {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 14px;
+}
+
+.combat-card {
+  padding: 16px;
+  background: linear-gradient(180deg, rgba(52, 52, 73, 0.9), rgba(31, 31, 46, 0.9));
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+  position: relative;
+  overflow: hidden;
+}
+
+.combat-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 15% 20%, rgba(255, 255, 255, 0.06), transparent 35%);
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.combat-card .title {
+  font-size: 20px;
+  margin: 6px 0;
+  letter-spacing: 0.04em;
+}
+
+.combat-card .subtitle {
+  color: var(--ui-text-dim);
+  margin: 4px 0 10px;
+  font-size: 14px;
+}
+
+.eyebrow {
+  letter-spacing: 0.12em;
+  font-size: 11px;
+  color: var(--ui-warning);
+  text-transform: uppercase;
+}
+
+.chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip-row.compact {
+  gap: 6px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  font-size: 13px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.chip-danger {
+  background: linear-gradient(90deg, rgba(224, 36, 94, 0.18), rgba(224, 36, 94, 0.08));
+  border-color: rgba(224, 36, 94, 0.35);
+}
+
+.chip-warning {
+  background: linear-gradient(90deg, rgba(250, 204, 21, 0.22), rgba(250, 204, 21, 0.08));
+  border-color: rgba(250, 204, 21, 0.35);
+  color: #111;
+}
+
+.chip-info {
+  background: linear-gradient(90deg, rgba(93, 138, 168, 0.2), rgba(93, 138, 168, 0.08));
+  border-color: rgba(93, 138, 168, 0.35);
+}
+
+.chip-amber {
+  background: linear-gradient(90deg, rgba(255, 170, 0, 0.22), rgba(255, 170, 0, 0.08));
+  border-color: rgba(255, 170, 0, 0.35);
+  color: #111;
+}
+
+.chip-success {
+  background: linear-gradient(90deg, rgba(58, 202, 120, 0.22), rgba(58, 202, 120, 0.08));
+  border-color: rgba(58, 202, 120, 0.35);
+}
+
+.chip-muted {
+  opacity: 0.5;
+}
+
+.chip-ghost {
+  background: rgba(255, 255, 255, 0.05);
+  border-style: dashed;
+}
+
+.chip-mono {
+  font-family: 'VT323', monospace;
+  letter-spacing: 0.08em;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px dashed rgba(255, 255, 255, 0.25);
+}
+
+.combat-card.objective .objective-value {
+  font-size: 36px;
+  color: var(--ui-accent);
+  text-shadow: 0 0 12px rgba(255, 107, 53, 0.6);
+  margin: 6px 0 10px;
+}
+
+.progress-retro.thick {
+  height: 26px;
+}
+
+.progress-retro.thin {
+  height: 16px;
+}
+
+.progress-retro.thin .progress-retro-bar {
+  font-size: 11px;
+}
+
+.progress-retro.thin.xp .progress-retro-bar {
+  background: linear-gradient(90deg, #a855f7, #38bdf8);
+}
+
+.objective-readout {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.combat-body {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+.combat-stage {
+  padding: 16px;
+  background: radial-gradient(circle at 30% 20%, rgba(93, 138, 168, 0.08), transparent 40%),
+    linear-gradient(180deg, rgba(27, 32, 53, 0.95), rgba(18, 21, 38, 0.95));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05), 0 10px 25px rgba(0, 0, 0, 0.35);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.stage-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.muted {
+  color: var(--ui-text-dim);
+  margin: 0;
+}
+
+.muted.small {
+  font-size: 12px;
+}
+
+.dice-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 12px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px dashed rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  min-height: 160px;
+}
+
+.stage-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.combat-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.bar-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.bar-group label {
+  font-size: 12px;
+  color: var(--ui-text-dim);
+  letter-spacing: 0.08em;
+}
+
+.ability-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.combat-cta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+}
+
+.cta-copy p {
+  max-width: 540px;
+}
+
+@media (max-width: 960px) {
+  .combat-body {
+    grid-template-columns: 1fr;
+  }
+
+  .stage-header {
+    flex-direction: column;
+  }
+
+  .combat-shell {
+    padding: 14px;
+  }
+}
+>>>>>>> theirs
